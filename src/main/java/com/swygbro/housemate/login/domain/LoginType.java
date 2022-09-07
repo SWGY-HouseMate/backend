@@ -3,9 +3,9 @@ package com.swygbro.housemate.login.domain;
 import com.swygbro.housemate.util.EnumModel;
 
 public enum LoginType implements EnumModel {
-    구글("GOOGLE"),
-    카카오("KAKAO"),
-    애플("APPLE")
+    GOOGLE("구글"),
+    KAKAO("카카오"),
+    APPLE("애플")
     ;
 
     private final String value;
