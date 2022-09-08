@@ -2,8 +2,11 @@ package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.login.domain.LoginType;
 import com.swygbro.housemate.login.external.GoogleLoginPage;
+import com.swygbro.housemate.login.message.GetSocialOAuthRes;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.login.service.OAutLoginFinder;
+import com.swygbro.housemate.util.response.domain.SingleResult;
+import com.swygbro.housemate.util.response.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LoginController {
 
+    private final ResponseService responseService;
     private final GoogleLoginPage googleLoginPage;
     private final OAutLoginFinder oAutLoginFinder;
 
@@ -28,7 +32,7 @@ public class LoginController {
     @GetMapping("/auth/{loginType}")
     public void login(@PathVariable String loginType, HttpServletResponse response) throws IOException {
         System.out.println("loginType = " + loginType);
-        googleLoginPage.execute(response);
+        googleLoginPage.execute(response); // 구글 소셜 로그인 리다이렉트
     }
 
     /**
@@ -40,12 +44,11 @@ public class LoginController {
 
     @ResponseBody
     @GetMapping(value = "/auth/{socialLoginType}/callback")
-    public Object callback (@PathVariable String socialLoginType, @RequestParam String code) throws IOException {
-        System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ code);
+    public SingleResult<Object> callback (@PathVariable String socialLoginType, @RequestParam String code) throws IOException {
         Login by = oAutLoginFinder.findBy(LoginType.valueOf(socialLoginType.toUpperCase()));
         Map<String, String> info = new HashMap<>();
         info.put("code", code);
 
-        return by.execute(info);
+        return responseService.getSingleResult(by.execute(info));
     }
 }

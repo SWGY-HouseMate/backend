@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     private String secretKey;
     private final MyUserDetails myUserDetails;
 
-    final static public String ACCESS_TOKEN_NAME = "accessToken";
+    final static public String ACCESS_TOKEN_NAME = "JWT-ZIPHAP-TOKEN";
     public final static long TOKEN_VALIDATION_SECOND = 1000L * 3600 * 24;  // 하루를 accessToken 만료 기간으로 잡는다
 
     @PostConstruct
@@ -43,10 +43,10 @@ public class JwtTokenProvider {
     }
 
     public String createToken(Member member){
-        Claims claims = Jwts.claims().setSubject(member.getEmail());
-        claims.put("tokenName", ACCESS_TOKEN_NAME);
-        claims.put("userEmail", member.getEmail());
-        claims.put("userRole", member.getRole());
+        Claims claims = Jwts.claims().setSubject(ACCESS_TOKEN_NAME);
+        claims.put("MemberEmail", member.getEmail());
+        claims.put("MemberRole", member.getMemberRole());
+        claims.put("LoginRole", member.getLoginRole());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + TOKEN_VALIDATION_SECOND); //Expire Time

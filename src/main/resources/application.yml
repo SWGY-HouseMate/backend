@@ -1,10 +1,26 @@
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+    datasource:
+      url: jdbc:h2:tcp://localhost/~/ziphap
+      driver-class-name: org.h2.Driver
+      username: sa
+    jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      properties.hibernate.hbm2ddl.auto: drop
+      showSql: true
+      properties:
+        hibernate:
+        default_batch_fetch_size: 1000
+
   jwt:
-  secret: JDKdldsjkdndsljJKDJLsdafldlJOkjd-jldkjadfsaOJUJNsdlsdjdsknslefipsjkewkw
+    secret: JDKdldsjkdndsljJKDJLsdafldlJOkjd-jldkjadfsaOJUJNsdlsdjdsknslefipsjkewkw
   OAuth2:
     google:
       url: https://accounts.google.com/o/oauth2/v2/auth
       client-id: 767085427001-c220ums6k5ntb78vv7rma8ne46den43g.apps.googleusercontent.com
       client-secret: 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
       callback-url: http://localhost:8080/accounts/auth/google/callback
-      scope: https://www.googleapis.com/auth/userinfo.email httpvs://www.googleapis.com/auth/userinfo.profile
+      scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile

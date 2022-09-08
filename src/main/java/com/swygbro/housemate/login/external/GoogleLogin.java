@@ -9,13 +9,14 @@ import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.swygbro.housemate.login.domain.LoginType.GOOGLE;
+import static com.swygbro.housemate.login.domain.MemberType.DEFAULT;
 
 @Component
 @RequiredArgsConstructor
@@ -36,17 +37,21 @@ public class GoogleLogin implements Login {
         //우리 서버의 db와 대조하여 해당 user가 존재하는 지 확인한다.
         Optional<Member> emailExists = memberRepository.findByEmail(googleUser.getEmail());
 
+        Member createMember = Member.builder()
+                .email(googleUser.getEmail())
+                .memberRoles(Collections.singletonList(DEFAULT))
+                .loginRole(GOOGLE.getKey())
+                .build();
+
         if (emailExists.isEmpty()) {
-            System.out.println("회원 정보 저장");
-            // 회원 정보 저장 하기
+            memberRepository.save(createMember);
         }
 
         //서버에 user가 존재하면 앞으로 회원 인가 처리를 위한 jwtToken을 발급한다.
-        String jwtToken = jwtTokenProvider.createToken(null);
+        String jwtToken = jwtTokenProvider.createToken(createMember);
 
         //액세스 토큰과 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.
-        GetSocialOAuthRes getSocialOAuthRes = new GetSocialOAuthRes(jwtToken, 1, oAuthToken.getAccess_token(), oAuthToken.getToken_type());
-        return getSocialOAuthRes;
+        return new GetSocialOAuthRes(jwtToken, googleUser.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type());
     }
 
     @Override
