@@ -23,9 +23,6 @@ public class GoogleLoginPage {
     @Value("${spring.OAuth2.google.callback-url}")
     private String GOOGLE_SNS_CALLBACK_URL;
 
-    @Value("${spring.OAuth2.google.client-secret}")
-    private String GOOGLE_SNS_CLIENT_SECRET;
-
     @Value("${spring.OAuth2.google.scope}")
     private String GOOGLE_DATA_ACCESS_SCOPE;
 

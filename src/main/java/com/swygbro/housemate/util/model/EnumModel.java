@@ -1,4 +1,4 @@
-package com.swygbro.housemate.util;
+package com.swygbro.housemate.util.model;
 
 public interface EnumModel {
 

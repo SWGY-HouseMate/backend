@@ -2,15 +2,13 @@ package com.swygbro.housemate.login.domain;
 
 import com.swygbro.housemate.util.model.EnumModel;
 
-public enum LoginType implements EnumModel {
-    GOOGLE("구글"),
-    KAKAO("카카오"),
-    APPLE("애플")
+public enum MemberType implements EnumModel {
+    DEFAULT("기본")
     ;
 
     private final String value;
 
-    LoginType(String value) {
+    MemberType(String value) {
         this.value = value;
     }
 
