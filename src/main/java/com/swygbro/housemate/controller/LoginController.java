@@ -33,10 +33,12 @@ public class LoginController {
      */
     @GetMapping("/auth/{loginType}")
     public void googleLoginPage(@PathVariable String loginType, HttpServletResponse response) throws IOException {
-        if (loginType.equals("google")) {
+        if (loginType.equalsIgnoreCase("google")) {
             googleLoginPage.execute(response); // 구글 소셜 로그인 리다이렉트
-        } else if (loginType.equals("kakao")) {
+        } else if (loginType.equalsIgnoreCase("kakao")) {
             kakaoLoginPage.execute(response); // 카카오 소셜 로그인 리다이렉트
+        } else {
+            response.sendError(404, "없는 페이지 입니다.");
         }
     }
 

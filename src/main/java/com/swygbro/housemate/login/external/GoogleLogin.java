@@ -50,7 +50,7 @@ public class GoogleLogin implements Login {
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
         //액세스 토큰과 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.
-        return GetSocialOAuthRes.of(jwtToken, googleUser.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey());
+        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey());
     }
 
     @Override

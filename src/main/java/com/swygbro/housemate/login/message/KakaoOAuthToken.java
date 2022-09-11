@@ -5,26 +5,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class GoogleOAuthToken { //구글에 일회성 코드를 다시 보내 받아올 액세스 토큰을 포함한 JSON 문자열을 담을 클래스
+public class KakaoOAuthToken {
+
+    private String token_type;
     private String access_token;
     private int expires_in;
+    private String refresh_token;
+    private int refresh_token_expires_in;
     private String scope;
-    private String token_type;
-    private String id_token;
 
 
     @JsonCreator
-    public GoogleOAuthToken(
+    public KakaoOAuthToken(
             @JsonProperty("access_token") String access_token,
             @JsonProperty("expires_in") int expires_in,
-            @JsonProperty("scope") String scope,
             @JsonProperty("token_type") String token_type,
-            @JsonProperty("id_token") String id_token) {
+            @JsonProperty("refresh_token") String refresh_token,
+            @JsonProperty("refresh_token_expires_in") int refresh_token_expires_in,
+            @JsonProperty("scope") String scope) {
 
         this.access_token = access_token;
         this.expires_in = expires_in;
-        this.scope = scope;
         this.token_type = token_type;
-        this.id_token = id_token;
+        this.refresh_token = refresh_token;
+        this.refresh_token_expires_in = refresh_token_expires_in;
+        this.scope = scope;
     }
 }

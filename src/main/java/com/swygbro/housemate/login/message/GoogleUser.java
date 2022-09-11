@@ -3,11 +3,9 @@ package com.swygbro.housemate.login.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
-@Data
 public class GoogleUser { //구글(서드파티)로 액세스 토큰을 보내 받아올 구글에 등록된 사용자 정보
     private String id;
     private String email;

@@ -2,6 +2,7 @@ package com.swygbro.housemate.login.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swygbro.housemate.login.external.GoogleLogin;
+import com.swygbro.housemate.login.external.KakaoLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +21,12 @@ class OAutLoginFinderTest {
 
     @Mock
     GoogleLogin googleLogin;
+    @Mock
+    KakaoLogin kakaoLogin;
 
     @BeforeEach
     void setUp() {
-        sut = new OAutLoginFinder(googleLogin);
+        sut = new OAutLoginFinder(googleLogin, kakaoLogin);
     }
 
     @Test
