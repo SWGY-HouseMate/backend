@@ -48,7 +48,6 @@ public class GoogleLoginPage {
                 .map(x->x.getKey()+"="+x.getValue())
                 .collect(Collectors.joining("&"));
         String redirectURL=GOOGLE_SNS_LOGIN_URL+"?"+parameterString;
-        System.out.println("redirectURL = " + redirectURL);
 
         return redirectURL;
     }

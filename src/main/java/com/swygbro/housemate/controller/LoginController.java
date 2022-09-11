@@ -2,6 +2,7 @@ package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.login.domain.LoginType;
 import com.swygbro.housemate.login.external.GoogleLoginPage;
+import com.swygbro.housemate.login.external.KakaoLoginPage;
 import com.swygbro.housemate.login.message.GetSocialOAuthRes;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.login.service.OAutLoginFinder;
@@ -22,6 +23,7 @@ public class LoginController {
 
     private final ResponseService responseService;
     private final GoogleLoginPage googleLoginPage;
+    private final KakaoLoginPage kakaoLoginPage;
     private final OAutLoginFinder oAutLoginFinder;
 
     /**
@@ -30,9 +32,12 @@ public class LoginController {
      * @return void
      */
     @GetMapping("/auth/{loginType}")
-    public void login(@PathVariable String loginType, HttpServletResponse response) throws IOException {
-        System.out.println("loginType = " + loginType);
-        googleLoginPage.execute(response); // 구글 소셜 로그인 리다이렉트
+    public void googleLoginPage(@PathVariable String loginType, HttpServletResponse response) throws IOException {
+        if (loginType.equals("google")) {
+            googleLoginPage.execute(response); // 구글 소셜 로그인 리다이렉트
+        } else if (loginType.equals("kakao")) {
+            kakaoLoginPage.execute(response); // 카카오 소셜 로그인 리다이렉트
+        }
     }
 
     /**
@@ -51,4 +56,6 @@ public class LoginController {
 
         return responseService.getSingleResult(by.execute(info));
     }
+
+
 }
