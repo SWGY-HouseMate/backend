@@ -3,18 +3,21 @@ package com.swygbro.housemate.login.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
+@Data
 public class GoogleUser { //구글(서드파티)로 액세스 토큰을 보내 받아올 구글에 등록된 사용자 정보
-    public String id;
-    public String email;
-    public Boolean verified_email;
-    public String name;
-    public String given_name;
-    public String family_name;
-    public String picture;
-    public String locale;
+    private String id;
+    private String email;
+    private Boolean verified_email;
+    private String name;
+    private String given_name;
+    private String family_name;
+    private String picture;
+    private String locale;
+    private String hd;
 
     @JsonCreator
     public GoogleUser(
@@ -25,7 +28,8 @@ public class GoogleUser { //구글(서드파티)로 액세스 토큰을 보내 �
             @JsonProperty("givenName") String given_name,
             @JsonProperty("familyName") String family_name,
             @JsonProperty("picture") String picture,
-            @JsonProperty("locale") String locale) {
+            @JsonProperty("locale") String locale,
+            @JsonProperty("hd") String hd) {
 
         this.id = id;
         this.email = email;
@@ -35,5 +39,6 @@ public class GoogleUser { //구글(서드파티)로 액세스 토큰을 보내 �
         this.family_name = family_name;
         this.picture = picture;
         this.locale = locale;
+        this.hd = hd;
     }
 }

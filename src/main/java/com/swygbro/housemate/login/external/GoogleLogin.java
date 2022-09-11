@@ -31,10 +31,9 @@ public class GoogleLogin implements Login {
         // 구글로 일회성 코드를 보내 액세스 토큰이 담긴 응답객체를 받아옴 (deserialization하여 자바 객체로 변경)
         GoogleOAuthToken oAuthToken = googleOauthService.getGoogleAccessToken(additionInfo.get("code"));
 
-        //액세스 토큰을 다시 구글로 보내 구글에 저장된 사용자 정보가 담긴 응답 객체를 받아온다. (deserialization하여 자바 객체로 변경)
+        // 액세스 토큰을 다시 구글로 보내 구글에 저장된 사용자 정보가 담긴 응답 객체를 받아온다. (deserialization하여 자바 객체로 변경)
         GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);
 
-        //우리 서버의 db와 대조하여 해당 user가 존재하는 지 확인한다.
         Optional<Member> emailExists = memberRepository.findByEmail(googleUser.getEmail());
 
         Member createMember = Member.builder()
@@ -51,7 +50,7 @@ public class GoogleLogin implements Login {
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
         //액세스 토큰과 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.
-        return new GetSocialOAuthRes(jwtToken, googleUser.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type());
+        return GetSocialOAuthRes.of(jwtToken, googleUser.getId(), oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey());
     }
 
     @Override
