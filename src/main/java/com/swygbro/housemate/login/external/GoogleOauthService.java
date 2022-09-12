@@ -27,11 +27,16 @@ public class GoogleOauthService {
     @Value("${spring.OAuth2.google.client-secret}")
     private String GOOGLE_SNS_CLIENT_SECRET;
 
+    @Value("${spring.OAuth2.google.token}")
+    private String GOOGLE_TOKEN_REQUEST_URL;
+
+    @Value("${spring.OAuth2.google.user-info}")
+    private String GOOGLE_USERINFO_REQUEST_URL;
+
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     public GoogleOAuthToken getGoogleAccessToken(String code) throws JsonProcessingException {
-        String GOOGLE_TOKEN_REQUEST_URL="https://oauth2.googleapis.com/token";
         Map<String, Object> params = new HashMap<>();
         params.put("code", code);
         params.put("client_id", GOOGLE_SNS_CLIENT_ID);
@@ -49,15 +54,12 @@ public class GoogleOauthService {
     }
 
     public GoogleUser getUserInfo(GoogleOAuthToken oAuthToken) throws JsonProcessingException {
-        String GOOGLE_USERINFO_REQUEST_URL="https://www.googleapis.com/oauth2/v1/userinfo";
-
-        //header에 accessToken을 담는다.
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization","Bearer "+oAuthToken.getAccess_token());
 
-        //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
+
         return objectMapper.readValue(response.getBody(), GoogleUser.class);
     }
 

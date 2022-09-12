@@ -44,10 +44,8 @@ public class KakaoLogin implements Login {
             memberRepository.save(createMember);
         }
 
-        //서버에 user가 존재하면 앞으로 회원 인가 처리를 위한 jwtToken을 발급한다.
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
-        //액세스 토큰과 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.
         return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), KAKAO.getKey());
     }
 

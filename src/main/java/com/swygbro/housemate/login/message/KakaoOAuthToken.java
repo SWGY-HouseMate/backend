@@ -1,10 +1,12 @@
 package com.swygbro.housemate.login.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class KakaoOAuthToken {
 
     private String token_type;

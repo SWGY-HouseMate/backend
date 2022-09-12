@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.swygbro.housemate.login.domain.LoginType.GOOGLE;
-
 @Component
 @RequiredArgsConstructor
 public class GoogleLoginPage implements LoginPage {
@@ -35,17 +33,9 @@ public class GoogleLoginPage implements LoginPage {
         response.sendRedirect(RequestURL);
     }
 
-    @Override
-    public String viewGetType() {
-        return GOOGLE.getValue();
-    }
-
     /*
      * parameter를 형식에 맞춰 구성해주는 함수
-     * https://accounts.google.com/o/oauth2/v2/auth?scope=profile&response_type=code
-     * &client_id="할당받은 id"&redirect_uri="access token 처리")
-     * 로 Redirect URL을 생성하는 로직을 구성
-     * */
+     */
     private String getOauthRedirectURL(){
         Map<String,Object> params=new HashMap<>();
         params.put("scope",GOOGLE_DATA_ACCESS_SCOPE);
@@ -56,8 +46,7 @@ public class GoogleLoginPage implements LoginPage {
         String parameterString=params.entrySet().stream()
                 .map(x->x.getKey()+"="+x.getValue())
                 .collect(Collectors.joining("&"));
-        String redirectURL=GOOGLE_SNS_LOGIN_URL+"?"+parameterString;
 
-        return redirectURL;
+        return GOOGLE_SNS_LOGIN_URL + "?" + parameterString;
     }
 }

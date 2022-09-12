@@ -40,7 +40,6 @@ public class LoginController {
      * @param code API Server 로부터 넘어오는 code
      * @return SNS Login 요청 결과로 받은 Json 형태의 java 객체 (access_token, jwt_token, user_num 등)
      */
-
     @ResponseBody
     @GetMapping(value = "/auth/{socialLoginType}/callback")
     public SingleResult<Object> callback (@PathVariable String socialLoginType, @RequestParam String code) throws IOException {

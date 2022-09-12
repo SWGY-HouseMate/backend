@@ -28,3 +28,11 @@ spring:
       client-secret: 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
       callback-url: http://localhost:8080/accounts/auth/google/callback
       scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
+      token: https://oauth2.googleapis.com/token
+      user-info: https://www.googleapis.com/oauth2/v1/userinfo
+    kakao:
+      client-id: 44a3c35e7086a6cea10ebddd03df7aa7
+      token: https://kauth.kakao.com/oauth/token
+      user-info: https://kapi.kakao.com/v2/user/me
+      redirect-uri: http://localhost:8080/accounts/auth/kakao/callback
+      page-uri: https://kauth.kakao.com/oauth/authorize

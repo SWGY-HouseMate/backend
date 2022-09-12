@@ -6,6 +6,5 @@ import java.io.IOException;
 public interface LoginPage {
 
     void view(HttpServletResponse response) throws IOException;
-    String viewGetType();
 
 }

@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Getter
 @Value(staticConstructor = "of")
-public class GetSocialOAuthRes { //클라이언트로 보낼 jwtToken, accessToken등이 담긴 객체
+public class GetSocialOAuthRes {
 
     String zipHapJwtToken;
     String zipHapTokenType;
