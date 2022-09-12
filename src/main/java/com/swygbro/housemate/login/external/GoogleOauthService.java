@@ -42,9 +42,7 @@ public class GoogleOauthService {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL, params,String.class);
 
         if(responseEntity.getStatusCode() == HttpStatus.OK){
-            System.out.println("response.getBody() = " + responseEntity.getBody());
-            GoogleOAuthToken googleOAuthToken = objectMapper.readValue(responseEntity.getBody(), GoogleOAuthToken.class);
-            return googleOAuthToken;
+            return objectMapper.readValue(responseEntity.getBody(), GoogleOAuthToken.class);
         }
 
         return null;
@@ -60,7 +58,6 @@ public class GoogleOauthService {
         //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
-        System.out.println("response.getBody() = " + response.getBody());
         return objectMapper.readValue(response.getBody(), GoogleUser.class);
     }
 

@@ -3,7 +3,8 @@ package com.swygbro.housemate.login.domain;
 import com.swygbro.housemate.util.model.EnumModel;
 
 public enum MemberType implements EnumModel {
-    DEFAULT("기본")
+    DEFAULT("기본"),
+    OWNER("관리자")
     ;
 
     private final String value;

@@ -1,5 +1,6 @@
 package com.swygbro.housemate.login.external;
 
+import com.swygbro.housemate.login.service.LoginPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,9 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.swygbro.housemate.login.domain.LoginType.GOOGLE;
+
 @Component
 @RequiredArgsConstructor
-public class GoogleLoginPage {
+public class GoogleLoginPage implements LoginPage {
 
     @Value("${spring.OAuth2.google.url}")
     private String GOOGLE_SNS_LOGIN_URL;
@@ -26,9 +29,15 @@ public class GoogleLoginPage {
     @Value("${spring.OAuth2.google.scope}")
     private String GOOGLE_DATA_ACCESS_SCOPE;
 
-    public void execute(HttpServletResponse response) throws IOException {
+    @Override
+    public void view(HttpServletResponse response) throws IOException {
         String RequestURL = getOauthRedirectURL();
         response.sendRedirect(RequestURL);
+    }
+
+    @Override
+    public String viewGetType() {
+        return GOOGLE.getValue();
     }
 
     /*

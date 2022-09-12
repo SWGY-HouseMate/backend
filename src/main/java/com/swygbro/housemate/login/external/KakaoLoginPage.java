@@ -1,5 +1,6 @@
 package com.swygbro.housemate.login.external;
 
+import com.swygbro.housemate.login.service.LoginPage;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,13 +9,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.swygbro.housemate.login.domain.LoginType.KAKAO;
+
 @Component
-public class KakaoLoginPage {
-    public void execute(HttpServletResponse response) throws IOException {
+public class KakaoLoginPage implements LoginPage {
+
+    @Override
+    public void view(HttpServletResponse response) throws IOException {
         String RequestURL = getOauthRedirectURL();
         response.sendRedirect(RequestURL);
     }
 
+    @Override
+    public String viewGetType() {
+        return KAKAO.getValue();
+    }
 
     public String getOauthRedirectURL() {
         Map<String,Object> params = new HashMap<>();

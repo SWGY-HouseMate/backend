@@ -1,6 +1,5 @@
 package com.swygbro.housemate.login.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swygbro.housemate.login.external.GoogleLogin;
 import com.swygbro.housemate.login.external.KakaoLogin;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.servlet.http.HttpServletResponse;
 
 import static com.swygbro.housemate.login.domain.LoginType.*;
 import static org.assertj.core.api.Assertions.assertThat;

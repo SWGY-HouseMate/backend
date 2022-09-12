@@ -1,10 +1,9 @@
 package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.login.domain.LoginType;
-import com.swygbro.housemate.login.external.GoogleLoginPage;
-import com.swygbro.housemate.login.external.KakaoLoginPage;
-import com.swygbro.housemate.login.message.GetSocialOAuthRes;
 import com.swygbro.housemate.login.service.Login;
+import com.swygbro.housemate.login.service.LoginPage;
+import com.swygbro.housemate.login.service.LoginPageFinder;
 import com.swygbro.housemate.login.service.OAutLoginFinder;
 import com.swygbro.housemate.util.response.domain.SingleResult;
 import com.swygbro.housemate.util.response.service.ResponseService;
@@ -22,24 +21,17 @@ import java.util.Map;
 public class LoginController {
 
     private final ResponseService responseService;
-    private final GoogleLoginPage googleLoginPage;
-    private final KakaoLoginPage kakaoLoginPage;
     private final OAutLoginFinder oAutLoginFinder;
+    private final LoginPageFinder loginPageFinder;
 
     /**
-     * 구글 로그인 페이지 (테스트 용도)
-     * [POST] /accounts/auth
-     * @return void
+     * 로그인 페이지
+     * [GET] /accounts/auth/{loginType}
      */
     @GetMapping("/auth/{loginType}")
     public void googleLoginPage(@PathVariable String loginType, HttpServletResponse response) throws IOException {
-        if (loginType.equalsIgnoreCase("google")) {
-            googleLoginPage.execute(response); // 구글 소셜 로그인 리다이렉트
-        } else if (loginType.equalsIgnoreCase("kakao")) {
-            kakaoLoginPage.execute(response); // 카카오 소셜 로그인 리다이렉트
-        } else {
-            response.sendError(404, "없는 페이지 입니다.");
-        }
+        LoginPage findLoginPage = loginPageFinder.findBy(LoginType.valueOf(loginType.toUpperCase()));
+        findLoginPage.view(response);
     }
 
     /**
@@ -58,6 +50,5 @@ public class LoginController {
 
         return responseService.getSingleResult(by.execute(info));
     }
-
 
 }
