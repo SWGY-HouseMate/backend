@@ -64,4 +64,19 @@ public class KakaoService {
 
         return null;
     }
+
+    public int logout(String access_token) throws JsonProcessingException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + access_token);
+
+        HttpEntity request = new HttpEntity(headers);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity("https://kapi.kakao.com/v1/user/logout", request, String.class);
+
+        if(responseEntity.getStatusCode() == HttpStatus.OK){
+            return 1;
+        }
+
+        return 0;
+    }
+
 }

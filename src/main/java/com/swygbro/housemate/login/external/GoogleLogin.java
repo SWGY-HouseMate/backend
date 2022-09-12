@@ -27,7 +27,7 @@ public class GoogleLogin implements Login {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public Object execute(Map<String, String> additionInfo) throws JsonProcessingException {
+    public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
         GoogleOAuthToken oAuthToken = googleOauthService.getGoogleAccessToken(additionInfo.get("code"));
 
         GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);

@@ -1,6 +1,9 @@
 package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.login.domain.LoginType;
+import com.swygbro.housemate.login.external.GoogleOauthService;
+import com.swygbro.housemate.login.external.KakaoService;
+import com.swygbro.housemate.login.message.GetSocialOAuthRes;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.login.service.LoginPage;
 import com.swygbro.housemate.login.service.LoginPageFinder;
@@ -23,13 +26,15 @@ public class LoginController {
     private final ResponseService responseService;
     private final OAutLoginFinder oAutLoginFinder;
     private final LoginPageFinder loginPageFinder;
+    private final KakaoService kakaoService;
+    private final GoogleOauthService googleOauthService;
 
     /**
      * 로그인 페이지
      * [GET] /accounts/auth/{loginType}
      */
     @GetMapping("/auth/{loginType}")
-    public void googleLoginPage(@PathVariable String loginType, HttpServletResponse response) throws IOException {
+    public void loginPage(@PathVariable String loginType, HttpServletResponse response) throws IOException {
         LoginPage findLoginPage = loginPageFinder.findBy(LoginType.valueOf(loginType.toUpperCase()));
         findLoginPage.view(response);
     }
@@ -42,7 +47,7 @@ public class LoginController {
      */
     @ResponseBody
     @GetMapping(value = "/auth/{socialLoginType}/callback")
-    public SingleResult<Object> callback (@PathVariable String socialLoginType, @RequestParam String code) throws IOException {
+    public SingleResult<GetSocialOAuthRes> callbackLogin (@PathVariable String socialLoginType, @RequestParam String code) throws IOException {
         Login by = oAutLoginFinder.findBy(LoginType.valueOf(socialLoginType.toUpperCase()));
         Map<String, String> info = new HashMap<>();
         info.put("code", code);
@@ -50,4 +55,21 @@ public class LoginController {
         return responseService.getSingleResult(by.execute(info));
     }
 
+    @ResponseBody
+    @GetMapping(value = "/auth/{socialLoginType}/logout")
+    public SingleResult<String> logout (@PathVariable String socialLoginType, @RequestParam String access_token) throws IOException {
+        int isLogout = 0;
+
+        if (socialLoginType.equalsIgnoreCase("kakao")) {
+            isLogout = kakaoService.logout(access_token);
+        } else if (socialLoginType.equalsIgnoreCase("google")) {
+            isLogout = googleOauthService.logout(access_token);
+        }
+
+        if (isLogout == 1) {
+            return responseService.getSingleResult("성공하였습니다.");
+        }
+
+        return responseService.getSingleResult("실패하였습니다.");
+    }
 }

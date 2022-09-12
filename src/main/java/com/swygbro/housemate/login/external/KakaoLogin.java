@@ -27,7 +27,7 @@ public class KakaoLogin implements Login {
     private final KakaoService kakaoService;
 
     @Override
-    public Object execute(Map<String, String> additionInfo) throws JsonProcessingException {
+    public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
         KakaoOAuthToken oAuthToken = kakaoService.getKakaoAccessToken(additionInfo.get("code"));
 
         KakaoUser kakaoUser = kakaoService.getKakaoUserInfo(oAuthToken.getAccess_token());
