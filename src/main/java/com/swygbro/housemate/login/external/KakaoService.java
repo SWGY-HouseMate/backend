@@ -28,6 +28,9 @@ public class KakaoService {
     @Value("${spring.OAuth2.kakao.user-info}")
     private String KAKAO_USER_INFO_REQUEST_URL;
 
+    @Value("${spring.OAuth2.kakao.logout-uri}")
+    private String KAKAO_LOGOUT_REQUEST_URL;
+
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -70,7 +73,7 @@ public class KakaoService {
         headers.add("Authorization", "Bearer " + access_token);
 
         HttpEntity request = new HttpEntity(headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity("https://kapi.kakao.com/v1/user/logout", request, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(KAKAO_LOGOUT_REQUEST_URL, request, String.class);
 
         if(responseEntity.getStatusCode() == HttpStatus.OK){
             return 1;

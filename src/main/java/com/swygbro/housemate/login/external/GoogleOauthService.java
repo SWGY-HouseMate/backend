@@ -63,7 +63,4 @@ public class GoogleOauthService {
         return objectMapper.readValue(response.getBody(), GoogleUser.class);
     }
 
-    public int logout(String access_token) {
-        return 1; // 구현하기
-    }
 }

@@ -36,3 +36,4 @@ spring:
       user-info: https://kapi.kakao.com/v2/user/me
       redirect-uri: http://localhost:8080/accounts/auth/kakao/callback
       page-uri: https://kauth.kakao.com/oauth/authorize
+      logout-uri: https://kapi.kakao.com/v1/user/logout

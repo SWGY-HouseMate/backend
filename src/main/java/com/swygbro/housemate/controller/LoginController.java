@@ -55,21 +55,4 @@ public class LoginController {
         return responseService.getSingleResult(by.execute(info));
     }
 
-    @ResponseBody
-    @GetMapping(value = "/auth/{socialLoginType}/logout")
-    public SingleResult<String> logout (@PathVariable String socialLoginType, @RequestParam String access_token) throws IOException {
-        int isLogout = 0;
-
-        if (socialLoginType.equalsIgnoreCase("kakao")) {
-            isLogout = kakaoService.logout(access_token);
-        } else if (socialLoginType.equalsIgnoreCase("google")) {
-            isLogout = googleOauthService.logout(access_token);
-        }
-
-        if (isLogout == 1) {
-            return responseService.getSingleResult("성공하였습니다.");
-        }
-
-        return responseService.getSingleResult("실패하였습니다.");
-    }
 }
