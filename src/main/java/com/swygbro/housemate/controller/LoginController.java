@@ -1,8 +1,6 @@
 package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.login.domain.LoginType;
-import com.swygbro.housemate.login.external.GoogleOauthService;
-import com.swygbro.housemate.login.external.KakaoService;
 import com.swygbro.housemate.login.message.GetSocialOAuthRes;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.login.service.LoginPage;
@@ -26,8 +24,6 @@ public class LoginController {
     private final ResponseService responseService;
     private final OAutLoginFinder oAutLoginFinder;
     private final LoginPageFinder loginPageFinder;
-    private final KakaoService kakaoService;
-    private final GoogleOauthService googleOauthService;
 
     /**
      * 로그인 페이지
