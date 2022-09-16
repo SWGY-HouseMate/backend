@@ -8,6 +8,7 @@ import com.swygbro.housemate.login.message.GoogleUser;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.security.jwt.JwtTokenProvider;
+import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class GoogleLogin implements Login {
     private final GoogleOauthService googleOauthService;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UUIDUtil uuidUtil;
 
     @Override
     public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
@@ -35,9 +37,11 @@ public class GoogleLogin implements Login {
         Optional<Member> emailExists = memberRepository.findByEmail(googleUser.getEmail());
 
         Member createMember = Member.builder()
+                .memberId((uuidUtil.create()))
                 .email(googleUser.getEmail())
                 .memberRoles(Collections.singletonList(DEFAULT))
                 .loginRole(GOOGLE.getKey())
+                .group(null)
                 .build();
 
         if (emailExists.isEmpty()) {
@@ -46,7 +50,7 @@ public class GoogleLogin implements Login {
 
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
-        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey());
+        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey(), createMember.getMemberId());
     }
 
     @Override

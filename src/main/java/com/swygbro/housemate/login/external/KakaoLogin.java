@@ -8,6 +8,7 @@ import com.swygbro.housemate.login.message.KakaoUser;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.login.service.Login;
 import com.swygbro.housemate.security.jwt.JwtTokenProvider;
+import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class KakaoLogin implements Login {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoService kakaoService;
+    private final UUIDUtil uuidUtil;
 
     @Override
     public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
@@ -35,9 +37,11 @@ public class KakaoLogin implements Login {
         Optional<Member> emailExists = memberRepository.findByEmail(kakaoUser.getEmail());
 
         Member createMember = Member.builder()
+                .memberId(uuidUtil.create())
                 .email(kakaoUser.getEmail())
                 .memberRoles(Collections.singletonList(DEFAULT))
                 .loginRole(KAKAO.getKey())
+                .group(null)
                 .build();
 
         if (emailExists.isEmpty()) {
@@ -46,7 +50,7 @@ public class KakaoLogin implements Login {
 
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
-        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), KAKAO.getKey());
+        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), KAKAO.getKey(), createMember.getMemberId());
     }
 
     @Override
