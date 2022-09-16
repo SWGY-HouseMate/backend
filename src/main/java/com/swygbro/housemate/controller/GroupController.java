@@ -1,5 +1,6 @@
 package com.swygbro.housemate.controller;
 
+import com.swygbro.housemate.group.message.GroupCreator;
 import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.service.GroupFactory;
 import com.swygbro.housemate.util.response.domain.SingleResult;
@@ -16,9 +17,8 @@ public class GroupController {
     private final ResponseService responseService;
 
     @PostMapping("/create")
-    public SingleResult<GroupResponse> createGroup(@RequestParam String currentMemberId,
-                                                  @RequestParam String groupName) {
-        return responseService.getSingleResult(groupFactory.create(currentMemberId, groupName));
+    public SingleResult<GroupResponse> createGroup(@RequestBody GroupCreator groupCreator) {
+        return responseService.getSingleResult(groupFactory.create(groupCreator));
     }
 
     @PostMapping("/join/{linkId}")

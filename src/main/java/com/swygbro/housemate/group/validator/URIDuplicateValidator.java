@@ -12,6 +12,6 @@ public class URIDuplicateValidator implements ValidatorURI {
 
     @Override
     public Boolean valid(String uri) {
-        return groupRepository.findByLink(uri).isPresent();
+        return groupRepository.findByLinkId(uri).isPresent();
     }
 }

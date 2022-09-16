@@ -13,7 +13,7 @@ public class LinkCreator {
         String uri = userId + "-" + RandomStringUtils.randomNumeric(4) + "-" + System.currentTimeMillis();
         validator.stream()
                 .filter(v -> v.valid(uri))
-                .map(v -> new Exception("Validation Fail"));
+                .map(v -> new IllegalStateException("Validation Fail"));
 
         return uri;
     }

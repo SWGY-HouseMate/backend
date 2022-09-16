@@ -22,7 +22,7 @@ public class Group extends AbstractEntity {
     @Id
     private String groupId;
 
-    private String link;
+    private String linkId;
 
     private String name;
 
@@ -30,7 +30,6 @@ public class Group extends AbstractEntity {
     @JoinColumn(name = "memberId")
     private Member owner;
 
-    // 연관관계 편의 메소드
     public void applyMember(final Member member) {
         this.owner = member;
         member.setGroup(this);
