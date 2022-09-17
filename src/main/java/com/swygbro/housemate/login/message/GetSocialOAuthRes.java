@@ -12,5 +12,6 @@ public class GetSocialOAuthRes {
     String socialLoginAccessToken;
     String socialLoginTokenType;
     String socialLoginLoginType;
+    String memberId;
 
 }

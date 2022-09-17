@@ -1,46 +1,46 @@
 package com.swygbro.housemate.login.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.util.model.AbstractEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Builder
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @PersistenceConstructor)
 @Table(name = "member")
 public class Member extends AbstractEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long memberId;
+    private String memberId;
 
     @Column(nullable = false, unique = true, length = 30)
     private String email;
 
-    @Column(nullable = false, unique = true, length = 30)
     private String loginRole;
 
     @Enumerated(STRING) @Column(name = "member_role")
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "member_role", joinColumns = @JoinColumn(name = "memberId"))
+    @CollectionTable(name = "member_role", joinColumns = @JoinColumn(name = "id"))
     @Builder.Default
     private List<MemberType> memberRoles = new ArrayList<>();
+
+    @ManyToOne(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = LAZY, optional = true)
+    @JoinColumn(name = "groupId")
+    private Group group;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
@@ -86,5 +86,13 @@ public class Member extends AbstractEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateRole(MemberType memberType) {
+        this.memberRoles = Collections.singletonList(memberType);
+    }
+
+    public void setGroup(final Group group) {
+        this.group = group;
     }
 }

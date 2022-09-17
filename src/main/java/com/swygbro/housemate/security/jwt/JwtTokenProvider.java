@@ -38,10 +38,6 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getMemberRole(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("MemberRole", String.class);
-    }
-
     public String getLoginRole(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("LoginRole", String.class);
     }
@@ -54,7 +50,6 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(member.getEmail());
         claims.put("TokenName", ACCESS_TOKEN_NAME);
         claims.put("MemberEmail", member.getEmail());
-        claims.put("MemberRole", member.getMemberRole());
         claims.put("LoginRole", member.getLoginRole());
 
         Date now = new Date();
