@@ -34,14 +34,14 @@ public class GoogleLogin implements Login {
 
         GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);
 
-        Optional<Member> emailExists = memberRepository.findByEmail(googleUser.getEmail());
+        Optional<Member> emailExists = memberRepository.findByMemberEmail(googleUser.getEmail());
 
         Member createMember = Member.builder()
                 .memberId((uuidUtil.create()))
-                .email(googleUser.getEmail())
-                .memberRoles(Collections.singletonList(DEFAULT))
-                .loginRole(GOOGLE.getKey())
-                .group(null)
+                .memberEmail(googleUser.getEmail())
+                .memberAuthorityRoles(Collections.singletonList(DEFAULT))
+                .memberLoginRole(GOOGLE.getKey())
+                .zipHapGroup(null)
                 .build();
 
         if (emailExists.isEmpty()) {

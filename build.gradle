@@ -43,8 +43,8 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.2'
     implementation 'io.swagger:swagger-models:1.5.22'
 
-    // *** h2 *** //
-    runtimeOnly 'com.h2database:h2'
+    // *** mysql *** //
+    runtimeOnly 'mysql:mysql-connector-java'
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 }

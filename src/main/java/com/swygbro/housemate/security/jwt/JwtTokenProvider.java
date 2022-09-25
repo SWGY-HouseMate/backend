@@ -47,10 +47,10 @@ public class JwtTokenProvider {
     }
 
     public String createToken(Member member){
-        Claims claims = Jwts.claims().setSubject(member.getEmail());
+        Claims claims = Jwts.claims().setSubject(member.getMemberEmail());
         claims.put("TokenName", ACCESS_TOKEN_NAME);
-        claims.put("MemberEmail", member.getEmail());
-        claims.put("LoginRole", member.getLoginRole());
+        claims.put("MemberEmail", member.getMemberEmail());
+        claims.put("LoginRole", member.getMemberLoginRole());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + TOKEN_VALIDATION_SECOND); //Expire Time

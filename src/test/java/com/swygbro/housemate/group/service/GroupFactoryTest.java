@@ -8,6 +8,7 @@ import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
+import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,13 +47,15 @@ class GroupFactoryTest {
     Member member;
     @Mock
     Group group;
+    @Mock
+    CurrentMemberUtil currentMemberUtil;
 
     String uriId = "aaa";
     GroupResponse groupResponse = GroupResponse.of(uriId, "aaa", "aaa");
 
     @BeforeEach
     void setUp() {
-        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, uuidUtil, uriDuplicateValidator);
+        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, currentMemberUtil, uuidUtil, uriDuplicateValidator);
     }
 
     @Test

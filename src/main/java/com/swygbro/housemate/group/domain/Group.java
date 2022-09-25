@@ -16,15 +16,15 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "groups")
+@Table(name = "ziphap_group")
 public class Group extends AbstractEntity {
 
     @Id
-    private String groupId;
+    private String zipHapGroupId;
 
     private String linkId;
 
-    private String name;
+    private String groupName;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "memberId")
@@ -32,6 +32,6 @@ public class Group extends AbstractEntity {
 
     public void applyMember(final Member member) {
         this.owner = member;
-        member.setGroup(this);
+        member.setZipHapGroup(this);
     }
 }
