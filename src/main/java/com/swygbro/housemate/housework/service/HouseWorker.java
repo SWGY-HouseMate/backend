@@ -7,7 +7,5 @@ import com.swygbro.housemate.housework.message.CreateHouseWork;
 import java.util.List;
 
 public interface HouseWorker {
-
     List<HouseWork> createWorks(CreateHouseWork createHouseWork, Long days);
-
 }

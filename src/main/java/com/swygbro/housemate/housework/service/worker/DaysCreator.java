@@ -22,8 +22,10 @@ public class DaysCreator implements HouseWorker {
         List<HouseWork> returnHouseWork = new ArrayList<>();
 
         int day = (Integer) createHouseWork.getProps().get("additional");
+        LocalDate startAt = createHouseWork.getStartAt();
+
         for (int i = 0; i <= days; i+=day) {
-            returnHouseWork.add(createHouseWork(createHouseWork, createHouseWork.getStartAt(), i));
+            returnHouseWork.add(createHouseWork(createHouseWork, startAt, i));
         }
 
         return returnHouseWork;

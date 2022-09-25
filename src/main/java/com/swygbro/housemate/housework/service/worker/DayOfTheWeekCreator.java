@@ -27,12 +27,13 @@ public class DayOfTheWeekCreator implements HouseWorker {
 
         String dayOfTheWeek = (String) createHouseWork.getProps().get("additional");
         String[] dayOfTheWeekSplit = dayOfTheWeek.split(",");
+        LocalDate startAt = createHouseWork.getStartAt();
 
         for (int i = 0; i <= days; i++) {
             int finalI = i;
             Arrays.stream(dayOfTheWeekSplit).forEach(s -> {
-                if(s.equals(createHouseWork.getStartAt().plusDays(finalI).getDayOfWeek().getDisplayName(FULL, KOREAN))) {
-                    returnHouseWork.add(createHouseWork(createHouseWork, createHouseWork.getStartAt(), finalI));
+                if(s.equals(startAt.plusDays(finalI).getDayOfWeek().getDisplayName(FULL, KOREAN))) {
+                    returnHouseWork.add(createHouseWork(createHouseWork, startAt, finalI));
                 }
             });
         }

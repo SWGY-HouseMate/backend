@@ -28,26 +28,19 @@ import java.util.List;
 public class HouseWorkProcess {
 
     private final ManagedFactory managedFactory;
-    private final HouseWorkRepository houseWorkRepository;
-    private final UUIDUtil uuidUtil;
-    private final CycleCondition cycleCondition;
     private final CycleFactory cycleFactory;
     private final HoseWorkFinder hoseWorkFinder;
+    private final CycleCondition cycleCondition;
+    private final HouseWorkRepository houseWorkRepository;
     private final CycleRepository cycleRepository;
+    private final UUIDUtil uuidUtil;
 
     @Transactional
     public HoseWorkRes execute(CreateHouseWork createHouseWork) throws ParseException {
         Boolean condition = getCondition(createHouseWork);
 
         if (!condition) {
-            HouseWork houseWork = houseWorkRepository.save(HouseWork.builder()
-                    .houseWorkId(uuidUtil.create())
-                    .title(createHouseWork.getTitle())
-                    .difficulty(createHouseWork.getDifficulty())
-                    .isCycle(createHouseWork.getIsCycle())
-                    .date(createHouseWork.getToday())
-                    .isCompleted(false)
-                    .build());
+            HouseWork houseWork = createHouseWork(createHouseWork);
 
             managedFactory.assign(List.of(houseWork));
             houseWorkRepository.save(houseWork);
@@ -68,7 +61,18 @@ public class HouseWorkProcess {
         managedFactory.assign(houseWorkerWorks); // 담당자와 그룹 할당
         houseWorkRepository.saveAll(houseWorkerWorks);
 
-        return HoseWorkRes.of("반복 주기 생성 완료");
+        return HoseWorkRes.of("반복 주기 및 집안일 생성 완료");
+    }
+
+    private HouseWork createHouseWork(CreateHouseWork createHouseWork) {
+        return houseWorkRepository.save(HouseWork.builder()
+                .houseWorkId(uuidUtil.create())
+                .title(createHouseWork.getTitle())
+                .difficulty(createHouseWork.getDifficulty())
+                .isCycle(createHouseWork.getIsCycle())
+                .date(createHouseWork.getToday())
+                .isCompleted(false)
+                .build());
     }
 
     private long startAtAndEndAtDiff(CreateHouseWork createHouseWork) throws ParseException {
