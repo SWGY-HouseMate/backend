@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByMemberId(String memberId);
     Optional<Member> findByMemberEmail(String email);
-
-//    @Query("SELECT m FROM Member m join fetch m.zipHapGroup where m.memberEmail = :email")
-//    Member findByMemberEmailJPQL(@Param("email") String email);
+    @Query("SELECT m FROM Member m join fetch m.zipHapGroup where m.memberEmail = :email")
+    Member findByMemberEmailJPQL(@Param("email") String email);
 }

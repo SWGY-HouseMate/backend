@@ -7,9 +7,9 @@ import lombok.*;
 import org.springframework.data.annotation.PersistenceConstructor;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
@@ -29,7 +29,7 @@ public class HouseWork extends AbstractEntity {
     @Enumerated(STRING)
     private DifficultyType difficulty;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "memberId")
     private Member manager;
 
@@ -39,17 +39,20 @@ public class HouseWork extends AbstractEntity {
 
     private Boolean isCycle;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "zipHapGroupId")
     private Group group;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "cycleId")
     private Cycle cycle;
 
-    @Transactional
     public void setAssign(Member manager, Group group) {
         this.manager = manager;
         this.group = group;
+    }
+
+    public void setCycle(Cycle cycle) {
+        this.cycle = cycle;
     }
 }

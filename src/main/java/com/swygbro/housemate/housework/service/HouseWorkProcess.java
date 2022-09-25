@@ -1,7 +1,6 @@
 package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.domain.Cycle;
-import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.message.HoseWorkRes;
@@ -36,7 +35,6 @@ public class HouseWorkProcess {
     private final HoseWorkFinder hoseWorkFinder;
     private final CycleRepository cycleRepository;
 
-
     @Transactional
     public HoseWorkRes execute(CreateHouseWork createHouseWork) throws ParseException {
         Boolean condition = getCondition(createHouseWork);
@@ -52,40 +50,39 @@ public class HouseWorkProcess {
                     .build());
 
             managedFactory.assign(List.of(houseWork));
+            houseWorkRepository.save(houseWork);
             return HoseWorkRes.of("단일 집안일 생성 완료");
         }
 
         // 반복 주기 만큼 DB row 생성
-        long days = getDays(createHouseWork);
+        Cycle cycle = cycleRepository.save(cycleFactory.create(createHouseWork));
 
-        CycleType cycleType = createHouseWork.getCycleType();
-        HouseWorker houseWorker = hoseWorkFinder.findBy(cycleType);
-        List<HouseWork> houseWorkerWorks = houseWorker.createWorks(createHouseWork, days);
-        houseWorkRepository.saveAll(houseWorkerWorks);
+        long days = startAtAndEndAtDiff(createHouseWork);
+        List<HouseWork> houseWorkerWorks = hoseWorkFinder.findBy(createHouseWork.getCycleType())
+                .createWorks(createHouseWork, days);
 
-        Cycle cycle = cycleFactory.create(createHouseWork);
-        for (HouseWork houseWorkerWork : houseWorkerWorks) {
-            cycle.setHouseWork(houseWorkerWork);
+        for (HouseWork houseWorkerWork : houseWorkerWorks) { // 반복 주기 할당
+            houseWorkerWork.setCycle(cycle);
         }
 
-        cycleRepository.save(cycle);
+        managedFactory.assign(houseWorkerWorks); // 담당자와 그룹 할당
+        houseWorkRepository.saveAll(houseWorkerWorks);
 
-        managedFactory.assign(houseWorkerWorks);
         return HoseWorkRes.of("반복 주기 생성 완료");
     }
 
-    private long getDays(CreateHouseWork createHouseWork) throws ParseException {
+    private long startAtAndEndAtDiff(CreateHouseWork createHouseWork) throws ParseException {
         LocalDate startAt = createHouseWork.getStartAt();
         LocalDate endAt = createHouseWork.getEndAt();
 
-        Date startDate = getDate(startAt);
-        Date endDate = getDate(endAt);
+        Date startDate = dateConverter(startAt);
+        Date endDate = dateConverter(endAt);
 
         long differenceInMillis = endDate.getTime() - startDate.getTime();
         return  (differenceInMillis / (24 * 60 * 60 * 1000));
     }
 
-    private Date getDate(LocalDate localDate) {
+    private Date dateConverter(LocalDate localDate) {
         ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
         Instant instant = zonedDateTime.toInstant();
         Date date = Date.from(instant);

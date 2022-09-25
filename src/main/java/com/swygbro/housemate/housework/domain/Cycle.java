@@ -33,12 +33,4 @@ public class Cycle extends AbstractEntity {
 
     private LocalDate endAt;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "houseWorkId")
-    private HouseWork houseWork;
-
-    @Transactional
-    public void setHouseWork(HouseWork houseWork) {
-        this.houseWork = houseWork;
-    }
 }

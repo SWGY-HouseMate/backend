@@ -19,12 +19,12 @@ public class ManagedFactory {
 
     private final MemberRepository memberRepository;
 
-    @Transactional
     public void assign(List<HouseWork> houseWorkList) {
         Member currentMember = currentMemberUtil.getCurrentMemberObject();
+        Member byMemberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMember.getMemberEmail());
 
         houseWorkList.forEach(houseWork -> {
-            houseWork.setAssign(currentMember, currentMember.getZipHapGroup());
+            houseWork.setAssign(byMemberEmailJPQL, byMemberEmailJPQL.getZipHapGroup());
         });
     }
 

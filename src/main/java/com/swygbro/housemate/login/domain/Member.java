@@ -39,8 +39,8 @@ public class Member extends AbstractEntity implements UserDetails {
     @Builder.Default
     private List<MemberType> memberAuthorityRoles = new ArrayList<>();
 
-    @ManyToOne(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = EAGER, optional = true)
-    @JoinColumn(name = "groupId")
+    @ManyToOne(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = LAZY, optional = true)
+    @JoinColumn(name = "zipHapGroupId")
     private Group zipHapGroup;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
