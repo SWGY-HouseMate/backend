@@ -17,16 +17,15 @@ public class MouthCreator implements HouseWorker {
 
     private final UUIDUtil uuidUtil;
 
-    @Override // TODO: 이것만 성공하면 됨.
+    @Override
     public List<HouseWork> createWorks(CreateHouseWork createHouseWork, Long days) {
         List<HouseWork> returnHouseWork = new ArrayList<>();
-        for (int i = 1; i <= days; i++) {
-            int finalI = i;
-            // if (createHouseWork.getStartAt().get) 계속 돌면서 startAt days == i 같으면 생성
+        LocalDate startAt = createHouseWork.getStartAt();
 
-
-            int mouth = createHouseWork.getStartAt().getMonthValue() + i;
-            returnHouseWork.add(createHouseWork(createHouseWork, createHouseWork.getStartAt(), i));
+        for (int i = 0; i <= days; i++) {
+            if (startAt.getDayOfMonth() == startAt.plusDays(i).getDayOfMonth()) {
+                returnHouseWork.add(createHouseWork(createHouseWork, startAt, i));
+            }
         }
 
         return returnHouseWork;
