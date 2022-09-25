@@ -1,6 +1,5 @@
 package com.swygbro.housemate.housework.service.worker;
 
-import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.service.HouseWorker;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.time.format.TextStyle.FULL;
 import static java.util.Locale.KOREAN;
@@ -30,7 +28,7 @@ public class DayOfTheWeekCreator implements HouseWorker {
         String dayOfTheWeek = (String) createHouseWork.getProps().get("additional");
         String[] dayOfTheWeekSplit = dayOfTheWeek.split(",");
 
-        for (int i = 1; i <= days; i++) {
+        for (int i = 0; i <= days; i++) {
             int finalI = i;
             Arrays.stream(dayOfTheWeekSplit).forEach(s -> {
                 if(s.equals(createHouseWork.getStartAt().plusDays(finalI).getDayOfWeek().getDisplayName(FULL, KOREAN))) {
