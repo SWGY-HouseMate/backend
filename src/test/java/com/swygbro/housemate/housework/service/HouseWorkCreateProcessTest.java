@@ -5,20 +5,16 @@ import com.swygbro.housemate.housework.repository.CycleRepository;
 import com.swygbro.housemate.housework.repository.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
 import com.swygbro.housemate.login.ManagedFactory;
-import com.swygbro.housemate.login.ManagerFactory;
 import com.swygbro.housemate.util.condition.CycleCondition;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
-class HouseWorkProcessTest {
+class HouseWorkCreateProcessTest {
 
-    HouseWorkProcess sut;
+    HouseWorkCreateProcess sut;
 
     @Mock
     CreateHouseWork createHouseWork;
@@ -39,10 +35,10 @@ class HouseWorkProcessTest {
     ManagedFactory managedFactory;
 
 
-    @BeforeEach
-    void setUp() {
-        sut = new HouseWorkProcess(managedFactory, houseWorkRepository, uuidUtil, cycleCondition, cycleFactory);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        sut = new HouseWorkCreateProcess(managedFactory, houseWorkRepository, uuidUtil, cycleCondition, cycleFactory);
+//    }
 
 //    @Test
 //    void when_create_house_work_cycle_true_success() {

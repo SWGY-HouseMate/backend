@@ -4,6 +4,7 @@ package com.swygbro.housemate.housework.service;
 import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.service.worker.DayOfTheWeekCreator;
 import com.swygbro.housemate.housework.service.worker.DaysCreator;
+import com.swygbro.housemate.housework.service.worker.HouseWorker;
 import com.swygbro.housemate.housework.service.worker.MouthCreator;
 import org.springframework.stereotype.Component;
 

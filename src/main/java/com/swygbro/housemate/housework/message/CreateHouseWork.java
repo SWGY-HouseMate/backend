@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.domain.DifficultyType;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
-@RequiredArgsConstructor
 public class CreateHouseWork {
 
     private String title;

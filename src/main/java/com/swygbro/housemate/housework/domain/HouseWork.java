@@ -33,7 +33,7 @@ public class HouseWork extends AbstractEntity {
     @JoinColumn(name = "memberId")
     private Member manager;
 
-    private LocalDate date;
+    private LocalDate today;
 
     private Boolean isCompleted;
 

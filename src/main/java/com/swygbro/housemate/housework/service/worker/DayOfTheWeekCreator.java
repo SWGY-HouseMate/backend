@@ -2,7 +2,6 @@ package com.swygbro.housemate.housework.service.worker;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.service.HouseWorker;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -47,7 +46,7 @@ public class DayOfTheWeekCreator implements HouseWorker {
                 .title(createHouseWork.getTitle())
                 .difficulty(createHouseWork.getDifficulty())
                 .isCycle(createHouseWork.getIsCycle())
-                .date(startAt.plusDays(i))
+                .today(startAt.plusDays(i))
                 .isCompleted(false)
                 .build();
     }
