@@ -21,7 +21,7 @@ public class GroupController {
         return responseService.getSingleResult(groupFactory.create(groupCreator));
     }
 
-    @PostMapping("/join/{linkId}")
+    @GetMapping("/join/{linkId}")
     public SingleResult<GroupResponse> joinGroup(@PathVariable String linkId,
                             @RequestParam String addMemberId) {
         return responseService.getSingleResult(groupFactory.join(linkId, addMemberId));

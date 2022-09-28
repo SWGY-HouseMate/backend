@@ -6,10 +6,8 @@ import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
-import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
-import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.springframework.stereotype.Service;
 
@@ -21,24 +19,20 @@ import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
 public class GroupFactory {
-
     private final List<ValidatorURI> validators = new ArrayList<>();
     private final LinkCreator linkCreator;
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
-    private final CurrentMemberUtil currentMemberUtil;
     private final UUIDUtil uuidUtil;
 
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
                         MemberRepository memberRepository,
-                        CurrentMemberUtil currentMemberUtil,
                         UUIDUtil uuidUtil,
                         URIDuplicateValidator uriDuplicateValidator) {
         this.linkCreator = linkCreator;
         this.memberRepository = memberRepository;
         this.groupRepository = groupRepository;
-        this.currentMemberUtil = currentMemberUtil;
         this.uuidUtil = uuidUtil;
         validators.add(uriDuplicateValidator);
     }
