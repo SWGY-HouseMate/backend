@@ -39,6 +39,8 @@ public class GoogleLogin implements Login {
         Member createMember = Member.builder()
                 .memberId((uuidUtil.create()))
                 .memberEmail(googleUser.getEmail())
+                .memberName(googleUser.getName()) // 전체 이름 저장 -> 이후 수정할 수 있음
+                .memberProfilePicture(googleUser.getPicture())
                 .memberAuthorityRoles(Collections.singletonList(DEFAULT))
                 .memberLoginRole(GOOGLE.getKey())
                 .zipHapGroup(null)

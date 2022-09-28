@@ -39,6 +39,8 @@ public class KakaoLogin implements Login {
         Member createMember = Member.builder()
                 .memberId(uuidUtil.create())
                 .memberEmail(kakaoUser.getEmail())
+                .memberName(kakaoUser.getName())
+                .memberProfilePicture(kakaoUser.getPicture())
                 .memberAuthorityRoles(Collections.singletonList(DEFAULT))
                 .memberLoginRole(KAKAO.getKey())
                 .zipHapGroup(null)

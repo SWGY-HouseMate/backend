@@ -31,6 +31,10 @@ public class Member extends AbstractEntity implements UserDetails {
     @Column(length = 30)
     private String memberEmail;
 
+    private String memberName;
+
+    private String memberProfilePicture;
+
     private String memberLoginRole;
 
     @Enumerated(STRING) @Column(name = "member_role")
