@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SearchDateProcess { // Group 내에서 Today를 기준으로 집안일 가져오기
+public class SearchDateProcess {
 
     private final HouseWorkRepository houseWorkRepository;
 
