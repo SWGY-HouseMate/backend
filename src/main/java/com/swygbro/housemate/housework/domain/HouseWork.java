@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
@@ -43,7 +44,7 @@ public class HouseWork extends AbstractEntity {
     @JoinColumn(name = "zipHapGroupId")
     private Group group;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cycleId")
     private Cycle cycle;
 
@@ -54,5 +55,9 @@ public class HouseWork extends AbstractEntity {
 
     public void setCycle(Cycle cycle) {
         this.cycle = cycle;
+    }
+
+    public void setCompleted(Boolean completed) {
+        isCompleted = completed;
     }
 }

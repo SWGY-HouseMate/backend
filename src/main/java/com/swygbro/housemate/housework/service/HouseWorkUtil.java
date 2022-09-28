@@ -2,11 +2,15 @@ package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
+import com.swygbro.housemate.housework.repository.HouseWorkRepository;
+import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.condition.CycleCondition;
+import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -20,6 +24,8 @@ import java.util.Date;
 public class HouseWorkUtil {
     private final CycleCondition cycleCondition;
     private final UUIDUtil uuidUtil;
+    private final HouseWorkRepository houseWorkRepository;
+    private final CurrentMemberUtil currentMemberUtil;
 
     public Boolean getCondition(CreateHouseWork createHouseWork) {
         return cycleCondition.isSatisfiedBy(createHouseWork);
@@ -54,5 +60,18 @@ public class HouseWorkUtil {
                 .today(createHouseWork.getToday())
                 .isCompleted(false)
                 .build();
+    }
+
+    @Transactional
+    public String completion(String houseWorkId, Boolean isCompleted) {
+        Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
+        HouseWork findByHouseWorkId = houseWorkRepository.findByHouseWorkIdJoinManger(houseWorkId).orElseThrow(null);
+
+        if (!currentMemberObject.getMemberEmail().equals(findByHouseWorkId.getManager().getMemberEmail())) { // 현재 로그인된 사용자가 집안일을 등록한 자이면 완료 표시 허용
+            throw new IllegalStateException("권한 없음");
+        }
+
+        findByHouseWorkId.setCompleted(isCompleted);
+        return findByHouseWorkId.getHouseWorkId();
     }
 }
