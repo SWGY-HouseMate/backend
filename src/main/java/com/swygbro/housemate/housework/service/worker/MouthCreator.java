@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class MouthCreator implements HouseWorker {
-
     private final UUIDUtil uuidUtil;
 
     @Override
@@ -21,9 +20,10 @@ public class MouthCreator implements HouseWorker {
         List<HouseWork> returnHouseWork = new ArrayList<>();
 
         LocalDate startAt = createHouseWork.getStartAt();
+        LocalDate reiterationDate = LocalDate.parse(createHouseWork.getProps().get("additional").toString());
 
         for (int i = 0; i <= days; i++) {
-            if (startAt.getDayOfMonth() == startAt.plusDays(i).getDayOfMonth()) {
+            if (reiterationDate.getDayOfMonth() == startAt.plusDays(i).getDayOfMonth()) {
                 returnHouseWork.add(createHouseWork(createHouseWork, startAt, i));
             }
         }
