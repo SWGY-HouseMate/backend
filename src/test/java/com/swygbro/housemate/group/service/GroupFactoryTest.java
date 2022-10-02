@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -49,13 +50,15 @@ class GroupFactoryTest {
     Group group;
     @Mock
     CurrentMemberUtil currentMemberUtil;
+    @Mock
+    ModelMapper modelMapper;
 
     String uriId = "aaa";
     GroupResponse groupResponse = GroupResponse.of(uriId, "aaa", "aaa");
 
     @BeforeEach
     void setUp() {
-        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, currentMemberUtil, uuidUtil, uriDuplicateValidator);
+        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, uuidUtil, modelMapper, uriDuplicateValidator);
     }
 
     @Test

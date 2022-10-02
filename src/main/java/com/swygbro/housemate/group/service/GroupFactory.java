@@ -2,13 +2,16 @@ package com.swygbro.housemate.group.service;
 
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupCreator;
+import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
+import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,15 +28,19 @@ public class GroupFactory {
     private final MemberRepository memberRepository;
     private final UUIDUtil uuidUtil;
 
+    private final ModelMapper modelMapper;
+
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
                         MemberRepository memberRepository,
                         UUIDUtil uuidUtil,
+                        ModelMapper modelMapper,
                         URIDuplicateValidator uriDuplicateValidator) {
         this.linkCreator = linkCreator;
         this.memberRepository = memberRepository;
         this.groupRepository = groupRepository;
         this.uuidUtil = uuidUtil;
+        this.modelMapper = modelMapper;
         validators.add(uriDuplicateValidator);
     }
 
@@ -58,4 +65,9 @@ public class GroupFactory {
         return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());
     }
 
+    public GroupInfo info(String likeId) {
+        return groupRepository.findByLinkIdQuery(likeId)
+                .map(m -> modelMapper.map(m, GroupInfo.class))
+                .orElseThrow(null);
+    }
 }
