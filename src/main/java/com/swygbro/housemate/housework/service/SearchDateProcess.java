@@ -1,7 +1,9 @@
 package com.swygbro.housemate.housework.service;
 
 
+import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupInfo;
+import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CycleInfo;
 import com.swygbro.housemate.housework.message.HoseWorkRes;
@@ -18,22 +20,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SearchDateProcess {
 
     private final HouseWorkRepository houseWorkRepository;
-
+    private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
     private final CurrentMemberUtil currentMemberUtil;
-
     private final ModelMapper mapper;
 
     public HoseWorkRes executeByGroup(SearchHouseWorkAtDate searchHouseWorkAtDate) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
 
         Member memberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMemberObject.getMemberEmail());
+        Group byLinkIdQuery = groupRepository.findByLinkIdQuery(memberEmailJPQL.getZipHapGroup().getLinkId()).orElseThrow(null);
         List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroupDSL(searchHouseWorkAtDate.getStartAt(),
                     searchHouseWorkAtDate.getEndAt(), memberEmailJPQL.getZipHapGroup());
 
@@ -52,7 +55,7 @@ public class SearchDateProcess {
                     cycleInfo, memberInfo));
         }
 
-        GroupInfo groupInfo = mapper.map(houseWorkList.get(0).getGroup(), GroupInfo.class);
+        GroupInfo groupInfo = mapper.map(byLinkIdQuery, GroupInfo.class);
         return HoseWorkRes.of(houseWorkInfos, groupInfo);
     }
 

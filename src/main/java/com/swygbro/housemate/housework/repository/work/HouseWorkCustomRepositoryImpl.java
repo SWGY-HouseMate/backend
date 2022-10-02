@@ -1,5 +1,6 @@
 package com.swygbro.housemate.housework.repository.work;
 
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.housework.domain.HouseWork;
@@ -29,16 +30,15 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     @Override
     public List<HouseWork> searchHouseWorkAtDateByGroupDSL(LocalDate startAt, LocalDate endAt, Group group) {
         return queryFactory.selectFrom(houseWork)
-                .join(houseWork.manager)
-                .fetchJoin()
-                .join(houseWork.cycle)
-                .fetchJoin()
-                .join(houseWork.group)
-                .where(houseWork.today.between(startAt, endAt)
+               .join(houseWork.manager).fetchJoin()
+               .join(houseWork.cycle).fetchJoin()
+               .join(houseWork.group).fetchJoin()
+               .where(houseWork.today.between(startAt, endAt)
                         .and(houseWork.group.eq(group)))
-                .fetchAll()
-                .fetch();
+               .fetchAll()
+               .fetch();
     }
+
 
 
 }
