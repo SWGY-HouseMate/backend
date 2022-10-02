@@ -11,6 +11,7 @@ import com.swygbro.housemate.housework.message.HouseWorkMemberInfo;
 import com.swygbro.housemate.login.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static com.swygbro.housemate.housework.domain.QHouseWork.houseWork;
 import static com.swygbro.housemate.login.domain.QMember.member;
 
+@Repository
 @RequiredArgsConstructor
 public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository {
 

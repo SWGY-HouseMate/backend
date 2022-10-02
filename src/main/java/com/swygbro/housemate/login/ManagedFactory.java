@@ -21,7 +21,7 @@ public class ManagedFactory {
 
     public void assign(List<HouseWork> houseWorkList) {
         Member currentMember = currentMemberUtil.getCurrentMemberObject();
-        Member byMemberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMember.getMemberEmail());
+        Member byMemberEmailJPQL = memberRepository.findByEmailJoinFetchGroup(currentMember.getMemberEmail()).orElseThrow(null);
 
         houseWorkList.forEach(houseWork -> {
             houseWork.setAssign(byMemberEmailJPQL, byMemberEmailJPQL.getZipHapGroup());

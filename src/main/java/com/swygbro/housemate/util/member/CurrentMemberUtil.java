@@ -60,6 +60,6 @@ public class CurrentMemberUtil {
         } else{
             username = principal.toString();
         }
-        return memberRepository.findByMemberEmailJPQL(username);
+        return memberRepository.findByEmailJoinFetchGroup(username).orElseThrow(null);
     }
 }
