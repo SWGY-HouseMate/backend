@@ -1,24 +1,25 @@
 package com.swygbro.housemate.housework.message;
 
 import com.swygbro.housemate.housework.domain.DifficultyType;
-import com.swygbro.housemate.login.message.MemberInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
-@Value(staticConstructor = "of")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class HouseWorkInfo {
 
     String houseWorkId;
     String title;
-    DifficultyType difficultyType;
+    DifficultyType difficulty;
     LocalDate today;
     Boolean isCompleted;
     Boolean isCycle;
     CycleInfo cycleInfo;
-    MemberInfo memberInfo;
 
 }

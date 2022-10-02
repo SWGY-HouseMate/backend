@@ -8,7 +8,7 @@ import java.util.List;
 @Value(staticConstructor = "of")
 public class HoseWorkRes {
 
-    List<HouseWorkInfo> houseWorkInfos;
+    List<HouseWorkByMember> houseWorkByMembers;
     GroupInfo groupInfo;
 
 }

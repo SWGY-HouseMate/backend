@@ -6,7 +6,7 @@ import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.message.CycleInfo;
 import com.swygbro.housemate.housework.message.HoseWorkRes;
-import com.swygbro.housemate.housework.message.HouseWorkInfo;
+import com.swygbro.housemate.housework.message.HouseWorkByMember;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
@@ -37,7 +37,7 @@ public class HouseWorkCreateProcess {
     public HoseWorkRes execute(CreateHouseWork createHouseWork) throws ParseException {
         Boolean condition = houseWorkUtil.getCondition(createHouseWork);
 
-        List<HouseWorkInfo> houseWorkInfos = new ArrayList<>();
+        List<HouseWorkByMember> houseWorkByMembers = new ArrayList<>();
         if (!condition) {
             HouseWork houseWork = houseWorkUtil.createHouseWork(createHouseWork);
 
@@ -47,17 +47,10 @@ public class HouseWorkCreateProcess {
             MemberInfo memberInfo = mapper.map(saveHouseWork.getManager(), MemberInfo.class);
             CycleInfo cycleInfo = mapper.map(saveHouseWork.getCycle(), CycleInfo.class);
 
-            houseWorkInfos.add(HouseWorkInfo.of(
-                    saveHouseWork.getHouseWorkId(),
-                    saveHouseWork.getTitle(),
-                    saveHouseWork.getDifficulty(),
-                    saveHouseWork.getToday(),
-                    saveHouseWork.getIsCompleted(),
-                    saveHouseWork.getIsCycle(),
-                    cycleInfo, memberInfo));
+            houseWorkByMembers.add(HouseWorkByMember.builder().build());
 
             GroupInfo groupInfo = mapper.map(saveHouseWork.getGroup(), GroupInfo.class);
-            return HoseWorkRes.of(houseWorkInfos, groupInfo);
+            return HoseWorkRes.of(houseWorkByMembers, groupInfo);
         }
 
         // 반복 주기 만큼 DB row 생성
@@ -78,17 +71,10 @@ public class HouseWorkCreateProcess {
             MemberInfo memberInfo = mapper.map(houseWork.getManager(), MemberInfo.class);
             CycleInfo cycleInfo = mapper.map(houseWork.getCycle(), CycleInfo.class);
 
-            houseWorkInfos.add(HouseWorkInfo.of(
-                    houseWork.getHouseWorkId(),
-                    houseWork.getTitle(),
-                    houseWork.getDifficulty(),
-                    houseWork.getToday(),
-                    houseWork.getIsCompleted(),
-                    houseWork.getIsCycle(),
-                    cycleInfo, memberInfo));
+            houseWorkByMembers.add(HouseWorkByMember.builder().build());
         }
 
         GroupInfo groupInfo = mapper.map(saveHouseWorkList.get(0).getGroup(), GroupInfo.class);
-        return HoseWorkRes.of(houseWorkInfos, groupInfo);
+        return HoseWorkRes.of(houseWorkByMembers, groupInfo);
     }
 }

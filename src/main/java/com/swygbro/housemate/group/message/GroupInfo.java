@@ -1,11 +1,14 @@
 package com.swygbro.housemate.group.message;
 
-import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class GroupInfo {
 

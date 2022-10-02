@@ -1,9 +1,6 @@
 package com.swygbro.housemate.controller;
 
-import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.message.HoseWorkRes;
-import com.swygbro.housemate.housework.message.HouseWorkCompleted;
-import com.swygbro.housemate.housework.message.SearchHouseWorkAtDate;
+import com.swygbro.housemate.housework.message.*;
 import com.swygbro.housemate.housework.service.CycleUtil;
 import com.swygbro.housemate.housework.service.HouseWorkCreateProcess;
 import com.swygbro.housemate.housework.service.HouseWorkUtil;
@@ -39,7 +36,7 @@ public class HouseWorkController {
             @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PostMapping("/search-date")
-    public SingleResult<HoseWorkRes> searchDateByGroupORMy(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
+    public SingleResult<HouseWorkByMember> searchDateByGroupORMy(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
         return responseService.getSingleResult(searchDateProcess.executeByGroup2(searchHouseWorkAtDate));
     }
 
