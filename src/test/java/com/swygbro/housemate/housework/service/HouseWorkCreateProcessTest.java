@@ -1,8 +1,8 @@
 package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.repository.CycleRepository;
-import com.swygbro.housemate.housework.repository.HouseWorkRepository;
+import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
+import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
 import com.swygbro.housemate.login.ManagedFactory;
 import com.swygbro.housemate.util.condition.CycleCondition;

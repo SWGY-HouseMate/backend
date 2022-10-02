@@ -18,7 +18,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @PersistenceConstructor)
+@AllArgsConstructor
 @Table(name = "house_work")
 public class HouseWork extends AbstractEntity {
 

@@ -2,7 +2,6 @@ package com.swygbro.housemate.housework.service.cycle;
 
 import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.repository.CycleRepository;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @PersistenceConstructor)
+@AllArgsConstructor
 @Table(name = "cycle")
 public class Cycle extends AbstractEntity {
 

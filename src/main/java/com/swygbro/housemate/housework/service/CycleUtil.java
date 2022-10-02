@@ -1,8 +1,8 @@
 package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.domain.Cycle;
-import com.swygbro.housemate.housework.repository.CycleRepository;
-import com.swygbro.housemate.housework.repository.HouseWorkRepository;
+import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
+import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

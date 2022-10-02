@@ -2,7 +2,7 @@ package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.repository.HouseWorkRepository;
+import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.condition.CycleCondition;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;

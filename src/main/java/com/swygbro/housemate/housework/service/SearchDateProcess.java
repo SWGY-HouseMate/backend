@@ -7,7 +7,7 @@ import com.swygbro.housemate.housework.message.CycleInfo;
 import com.swygbro.housemate.housework.message.HoseWorkRes;
 import com.swygbro.housemate.housework.message.HouseWorkInfo;
 import com.swygbro.housemate.housework.message.SearchHouseWorkAtDate;
-import com.swygbro.housemate.housework.repository.HouseWorkRepository;
+import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.login.repository.MemberRepository;
@@ -34,7 +34,7 @@ public class SearchDateProcess {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
 
         Member memberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMemberObject.getMemberEmail());
-        List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroup(searchHouseWorkAtDate.getStartAt(),
+        List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroupDSL(searchHouseWorkAtDate.getStartAt(),
                     searchHouseWorkAtDate.getEndAt(), memberEmailJPQL.getZipHapGroup());
 
         List<HouseWorkInfo> houseWorkInfos = new ArrayList<>();

@@ -21,7 +21,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @PersistenceConstructor)
+@AllArgsConstructor
 @Table(name = "ziphap_member")
 public class Member extends AbstractEntity implements UserDetails {
 

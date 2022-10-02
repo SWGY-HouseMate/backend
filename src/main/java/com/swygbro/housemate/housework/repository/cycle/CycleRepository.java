@@ -1,4 +1,4 @@
-package com.swygbro.housemate.housework.repository;
+package com.swygbro.housemate.housework.repository.cycle;
 
 import com.swygbro.housemate.housework.domain.Cycle;
 import org.springframework.data.jpa.repository.JpaRepository;
