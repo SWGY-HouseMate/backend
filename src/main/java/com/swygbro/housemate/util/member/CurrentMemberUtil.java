@@ -51,4 +51,15 @@ public class CurrentMemberUtil {
         Member member = memberRepository.findByMemberEmail(username).orElseThrow(null);
         return modelMapper.map(member, MemberInfo.class);
     }
+
+    public Member getCurrentMemberANDGroupObject() {
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else{
+            username = principal.toString();
+        }
+        return memberRepository.findByMemberEmailJPQL(username);
+    }
 }

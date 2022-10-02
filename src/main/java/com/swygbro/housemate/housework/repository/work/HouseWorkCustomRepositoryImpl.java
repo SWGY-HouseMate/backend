@@ -29,6 +29,11 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
 
     @Override
     public List<HouseWork> searchHouseWorkAtDateByGroupDSL(LocalDate startAt, LocalDate endAt, Group group) {
+
+
+
+
+
         return queryFactory.selectFrom(houseWork)
                .join(houseWork.manager).fetchJoin()
                .join(houseWork.cycle).fetchJoin()

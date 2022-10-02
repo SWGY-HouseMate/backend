@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Value;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Value(staticConstructor = "of")

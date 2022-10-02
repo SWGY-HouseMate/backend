@@ -40,7 +40,7 @@ public class HouseWorkController {
     })
     @PostMapping("/search-date")
     public SingleResult<HoseWorkRes> searchDateByGroupORMy(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
-        return responseService.getSingleResult(searchDateProcess.executeByGroup(searchHouseWorkAtDate));
+        return responseService.getSingleResult(searchDateProcess.executeByGroup2(searchHouseWorkAtDate));
     }
 
     @ApiImplicitParams({

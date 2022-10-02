@@ -59,4 +59,14 @@ public class SearchDateProcess {
         return HoseWorkRes.of(houseWorkInfos, groupInfo);
     }
 
+
+    public HoseWorkRes executeByGroup2(SearchHouseWorkAtDate searchHouseWorkAtDate) {
+        // 현재 그룹을 구해야 해야한다.
+        Group zipHapGroup = currentMemberUtil.getCurrentMemberANDGroupObject().getZipHapGroup();
+        List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroupDSL(
+                searchHouseWorkAtDate.getStartAt(),
+                searchHouseWorkAtDate.getEndAt(), zipHapGroup
+        );
+        return null;
+    }
 }
