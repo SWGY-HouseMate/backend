@@ -14,5 +14,4 @@ public class SearchHouseWorkAtDate {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endAt;
 
-    private Boolean searchMyHouseWork;
 }

@@ -33,15 +33,9 @@ public class SearchDateProcess {
     public HoseWorkRes executeByGroup(SearchHouseWorkAtDate searchHouseWorkAtDate) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
 
-        List<HouseWork> houseWorkList = new ArrayList<>();
-        if (searchHouseWorkAtDate.getSearchMyHouseWork()) {
-            houseWorkList = houseWorkRepository.searchHouseWorkAtDateByManager(searchHouseWorkAtDate.getStartAt(),
-                    searchHouseWorkAtDate.getEndAt(), currentMemberObject);
-        } else {
-            Member memberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMemberObject.getMemberEmail());
-            houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroup(searchHouseWorkAtDate.getStartAt(),
+        Member memberEmailJPQL = memberRepository.findByMemberEmailJPQL(currentMemberObject.getMemberEmail());
+        List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkAtDateByGroup(searchHouseWorkAtDate.getStartAt(),
                     searchHouseWorkAtDate.getEndAt(), memberEmailJPQL.getZipHapGroup());
-        }
 
         List<HouseWorkInfo> houseWorkInfos = new ArrayList<>();
         for (HouseWork houseWork : houseWorkList) {
