@@ -6,9 +6,8 @@ import lombok.Value;
 import java.util.List;
 
 @Value(staticConstructor = "of")
-public class HoseWorkRes {
+public class HoseWorkCreate {
 
-    List<HouseWorkByMember> houseWorkByMembers;
-    GroupInfo groupInfo;
+    List<String> id;
 
 }

@@ -59,6 +59,14 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
 
             List<HouseWorkInfo> houseWorkInfoList = new ArrayList<>();
             for (HouseWork work : houseWorkList) {
+                CycleInfo cycleInfo = CycleInfo.builder()
+                        .cycleId(work.getCycle().getCycleId())
+                        .cycleType(work.getCycle().getCycleType())
+                        .props(work.getCycle().getProps())
+                        .startAt(work.getCycle().getStartAt())
+                        .endAt(work.getCycle().getEndAt())
+                        .build();
+
                 houseWorkInfoList.add(HouseWorkInfo.builder()
                         .houseWorkId(work.getHouseWorkId())
                         .title(work.getTitle())
@@ -66,7 +74,7 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
                         .today(work.getToday())
                         .isCompleted(work.getIsCompleted())
                         .isCycle(work.getIsCycle())
-                        .cycleInfo(modelMapper.map(work.getCycle(), CycleInfo.class))
+                        .cycleInfo(cycleInfo)
                         .build());
             }
 

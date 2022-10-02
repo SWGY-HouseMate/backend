@@ -28,7 +28,7 @@ public class HouseWorkController {
             @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @PostMapping("/create")
-    public SingleResult<HoseWorkRes> create(@RequestBody CreateHouseWork createHouseWork) throws ParseException {
+    public SingleResult<HoseWorkCreate> create(@RequestBody CreateHouseWork createHouseWork) throws ParseException {
         return responseService.getSingleResult(houseWorkCreateProcess.execute(createHouseWork));
     }
 
@@ -37,7 +37,7 @@ public class HouseWorkController {
     })
     @PostMapping("/search-date")
     public SingleResult<HouseWorkByMember> searchDateByGroupORMy(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
-        return responseService.getSingleResult(searchDateProcess.executeByGroup2(searchHouseWorkAtDate));
+        return responseService.getSingleResult(searchDateProcess.executeByGroup(searchHouseWorkAtDate));
     }
 
     @ApiImplicitParams({

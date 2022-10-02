@@ -5,7 +5,7 @@ import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.message.CycleInfo;
-import com.swygbro.housemate.housework.message.HoseWorkRes;
+import com.swygbro.housemate.housework.message.HoseWorkCreate;
 import com.swygbro.housemate.housework.message.HouseWorkByMember;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class HouseWorkCreateProcess {
     private final ModelMapper mapper;
 
     @Transactional
-    public HoseWorkRes execute(CreateHouseWork createHouseWork) throws ParseException {
+    public HoseWorkCreate execute(CreateHouseWork createHouseWork) throws ParseException {
         Boolean condition = houseWorkUtil.getCondition(createHouseWork);
 
         List<HouseWorkByMember> houseWorkByMembers = new ArrayList<>();
@@ -43,14 +44,7 @@ public class HouseWorkCreateProcess {
 
             managedFactory.assign(List.of(houseWork));
             HouseWork saveHouseWork = houseWorkRepository.save(houseWork);
-
-            MemberInfo memberInfo = mapper.map(saveHouseWork.getManager(), MemberInfo.class);
-            CycleInfo cycleInfo = mapper.map(saveHouseWork.getCycle(), CycleInfo.class);
-
-            houseWorkByMembers.add(HouseWorkByMember.builder().build());
-
-            GroupInfo groupInfo = mapper.map(saveHouseWork.getGroup(), GroupInfo.class);
-            return HoseWorkRes.of(houseWorkByMembers, groupInfo);
+            return HoseWorkCreate.of(List.of(saveHouseWork.getHouseWorkId()));
         }
 
         // 반복 주기 만큼 DB row 생성
@@ -67,14 +61,10 @@ public class HouseWorkCreateProcess {
         managedFactory.assign(houseWorkerWorks); // 담당자와 그룹 할당
         List<HouseWork> saveHouseWorkList = houseWorkRepository.saveAll(houseWorkerWorks);
 
-        for (HouseWork houseWork : saveHouseWorkList) {
-            MemberInfo memberInfo = mapper.map(houseWork.getManager(), MemberInfo.class);
-            CycleInfo cycleInfo = mapper.map(houseWork.getCycle(), CycleInfo.class);
+        List<String> houseWorkIds = saveHouseWorkList.stream()
+                .map(HouseWork::getHouseWorkId)
+                .collect(Collectors.toList());
 
-            houseWorkByMembers.add(HouseWorkByMember.builder().build());
-        }
-
-        GroupInfo groupInfo = mapper.map(saveHouseWorkList.get(0).getGroup(), GroupInfo.class);
-        return HoseWorkRes.of(houseWorkByMembers, groupInfo);
+        return HoseWorkCreate.of(houseWorkIds);
     }
 }

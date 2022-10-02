@@ -9,9 +9,6 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Repository
-public interface GroupRepository extends JpaRepository<Group, Long> {
+public interface GroupRepository extends JpaRepository<Group, Long>, GroupCustomRepository {
     Optional<Group> findByLinkId(String linkId);
-
-    @Query("select g from Group g join fetch g.owner where g.linkId = :linkId")
-    Optional<Group> findByLinkIdQuery(String linkId);
 }

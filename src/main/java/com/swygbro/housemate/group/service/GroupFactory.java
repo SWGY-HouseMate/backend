@@ -66,7 +66,7 @@ public class GroupFactory {
     }
 
     public GroupInfo info(String likeId) {
-        return groupRepository.findByLinkIdQuery(likeId)
+        return groupRepository.findByLinkIdJoinFetchOwner(likeId)
                 .map(m -> modelMapper.map(m, GroupInfo.class))
                 .orElseThrow(null);
     }
