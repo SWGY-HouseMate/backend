@@ -1,6 +1,5 @@
 package com.swygbro.housemate.housework.service.worker;
 
-import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 

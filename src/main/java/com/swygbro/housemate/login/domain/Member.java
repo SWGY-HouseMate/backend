@@ -3,18 +3,22 @@ package com.swygbro.housemate.login.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.util.model.AbstractEntity;
-import lombok.*;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Builder

@@ -1,17 +1,14 @@
 package com.swygbro.housemate.housework.service;
 
-import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
-import com.swygbro.housemate.housework.message.CycleInfo;
 import com.swygbro.housemate.housework.message.HoseWorkCreate;
 import com.swygbro.housemate.housework.message.HouseWorkByMember;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
 import com.swygbro.housemate.login.ManagedFactory;
-import com.swygbro.housemate.login.message.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

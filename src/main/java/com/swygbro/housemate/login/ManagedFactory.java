@@ -1,8 +1,6 @@
 package com.swygbro.housemate.login;
 
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
-import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
-import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
@@ -10,7 +8,6 @@ import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;

@@ -1,7 +1,6 @@
 package com.swygbro.housemate.housework.message;
 
 
-import com.swygbro.housemate.group.message.GroupInfo;
 import lombok.Getter;
 import lombok.Value;
 

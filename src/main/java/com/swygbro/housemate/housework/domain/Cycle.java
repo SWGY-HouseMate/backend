@@ -1,17 +1,18 @@
 package com.swygbro.housemate.housework.domain;
 
 import com.swygbro.housemate.util.model.AbstractEntity;
-import lombok.*;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.LAZY;
 
 @Builder
 @Entity

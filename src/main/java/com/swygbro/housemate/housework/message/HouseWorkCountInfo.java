@@ -1,6 +1,5 @@
 package com.swygbro.housemate.housework.message;
 
-import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.login.message.MemberInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

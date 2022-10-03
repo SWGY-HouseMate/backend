@@ -1,7 +1,6 @@
 package com.swygbro.housemate.security.authectication;
 
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
-import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

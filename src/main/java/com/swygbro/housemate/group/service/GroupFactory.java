@@ -1,7 +1,6 @@
 package com.swygbro.housemate.group.service;
 
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
-import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupCreator;
 import com.swygbro.housemate.group.message.GroupInfo;
@@ -10,7 +9,6 @@ import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
-import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.modelmapper.ModelMapper;

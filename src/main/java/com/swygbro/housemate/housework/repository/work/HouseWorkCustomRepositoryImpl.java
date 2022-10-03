@@ -2,9 +2,7 @@ package com.swygbro.housemate.housework.repository.work;
 
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.group.domain.Group;
-import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.housework.domain.HouseWork;
-import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.*;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.*;
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
 import static com.swygbro.housemate.housework.domain.QHouseWork.houseWork;
 import static com.swygbro.housemate.login.domain.QMember.member;
 

@@ -3,7 +3,6 @@ package com.swygbro.housemate.login.external;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swygbro.housemate.exception.badrequest.BadRequestException;
-import com.swygbro.housemate.exception.badrequest.BadRequestType;
 import com.swygbro.housemate.login.message.GoogleOAuthToken;
 import com.swygbro.housemate.login.message.GoogleUser;
 import lombok.RequiredArgsConstructor;
