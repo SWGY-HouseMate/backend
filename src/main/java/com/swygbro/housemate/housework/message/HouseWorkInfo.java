@@ -1,6 +1,7 @@
 package com.swygbro.housemate.housework.message;
 
 import com.swygbro.housemate.housework.domain.DifficultyType;
+import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class HouseWorkInfo {
     String title;
     DifficultyType difficulty;
     LocalDate today;
-    Boolean isCompleted;
+    HouseWorkStatusType houseWorkStatusType;
     Boolean isCycle;
     CycleInfo cycleInfo;
 

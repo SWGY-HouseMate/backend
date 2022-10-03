@@ -4,6 +4,7 @@ import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.housework.domain.HouseWork;
+import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.*;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.*;
 import static com.swygbro.housemate.housework.domain.QHouseWork.houseWork;
 import static com.swygbro.housemate.login.domain.QMember.member;
 
@@ -69,7 +71,7 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
                         .title(work.getTitle())
                         .difficulty(work.getDifficulty())
                         .today(work.getToday())
-                        .isCompleted(work.getIsCompleted())
+                        .houseWorkStatusType(work.getHouseWorkStatusType())
                         .isCycle(work.getIsCycle())
                         .cycleInfo(cycleInfo)
                         .build());
@@ -100,23 +102,22 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
         List<HouseWorkCountInfo> houseWorkCountInfoList = new ArrayList<>();
         for (Member m : memberList) {
             MemberInfo memberInfo = modelMapper.map(m, MemberInfo.class);
-            Long count = queryFactory.select(houseWork.count())
+            Long completedCount = queryFactory.select(houseWork.count())
                     .from(houseWork)
                     .where(houseWork.today.between(startAt, endAt)
                             .and(houseWork.manager.eq(m))
-                            .and(houseWork.isCompleted.eq(true)))
+                            .and(houseWork.houseWorkStatusType.eq(COMPLETED)))
                     .fetchOne();
 
             Long allCount = queryFactory.select(houseWork.count())
                     .from(houseWork)
                     .where(houseWork.today.between(startAt, endAt)
-                            .and(houseWork.manager.eq(m))
-                            .and(houseWork.isCompleted.eq(false)))
+                            .and(houseWork.manager.eq(m)))
                     .fetchOne();
 
             houseWorkCountInfoList.add(HouseWorkCountInfo.builder()
                     .memberInfo(memberInfo)
-                    .count(count)
+                    .completedCount(completedCount)
                     .allCount(allCount)
                     .build());
         }

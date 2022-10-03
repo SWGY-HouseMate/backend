@@ -62,7 +62,7 @@ public class HouseWorkController {
     @ApiOperation("집안일을 완료하거나, 롤백합니다.")
     @PostMapping("/complete")
     public SingleResult<String> updateCompleted(@RequestBody HouseWorkCompleted houseWorkCompleted) {
-        return responseService.getSingleResult(houseWorkUtil.completion(houseWorkCompleted.getHouse_work_id(), houseWorkCompleted.getIsCompleted()));
+        return responseService.getSingleResult(houseWorkUtil.completion(houseWorkCompleted.getHouse_work_id(), houseWorkCompleted.getHouseWorkStatusType()));
     }
 
     @ApiImplicitParams({

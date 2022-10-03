@@ -1,6 +1,7 @@
 package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
+import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.login.domain.Member;
@@ -18,6 +19,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DEFAULT;
 
 @Component
 @RequiredArgsConstructor
@@ -58,12 +62,12 @@ public class HouseWorkUtil {
                 .difficulty(createHouseWork.getDifficulty())
                 .isCycle(createHouseWork.getIsCycle())
                 .today(createHouseWork.getToday())
-                .isCompleted(false)
+                .houseWorkStatusType(DEFAULT)
                 .build();
     }
 
     @Transactional
-    public String completion(String houseWorkId, Boolean isCompleted) {
+    public String completion(String houseWorkId, HouseWorkStatusType houseWorkStatusType) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
         HouseWork findByHouseWorkId = houseWorkRepository.searchHouseWorkIdJoinManger(houseWorkId).orElseThrow(null);
 
@@ -71,7 +75,7 @@ public class HouseWorkUtil {
             throw new IllegalStateException("권한 없음");
         }
 
-        findByHouseWorkId.setCompleted(isCompleted);
+        findByHouseWorkId.setCompleted(houseWorkStatusType);
         return findByHouseWorkId.getHouseWorkId();
     }
 }

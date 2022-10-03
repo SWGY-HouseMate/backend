@@ -1,6 +1,7 @@
 package com.swygbro.housemate.housework.service.worker;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
+import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DEFAULT;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class MouthCreator implements HouseWorker {
                 .difficulty(createHouseWork.getDifficulty())
                 .isCycle(createHouseWork.getIsCycle())
                 .today(startAt.plusDays(i))
-                .isCompleted(false)
+                .houseWorkStatusType(DEFAULT)
                 .build();
     }
 }

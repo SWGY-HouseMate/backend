@@ -1,6 +1,7 @@
 package com.swygbro.housemate.housework.service.worker;
 
 import com.swygbro.housemate.housework.domain.HouseWork;
+import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DEFAULT;
 import static java.time.format.TextStyle.FULL;
 import static java.util.Locale.KOREAN;
 
@@ -47,7 +49,7 @@ public class DayOfTheWeekCreator implements HouseWorker {
                 .difficulty(createHouseWork.getDifficulty())
                 .isCycle(createHouseWork.getIsCycle())
                 .today(startAt.plusDays(i))
-                .isCompleted(false)
+                .houseWorkStatusType(DEFAULT)
                 .build();
     }
 }

@@ -15,6 +15,6 @@ public class HouseWorkCountInfo {
 
     MemberInfo memberInfo;
     Long allCount;
-    Long count;
+    Long completedCount;
 
 }

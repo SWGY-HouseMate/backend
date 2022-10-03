@@ -3,14 +3,15 @@ package com.swygbro.housemate.housework.domain;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.model.AbstractEntity;
-import lombok.*;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
@@ -36,7 +37,8 @@ public class HouseWork extends AbstractEntity {
 
     private LocalDate today;
 
-    private Boolean isCompleted;
+    @Enumerated(STRING)
+    private HouseWorkStatusType houseWorkStatusType;
 
     private Boolean isCycle;
 
@@ -57,7 +59,7 @@ public class HouseWork extends AbstractEntity {
         this.cycle = cycle;
     }
 
-    public void setCompleted(Boolean completed) {
-        isCompleted = completed;
+    public void setCompleted(HouseWorkStatusType houseWorkStatusType) {
+        this.houseWorkStatusType = houseWorkStatusType;
     }
 }
