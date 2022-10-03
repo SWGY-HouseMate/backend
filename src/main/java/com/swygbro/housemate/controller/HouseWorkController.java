@@ -1,10 +1,7 @@
 package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.housework.message.*;
-import com.swygbro.housemate.housework.service.CycleUtil;
-import com.swygbro.housemate.housework.service.HouseWorkCreateProcess;
-import com.swygbro.housemate.housework.service.HouseWorkUtil;
-import com.swygbro.housemate.housework.service.SearchDateProcess;
+import com.swygbro.housemate.housework.service.*;
 import com.swygbro.housemate.util.response.domain.SingleResult;
 import com.swygbro.housemate.util.response.service.ResponseService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,6 +17,7 @@ import java.text.ParseException;
 public class HouseWorkController {
     private final HouseWorkCreateProcess houseWorkCreateProcess;
     private final SearchDateProcess searchDateProcess;
+    private final HouseWorkCountProcess houseWorkCountProcess;
     private final HouseWorkUtil houseWorkUtil;
     private final CycleUtil cycleUtil;
     private final ResponseService responseService;
@@ -38,6 +36,14 @@ public class HouseWorkController {
     @PostMapping("/search-date")
     public SingleResult<HouseWorkByMember> searchDateByGroupORMy(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
         return responseService.getSingleResult(searchDateProcess.executeByGroup(searchHouseWorkAtDate));
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @PostMapping("/count")
+    public SingleResult<HouseWorkCountForGroup> houseWorkCountForGroup(@RequestBody SearchHouseWorkAtDate searchHouseWorkAtDate) {
+        return responseService.getSingleResult(houseWorkCountProcess.executeByGroup(searchHouseWorkAtDate));
     }
 
     @ApiImplicitParams({

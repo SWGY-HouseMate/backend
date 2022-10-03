@@ -65,7 +65,7 @@ public class HouseWorkUtil {
     @Transactional
     public String completion(String houseWorkId, Boolean isCompleted) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
-        HouseWork findByHouseWorkId = houseWorkRepository.findByHouseWorkIdJoinManger(houseWorkId).orElseThrow(null);
+        HouseWork findByHouseWorkId = houseWorkRepository.searchHouseWorkIdJoinManger(houseWorkId).orElseThrow(null);
 
         if (!currentMemberObject.getMemberEmail().equals(findByHouseWorkId.getManager().getMemberEmail())) { // 현재 로그인된 사용자가 집안일을 등록한 자이면 완료 표시 허용
             throw new IllegalStateException("권한 없음");

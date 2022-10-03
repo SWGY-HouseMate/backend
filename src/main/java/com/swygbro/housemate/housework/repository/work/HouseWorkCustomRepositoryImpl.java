@@ -4,11 +4,9 @@ import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.housework.domain.HouseWork;
-import com.swygbro.housemate.housework.message.CycleInfo;
-import com.swygbro.housemate.housework.message.HouseWorkByMember;
-import com.swygbro.housemate.housework.message.HouseWorkInfo;
-import com.swygbro.housemate.housework.message.HouseWorkMemberInfo;
+import com.swygbro.housemate.housework.message.*;
 import com.swygbro.housemate.login.domain.Member;
+import com.swygbro.housemate.login.message.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
@@ -29,7 +27,7 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     private final ModelMapper modelMapper;
 
     @Override
-    public Optional<HouseWork> findByHouseWorkIdJoinManger(String houseWorkId) {
+    public Optional<HouseWork> searchHouseWorkIdJoinManger(String houseWorkId) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(houseWork)
                         .join(houseWork.manager)
@@ -39,8 +37,7 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     }
 
     @Override
-    public HouseWorkByMember searchHouseWorkAtDateByGroupDSL(LocalDate startAt, LocalDate endAt, Group group) {
-        GroupInfo groupInfo = modelMapper.map(group, GroupInfo.class);
+    public HouseWorkByMember searchHouseWorkAtDateByGroup(LocalDate startAt, LocalDate endAt, Group group) {
         List<Member> memberList = queryFactory.selectFrom(member)
                 .join(member.zipHapGroup).fetchJoin()
                 .where(member.zipHapGroup.eq(group))
@@ -89,10 +86,43 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
 
         return HouseWorkByMember.builder()
                 .houseWorkInfos(houseWorkMemberInfoList)
-                .groupInfo(groupInfo)
                 .build();
     }
 
+    @Override
+    public HouseWorkCountForGroup searchHouseWorkCountByMember(LocalDate startAt, LocalDate endAt, Group group) {
+        List<Member> memberList = queryFactory.selectFrom(member)
+                .join(member.zipHapGroup).fetchJoin()
+                .where(member.zipHapGroup.eq(group))
+                .fetchAll()
+                .fetch();
+
+        List<HouseWorkCountInfo> houseWorkCountInfoList = new ArrayList<>();
+        for (Member m : memberList) {
+            MemberInfo memberInfo = modelMapper.map(m, MemberInfo.class);
+            Long count = queryFactory.select(houseWork.count())
+                    .from(houseWork)
+                    .where(houseWork.today.between(startAt, endAt)
+                            .and(houseWork.manager.eq(m))
+                            .and(houseWork.isCompleted.eq(true)))
+                    .fetchOne();
+
+            Long allCount = queryFactory.select(houseWork.count())
+                    .from(houseWork)
+                    .where(houseWork.today.between(startAt, endAt)
+                            .and(houseWork.manager.eq(m))
+                            .and(houseWork.isCompleted.eq(false)))
+                    .fetchOne();
+
+            houseWorkCountInfoList.add(HouseWorkCountInfo.builder()
+                    .memberInfo(memberInfo)
+                    .count(count)
+                    .allCount(allCount)
+                    .build());
+        }
+
+        return HouseWorkCountForGroup.of(houseWorkCountInfoList);
+    }
 
 
 }
