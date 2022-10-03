@@ -1,5 +1,6 @@
 package com.swygbro.housemate.housework.service;
 
+import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.집안일을_찾을_수_없습니다;
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DEFAULT;
 
 @Component
@@ -35,7 +35,7 @@ public class HouseWorkUtil {
         return cycleCondition.isSatisfiedBy(createHouseWork);
     }
 
-    public long startAtAndEndAtDiff(CreateHouseWork createHouseWork) throws ParseException {
+    public long startAtAndEndAtDiff(CreateHouseWork createHouseWork) {
         LocalDate startAt = createHouseWork.getStartAt();
         LocalDate endAt = createHouseWork.getEndAt();
 
@@ -69,7 +69,8 @@ public class HouseWorkUtil {
     @Transactional
     public String completion(String houseWorkId, HouseWorkStatusType houseWorkStatusType) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
-        HouseWork findByHouseWorkId = houseWorkRepository.searchHouseWorkIdJoinManger(houseWorkId).orElseThrow(null);
+        HouseWork findByHouseWorkId = houseWorkRepository.searchHouseWorkIdJoinManger(houseWorkId)
+                .orElseThrow(() -> new DataNotFoundException(집안일을_찾을_수_없습니다));
 
         if (!currentMemberObject.getMemberEmail().equals(findByHouseWorkId.getManager().getMemberEmail())) { // 현재 로그인된 사용자가 집안일을 등록한 자이면 완료 표시 허용
             throw new IllegalStateException("권한 없음");

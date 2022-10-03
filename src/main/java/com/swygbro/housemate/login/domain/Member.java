@@ -61,7 +61,7 @@ public class Member extends AbstractEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return "현재 애플리케이션에서는 passWord를 사용하지 않습니다.";
     }
 
     @Override

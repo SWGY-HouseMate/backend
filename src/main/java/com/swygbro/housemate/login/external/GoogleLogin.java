@@ -43,7 +43,6 @@ public class GoogleLogin implements Login {
                 .memberProfilePicture(googleUser.getPicture())
                 .memberAuthorityRoles(Collections.singletonList(DEFAULT))
                 .memberLoginRole(GOOGLE.getKey())
-                .zipHapGroup(null)
                 .build();
 
         if (emailExists.isEmpty()) {

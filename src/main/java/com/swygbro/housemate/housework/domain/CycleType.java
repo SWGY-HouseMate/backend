@@ -8,7 +8,7 @@ public enum CycleType implements EnumModel {
     매달("매달")
     ;
 
-    private String value;
+    private final String value;
 
     CycleType(String value) {
         this.value = value;
@@ -16,11 +16,11 @@ public enum CycleType implements EnumModel {
 
     @Override
     public String getKey() {
-        return null;
+        return this.name();
     }
 
     @Override
     public String getValue() {
-        return null;
+        return this.value;
     }
 }

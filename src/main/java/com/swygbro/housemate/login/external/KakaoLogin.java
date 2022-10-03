@@ -43,7 +43,6 @@ public class KakaoLogin implements Login {
                 .memberProfilePicture(kakaoUser.getPicture())
                 .memberAuthorityRoles(Collections.singletonList(DEFAULT))
                 .memberLoginRole(KAKAO.getKey())
-                .zipHapGroup(null)
                 .build();
 
         if (emailExists.isEmpty()) {

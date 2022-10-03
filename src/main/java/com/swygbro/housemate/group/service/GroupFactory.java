@@ -1,5 +1,7 @@
 package com.swygbro.housemate.group.service;
 
+import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
+import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupCreator;
 import com.swygbro.housemate.group.message.GroupInfo;
@@ -18,6 +20,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
@@ -47,7 +51,8 @@ public class GroupFactory {
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
         String linkId = linkCreator.executor(groupCreator.getCurrentMemberId(), validators);
-        Member owner = memberRepository.findByMemberId(groupCreator.getCurrentMemberId());
+        Member owner = memberRepository.findByMemberId(groupCreator.getCurrentMemberId())
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
         Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, owner));
 
         owner.updateRole(OWNER);
@@ -58,8 +63,10 @@ public class GroupFactory {
 
     @Transactional
     public GroupResponse join(String likeId, String addMemberId) {
-        Group group = groupRepository.findByLinkId(likeId).orElseThrow(null);
-        Member addMember = memberRepository.findByMemberId(addMemberId);
+        Group group = groupRepository.findByLinkId(likeId)
+                .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
+        Member addMember = memberRepository.findByMemberId(addMemberId)
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
         group.applyMember(addMember);
         return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());
@@ -68,6 +75,6 @@ public class GroupFactory {
     public GroupInfo info(String likeId) {
         return groupRepository.findByLinkIdJoinFetchOwner(likeId)
                 .map(m -> modelMapper.map(m, GroupInfo.class))
-                .orElseThrow(null);
+                .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
     }
 }
