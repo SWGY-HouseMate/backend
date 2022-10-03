@@ -2,6 +2,7 @@ package com.swygbro.housemate.login.external;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swygbro.housemate.exception.badrequest.BadRequestException;
 import com.swygbro.housemate.login.message.KakaoOAuthToken;
 import com.swygbro.housemate.login.message.KakaoUser;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import static com.swygbro.housemate.exception.badrequest.BadRequestType.KAKAO_LOGIN_COMMUNICATION_FAIL;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +54,7 @@ public class KakaoService {
             return objectMapper.readValue(responseEntity.getBody(), KakaoOAuthToken.class);
         }
 
-        return null;
+        throw new BadRequestException(KAKAO_LOGIN_COMMUNICATION_FAIL);
     }
 
     public KakaoUser getKakaoUserInfo(String access_token) throws JsonProcessingException {
@@ -65,21 +68,6 @@ public class KakaoService {
             return objectMapper.readValue(responseEntity.getBody(), KakaoUser.class);
         }
 
-        return null;
+        throw new BadRequestException(KAKAO_LOGIN_COMMUNICATION_FAIL);
     }
-
-    public int logout(String access_token) throws JsonProcessingException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + access_token);
-
-        HttpEntity request = new HttpEntity(headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(KAKAO_LOGOUT_REQUEST_URL, request, String.class);
-
-        if(responseEntity.getStatusCode() == HttpStatus.OK){
-            return 1;
-        }
-
-        return 0;
-    }
-
 }
