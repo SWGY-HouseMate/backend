@@ -1,8 +1,15 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id "io.freefair.lombok" version "6.0.0-m2"
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group = 'com.swygbro.house-mate'
@@ -20,35 +27,65 @@ repositories {
 }
 
 dependencies {
+    // *** spring starter *** //
+    implementation 'org.springframework.boot:spring-boot-starter-web' // web
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //data JPA
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools' // devtools
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor' // configuration
     implementation 'org.springframework.boot:spring-boot-starter-security' //security
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // oauth2
 
-    testImplementation 'org.assertj:assertj-core:3.21.0'
-    testImplementation 'org.mockito:mockito-core:3.1.0'
-
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // *** spring test *** //
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // test starter
+    testImplementation 'org.assertj:assertj-core:3.21.0' // assertj
+    testImplementation 'org.mockito:mockito-core:3.1.0' // mockito
 
     // *** jwt *** //
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.1'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.1' // jjwt api
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1' // jjwt impl
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.1' // jjwt jackson
 
     // *** swagger *** //
-    implementation 'io.springfox:springfox-swagger2:2.9.1'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.1'
-    implementation 'io.swagger:swagger-annotations:1.6.2'
-    implementation 'io.swagger:swagger-models:1.5.22'
+    implementation 'io.springfox:springfox-swagger2:2.9.1' // swagger
+    implementation 'io.springfox:springfox-swagger-ui:2.9.1' // swagger ui
+    implementation 'io.swagger:swagger-annotations:1.6.2' // swagger annotations
+    implementation 'io.swagger:swagger-models:1.5.22' // swagger models
 
-    // *** h2 *** //
-    runtimeOnly 'com.h2database:h2'
+    // *** mysql *** //
+    runtimeOnly 'mysql:mysql-connector-java' // mysql connector
 
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    // *** etc *** //
+    implementation 'org.apache.commons:commons-lang3:3.12.0' // apache commons
+    implementation 'org.modelmapper:modelmapper:2.3.8' // modelMapper
+
+    // *** querydsl *** //
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+//querydsl 추가 끝

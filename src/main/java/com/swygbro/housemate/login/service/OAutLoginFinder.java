@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swygbro.housemate.login.domain.LoginType.*;
+import static com.swygbro.housemate.login.domain.LoginType.GOOGLE;
+import static com.swygbro.housemate.login.domain.LoginType.KAKAO;
 
 @Component
 public class OAutLoginFinder {

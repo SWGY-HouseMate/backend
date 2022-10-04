@@ -34,14 +34,15 @@ public class KakaoLogin implements Login {
 
         KakaoUser kakaoUser = kakaoService.getKakaoUserInfo(oAuthToken.getAccess_token());
 
-        Optional<Member> emailExists = memberRepository.findByEmail(kakaoUser.getEmail());
+        Optional<Member> emailExists = memberRepository.findByMemberEmail(kakaoUser.getEmail());
 
         Member createMember = Member.builder()
                 .memberId(uuidUtil.create())
-                .email(kakaoUser.getEmail())
-                .memberRoles(Collections.singletonList(DEFAULT))
-                .loginRole(KAKAO.getKey())
-                .group(null)
+                .memberEmail(kakaoUser.getEmail())
+                .memberName(kakaoUser.getName())
+                .memberProfilePicture(kakaoUser.getPicture())
+                .memberAuthorityRoles(Collections.singletonList(DEFAULT))
+                .memberLoginRole(KAKAO.getKey())
                 .build();
 
         if (emailExists.isEmpty()) {

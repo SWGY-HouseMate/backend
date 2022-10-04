@@ -12,12 +12,14 @@ public class GroupCreator {
     private String currentMemberId;
     private String groupName;
 
+    private String memberName;
+
     public Group create(String id, String linkId, Member owner) {
         return Group.builder()
-                .groupId(id)
+                .zipHapGroupId(id)
                 .linkId(linkId)
                 .owner(owner)
-                .name(groupName)
+                .groupName(groupName)
                 .build();
     }
 

@@ -34,14 +34,15 @@ public class GoogleLogin implements Login {
 
         GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);
 
-        Optional<Member> emailExists = memberRepository.findByEmail(googleUser.getEmail());
+        Optional<Member> emailExists = memberRepository.findByMemberEmail(googleUser.getEmail());
 
         Member createMember = Member.builder()
                 .memberId((uuidUtil.create()))
-                .email(googleUser.getEmail())
-                .memberRoles(Collections.singletonList(DEFAULT))
-                .loginRole(GOOGLE.getKey())
-                .group(null)
+                .memberEmail(googleUser.getEmail())
+                .memberName(googleUser.getName()) // 전체 이름 저장 -> 이후 수정할 수 있음
+                .memberProfilePicture(googleUser.getPicture())
+                .memberAuthorityRoles(Collections.singletonList(DEFAULT))
+                .memberLoginRole(GOOGLE.getKey())
                 .build();
 
         if (emailExists.isEmpty()) {

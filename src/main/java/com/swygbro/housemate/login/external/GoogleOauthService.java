@@ -2,6 +2,7 @@ package com.swygbro.housemate.login.external;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swygbro.housemate.exception.badrequest.BadRequestException;
 import com.swygbro.housemate.login.message.GoogleOAuthToken;
 import com.swygbro.housemate.login.message.GoogleUser;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.swygbro.housemate.exception.badrequest.BadRequestType.GOOGLE_LOGIN_COMMUNICATION_FAIL;
 
 @Component
 @RequiredArgsConstructor
@@ -50,7 +53,7 @@ public class GoogleOauthService {
             return objectMapper.readValue(responseEntity.getBody(), GoogleOAuthToken.class);
         }
 
-        return null;
+        throw new BadRequestException(GOOGLE_LOGIN_COMMUNICATION_FAIL);
     }
 
     public GoogleUser getUserInfo(GoogleOAuthToken oAuthToken) throws JsonProcessingException {

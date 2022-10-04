@@ -10,7 +10,7 @@ import java.util.List;
 public class LinkCreator {
 
     public String executor(String userId, List<ValidatorURI> validator) {
-        String uri = userId + "-" + RandomStringUtils.randomNumeric(4) + "-" + System.currentTimeMillis();
+        String uri = userId.substring(0, 3) + RandomStringUtils.randomNumeric(2) + "-" + System.currentTimeMillis();
         validator.stream()
                 .filter(v -> v.valid(uri))
                 .map(v -> new IllegalStateException("Validation Fail"));
