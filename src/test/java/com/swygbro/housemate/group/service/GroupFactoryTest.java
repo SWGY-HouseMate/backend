@@ -50,7 +50,7 @@ class GroupFactoryTest {
 
     @BeforeEach
     void setUp() {
-        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, uuidUtil, modelMapper, uriDuplicateValidator);
+        sut = new GroupFactory(linkCreator, groupRepository, memberRepository, uuidUtil, modelMapper, currentMemberUtil, uriDuplicateValidator);
     }
 
     @Test

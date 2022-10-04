@@ -38,12 +38,14 @@ public class GroupFactory {
                         MemberRepository memberRepository,
                         UUIDUtil uuidUtil,
                         ModelMapper modelMapper,
+                        CurrentMemberUtil currentMemberUtil,
                         URIDuplicateValidator uriDuplicateValidator) {
         this.linkCreator = linkCreator;
         this.memberRepository = memberRepository;
         this.groupRepository = groupRepository;
         this.uuidUtil = uuidUtil;
         this.modelMapper = modelMapper;
+        this.currentMemberUtil = currentMemberUtil;
         validators.add(uriDuplicateValidator);
     }
 
