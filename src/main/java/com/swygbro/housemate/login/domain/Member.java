@@ -104,4 +104,8 @@ public class Member extends AbstractEntity implements UserDetails {
     public void setZipHapGroup(final Group group) {
         this.zipHapGroup = group;
     }
+
+    public void updateName(String name) {
+        this.memberName = name;
+    }
 }

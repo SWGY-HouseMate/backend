@@ -10,6 +10,7 @@ import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
+import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class GroupFactory {
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
     private final UUIDUtil uuidUtil;
-
     private final ModelMapper modelMapper;
+    private final CurrentMemberUtil currentMemberUtil;
 
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
@@ -48,6 +49,7 @@ public class GroupFactory {
 
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
+        Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
         String linkId = linkCreator.executor(groupCreator.getCurrentMemberId(), validators);
         Member owner = memberRepository.findByMemberId(groupCreator.getCurrentMemberId())
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
@@ -56,6 +58,7 @@ public class GroupFactory {
         owner.updateRole(OWNER);
         group.applyMember(owner);
 
+        currentMemberObject.updateName(group.getGroupName());
         return GroupResponse.of(linkId, group.createAt(), "http://localhost:8080/group/join/" + linkId);
     }
 
