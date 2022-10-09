@@ -1,5 +1,6 @@
 package com.swygbro.housemate.heart.messages;
 
+import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.heart.domain.Heart;
 import com.swygbro.housemate.heart.domain.HeartType;
 import com.swygbro.housemate.heart.domain.Letter;
@@ -17,7 +18,7 @@ public class InputSecondHeartLetter {
 
     private String content;
 
-    public Letter createLetterEntity(String letterId, Member from, Heart heart) {
+    public Letter createLetterEntity(String letterId, Member from, Heart heart, Group group) {
         return Letter.builder()
                 .letterId(letterId)
                 .title(this.title)
@@ -25,6 +26,7 @@ public class InputSecondHeartLetter {
                 .kind(this.heartType)
                 .from(from)
                 .heart(heart)
+                .group(group)
                 .build();
     }
 }

@@ -1,6 +1,5 @@
 package com.swygbro.housemate.heart.messages;
 
-import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.heart.domain.HeartType;
 import com.swygbro.housemate.login.message.MemberInfo;
 import lombok.AllArgsConstructor;

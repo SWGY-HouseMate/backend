@@ -28,7 +28,7 @@ public class InputFirstHeartLetter {
                 .build();
     }
 
-    public Letter createLetterEntity(String letterId, Member from, Group group, Heart heart) {
+    public Letter createLetterEntity(String letterId, Member from, Heart heart, Group group) {
         return Letter.builder()
                 .letterId(letterId)
                 .title(this.title)
@@ -36,6 +36,7 @@ public class InputFirstHeartLetter {
                 .kind(this.heartType)
                 .from(from)
                 .heart(heart)
+                .group(group)
                 .build();
     }
 }

@@ -54,4 +54,14 @@ public class LetterController {
     public SingleResult<CreateHeartLetter> writeSecond(@RequestParam String heartId, @RequestBody InputSecondHeartLetter inputSecondHeartLetter) {
         return responseService.getSingleResult(letterProcess.writeSecond(heartId, inputSecondHeartLetter));
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @ResponseBody
+    @ApiOperation("서로 답장을 완료한 편지 전체 보기")
+    @PostMapping("/view-all-letter")
+    public ListResult<ViewMessage> viewMessage() {
+        return responseService.getListResult(letterProcess.viewMessage());
+    }
 }

@@ -40,4 +40,8 @@ public class Letter extends AbstractEntity {
     @OneToOne
     @JoinColumn(name = "heartId")
     private Heart heart;
+
+    @OneToOne
+    @JoinColumn(name = "groupId")
+    private Group group;
 }
