@@ -1,9 +1,6 @@
 package com.swygbro.housemate.controller;
 
-import com.swygbro.housemate.heart.messages.CreateHeartLetter;
-import com.swygbro.housemate.heart.messages.InputFirstHeartLetter;
-import com.swygbro.housemate.heart.messages.InputSecondHeartLetter;
-import com.swygbro.housemate.heart.messages.ViewMessage;
+import com.swygbro.housemate.heart.messages.*;
 import com.swygbro.housemate.heart.service.LetterProcess;
 import com.swygbro.housemate.util.response.domain.ListResult;
 import com.swygbro.housemate.util.response.domain.SingleResult;
@@ -41,7 +38,7 @@ public class LetterController {
     @ResponseBody
     @ApiOperation("B가 상대방이 보낸 읽지 않는 편지를 조회합니다. <MemberId -> 그룹에 속해있는 MemberId 확인하기 API 하고 오기>")
     @GetMapping("/not-read")
-    public ListResult<ViewMessage> viewNotRead(@RequestParam String userId) {
+    public ListResult<PrivateViewMessage> viewNotRead(@RequestParam String userId) {
         return responseService.getListResult(letterProcess.notReadMessageView(userId));
     }
 

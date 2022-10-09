@@ -3,10 +3,7 @@ package com.swygbro.housemate.heart.service;
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.heart.domain.Heart;
 import com.swygbro.housemate.heart.domain.Letter;
-import com.swygbro.housemate.heart.messages.CreateHeartLetter;
-import com.swygbro.housemate.heart.messages.InputFirstHeartLetter;
-import com.swygbro.housemate.heart.messages.InputSecondHeartLetter;
-import com.swygbro.housemate.heart.messages.ViewMessage;
+import com.swygbro.housemate.heart.messages.*;
 import com.swygbro.housemate.heart.repository.heart.HeartRepository;
 import com.swygbro.housemate.heart.repository.letter.LetterRepository;
 import com.swygbro.housemate.login.domain.Member;
@@ -48,12 +45,12 @@ public class LetterProcess {
         return CreateHeartLetter.of(heartSave.getHeartId());
     }
 
-    public List<ViewMessage> notReadMessageView(String userId) {  //B userId를 기준으로 가 읽지 않은 편지 조회하기
+    public List<PrivateViewMessage> notReadMessageView(String userId) {  //B userId를 기준으로 가 읽지 않은 편지 조회하기
         Member to = memberRepository.findByMemberId(userId)
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
         List<Letter> letterList = letterRepository.findByUserIdAndNotRead(to);
 
-        return createViewMessages(letterList);
+        return createPrivateViewMessages(letterList);
     }
 
     @Transactional
@@ -94,6 +91,22 @@ public class LetterProcess {
                     .title(letterDomain.getTitle())
                     .content(letterDomain.getContent())
                     .kind(letterDomain.getKind())
+                    .to(toDto)
+                    .from(fromDto)
+                    .build());
+        }
+        return viewMessageList;
+    }
+
+    private List<PrivateViewMessage> createPrivateViewMessages(List<Letter> letterList) {
+        List<PrivateViewMessage> viewMessageList = new ArrayList<>();
+        for (Letter letterDomain : letterList) {
+            MemberInfo toDto = modelMapper.map(letterDomain.getHeart().getTo(), MemberInfo.class);
+            MemberInfo fromDto = modelMapper.map(letterDomain.getFrom(), MemberInfo.class);
+
+            viewMessageList.add(PrivateViewMessage.builder()
+                    .letterId(letterDomain.getLetterId())
+                    .heartId(letterDomain.getHeart().getHeartId())
                     .to(toDto)
                     .from(fromDto)
                     .build());
