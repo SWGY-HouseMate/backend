@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupCreator {
 
-    private String currentMemberId;
     private String groupName;
 
     private String memberName;

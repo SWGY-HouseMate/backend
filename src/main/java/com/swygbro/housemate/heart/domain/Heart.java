@@ -1,5 +1,7 @@
 package com.swygbro.housemate.heart.domain;
 
+import com.swygbro.housemate.group.domain.Group;
+import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.model.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +24,13 @@ public class Heart extends AbstractEntity {
     @Id
     private String heartId;
 
-    @Enumerated(STRING)
-    private HeartType kind;
-
-    private String title;
-
     private Boolean isCreateAllMembers;
+
+    @OneToOne
+    @JoinColumn(name = "memberId")
+    private Member to;
+
+    public void read() {
+        this.isCreateAllMembers = true;
+    }
 }

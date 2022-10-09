@@ -52,13 +52,11 @@ public class GroupFactory {
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
-        String linkId = linkCreator.executor(groupCreator.getCurrentMemberId(), validators);
-        Member owner = memberRepository.findByMemberId(groupCreator.getCurrentMemberId())
-                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-        Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, owner));
+        String linkId = linkCreator.executor(currentMemberObject.getMemberId(), validators);
+        Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, currentMemberObject));
 
-        owner.updateRole(OWNER);
-        group.applyMember(owner);
+        currentMemberObject.updateRole(OWNER);
+        group.applyMember(currentMemberObject);
 
         currentMemberObject.updateName(group.getGroupName());
         return GroupResponse.of(linkId, group.createAt(), "http://localhost:8080/group/join/" + linkId);
