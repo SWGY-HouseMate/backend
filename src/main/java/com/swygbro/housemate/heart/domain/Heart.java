@@ -1,6 +1,5 @@
 package com.swygbro.housemate.heart.domain;
 
-import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.model.AbstractEntity;
 import lombok.AllArgsConstructor;
@@ -9,9 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Getter

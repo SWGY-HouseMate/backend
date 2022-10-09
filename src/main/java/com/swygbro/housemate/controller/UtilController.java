@@ -1,6 +1,5 @@
 package com.swygbro.housemate.controller;
 
-import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.response.domain.SingleResult;

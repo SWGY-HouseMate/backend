@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import static javax.persistence.EnumType.STRING;
 
 @Entity
