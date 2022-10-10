@@ -13,7 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
@@ -63,5 +64,25 @@ public class CurrentMemberUtil {
         MemberInfo memberInfo = modelMapper.map(member, MemberInfo.class);
 
         return CurrentMemberInfo.of(groupInfo, memberInfo);
+    }
+
+    public GroupPersonInfo getMembersOfTheGroup() {
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else{
+            username = principal.toString();
+        }
+        Member member_me = memberRepository.findByEmailJoinFetchGroup(username).orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
+        MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
+
+        Member member_author = memberRepository.findByZipHapGroup(member_me.getZipHapGroup())
+                .stream()
+                .filter(Predicate.not(m -> m.getMemberEmail() == memberInfo_me.getMemberEmail()))
+                .collect(Collectors.toList())
+                .get(0);
+        MemberInfo memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
+        return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
     }
 }

@@ -1,8 +1,8 @@
 package com.swygbro.housemate.controller;
 
-import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
+import com.swygbro.housemate.util.member.GroupPersonInfo;
 import com.swygbro.housemate.util.response.domain.SingleResult;
 import com.swygbro.housemate.util.response.service.ResponseService;
 import io.swagger.annotations.Api;
@@ -34,4 +34,13 @@ public class UtilController {
         return responseService.getSingleResult(currentMemberUtil.getCurrentMemberInfoAndGroupInfoObject());
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @ResponseBody
+    @ApiOperation("그룹에 속해 있는 MemberId 구하는 API 추가")
+    @GetMapping("/group-member")
+    public SingleResult<GroupPersonInfo> currentGroupMemberInfo() {
+        return responseService.getSingleResult(currentMemberUtil.getMembersOfTheGroup());
+    }
 }

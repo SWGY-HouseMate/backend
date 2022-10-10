@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
-import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
@@ -52,24 +51,21 @@ public class GroupFactory {
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
-        String linkId = linkCreator.executor(groupCreator.getCurrentMemberId(), validators);
-        Member owner = memberRepository.findByMemberId(groupCreator.getCurrentMemberId())
-                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-        Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, owner));
+        String linkId = linkCreator.executor(currentMemberObject.getMemberId(), validators);
+        Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, currentMemberObject));
 
-        owner.updateRole(OWNER);
-        group.applyMember(owner);
+        currentMemberObject.updateRole(OWNER);
+        group.applyMember(currentMemberObject);
 
         currentMemberObject.updateName(group.getGroupName());
         return GroupResponse.of(linkId, group.createAt(), "http://localhost:8080/group/join/" + linkId);
     }
 
     @Transactional
-    public GroupResponse join(String likeId, String addMemberId) {
+    public GroupResponse join(String likeId) {
+        Member addMember = currentMemberUtil.getCurrentMemberObject();
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
-        Member addMember = memberRepository.findByMemberId(addMemberId)
-                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
         group.applyMember(addMember);
         return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());

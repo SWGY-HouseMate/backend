@@ -3,12 +3,10 @@ package com.swygbro.housemate.housework.service;
 
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.group.domain.Group;
-import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.housework.message.HouseWorkByMember;
 import com.swygbro.housemate.housework.message.SearchHouseWorkAtDate;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
-import com.swygbro.housemate.util.member.CurrentMemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
