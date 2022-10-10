@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: ziphap-backend-batch
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
