@@ -37,9 +37,8 @@ public class GroupController {
     @ResponseBody
     @ApiOperation("그룹에 참가합니다.")
     @PostMapping("/join/{linkId}")
-    public SingleResult<GroupResponse> joinGroup(@PathVariable String linkId,
-                            @RequestParam String addMemberId) {
-        return responseService.getSingleResult(groupFactory.join(linkId, addMemberId));
+    public SingleResult<GroupResponse> joinGroup(@PathVariable String linkId) {
+        return responseService.getSingleResult(groupFactory.join(linkId));
     }
 
     @ApiImplicitParams({

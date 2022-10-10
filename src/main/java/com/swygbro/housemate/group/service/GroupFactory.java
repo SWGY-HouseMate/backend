@@ -63,11 +63,10 @@ public class GroupFactory {
     }
 
     @Transactional
-    public GroupResponse join(String likeId, String addMemberId) {
+    public GroupResponse join(String likeId) {
+        Member addMember = currentMemberUtil.getCurrentMemberObject();
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
-        Member addMember = memberRepository.findByMemberId(addMemberId)
-                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
         group.applyMember(addMember);
         return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());
