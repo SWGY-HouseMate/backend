@@ -1,13 +1,14 @@
 package com.swygbro.housemate.heart.domain;
 
-import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.model.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Getter

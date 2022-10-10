@@ -3,7 +3,6 @@ package com.swygbro.housemate.heart.repository.letter;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.heart.domain.Letter;
-import com.swygbro.housemate.login.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
