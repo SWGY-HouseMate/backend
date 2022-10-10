@@ -1,7 +1,6 @@
 package com.swygbro.housemate.heart.domain;
 
 import com.swygbro.housemate.group.domain.Group;
-import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.model.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -28,17 +28,17 @@ public class Letter extends AbstractEntity {
     private String content;
 
     @Enumerated(STRING)
-    private HeartType kind;
+    private HeartType heartType;
 
-    @OneToOne
-    @JoinColumn(name = "memberId")
-    private Member from;
+    private String letterFrom;
 
-    @OneToOne
+    private String letterTo;
+
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "heartId")
     private Heart heart;
 
-    @OneToOne
-    @JoinColumn(name = "groupId")
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "zipHapGroupId")
     private Group group;
 }

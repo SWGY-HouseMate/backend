@@ -22,10 +22,6 @@ public class Heart extends AbstractEntity {
 
     private Boolean isCreateAllMembers;
 
-    @OneToOne
-    @JoinColumn(name = "memberId")
-    private Member to;
-
     public void read() {
         this.isCreateAllMembers = true;
     }

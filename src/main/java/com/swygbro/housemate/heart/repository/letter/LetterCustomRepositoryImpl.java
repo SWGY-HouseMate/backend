@@ -17,11 +17,11 @@ public class LetterCustomRepositoryImpl implements LetterCustomRepository {
     private final JPQLQueryFactory queryFactory;
 
     @Override
-    public List<Letter> findByUserIdAndNotRead(Member to) {
+    public List<Letter> findByUserIdAndNotRead(String from) {
         return queryFactory.selectFrom(letter)
                 .join(letter.heart).fetchJoin()
                 .where(letter.heart.isCreateAllMembers.eq(false)
-                        .and(letter.heart.to.eq(to)))
+                        .and(letter.letterFrom.eq(from)))
                 .fetchAll().fetch();
     }
 
@@ -34,11 +34,4 @@ public class LetterCustomRepositoryImpl implements LetterCustomRepository {
                 .fetchAll().fetch();
     }
 
-    public Letter findByLetterIdFetch(String letterId) {
-        return queryFactory.selectFrom(letter)
-                .join(letter.heart).fetchJoin()
-                .join(letter.from).fetchJoin()
-                .where(letter.letterId.eq(letterId))
-                .fetchOne();
-    }
 }

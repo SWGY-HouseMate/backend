@@ -23,22 +23,25 @@ import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤�
 
 @Service
 @RequiredArgsConstructor
-public class LetterProcess {
-
-    private final UUIDUtil uuidUtil;
-    private final CurrentMemberUtil currentMemberUtil;
+public class WireLetterProcess {
     private final MemberRepository memberRepository;
     private final LetterRepository letterRepository;
     private final HeartRepository heartRepository;
+    private final UUIDUtil uuidUtil;
+    private final CurrentMemberUtil currentMemberUtil;
     private final ModelMapper modelMapper;
 
     public CreateHeartLetter writeFirst(InputFirstHeartLetter inputFirstHeartLetter) { // A가 편지를 쓴다.
-        Member to = currentMemberUtil.getCurrentMemberANDGroupObject();
-        Member from = memberRepository.findByMemberId(inputFirstHeartLetter.getFrom())
+        Member from = currentMemberUtil.getCurrentMemberANDGroupObject();
+        Member to = memberRepository.findByMemberId(inputFirstHeartLetter.getFrom())
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
-        Heart heart = inputFirstHeartLetter.creatHeartEntity(uuidUtil.create(), to);
-        Letter letter = inputFirstHeartLetter.createLetterEntity(uuidUtil.create(), from, heart, to.getZipHapGroup());
+        Heart heart = inputFirstHeartLetter.creatHeartEntity(uuidUtil.create());
+        Letter letter = inputFirstHeartLetter.createLetterEntity(uuidUtil.create(),
+                from.getMemberId(),
+                to.getMemberId(),
+                heart,
+                to.getZipHapGroup());
 
         Heart heartSave = heartRepository.save(heart);
         letterRepository.save(letter);
@@ -46,23 +49,28 @@ public class LetterProcess {
     }
 
     public List<PrivateViewMessage> notReadMessageView(String userId) {  //B userId를 기준으로 가 읽지 않은 편지 조회하기
-        Member to = memberRepository.findByMemberId(userId)
+        Member from = memberRepository.findByMemberId(userId)
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-        List<Letter> letterList = letterRepository.findByUserIdAndNotRead(to);
+        List<Letter> letterList = letterRepository.findByUserIdAndNotRead(from.getMemberId());
 
         return createPrivateViewMessages(letterList);
     }
 
     @Transactional
     public CreateHeartLetter writeSecond(String heartId, InputSecondHeartLetter inputSecondHeartLetter) { // B가 편지를 쓴다.
-        Member currentMemberANDGroupObject = currentMemberUtil.getCurrentMemberANDGroupObject();
         Heart findBy = heartRepository.findByHeartId(heartId)
                 .orElseThrow(null);
         Letter letter = letterRepository.findByHeart(findBy)
                 .orElseThrow(null);
         // 편지쓰기
         Heart heart = letter.getHeart();
-        Letter writeLetter = inputSecondHeartLetter.createLetterEntity(heartId, heart.getTo(), heart, currentMemberANDGroupObject.getZipHapGroup());
+        Letter writeLetter = inputSecondHeartLetter.createLetterEntity(
+                uuidUtil.create(),
+                letter.getLetterTo(),
+                letter.getLetterFrom(),
+                heart,
+                letter.getGroup()
+        );
 
         letterRepository.save(writeLetter);
 
@@ -82,15 +90,21 @@ public class LetterProcess {
     private List<ViewMessage> createViewMessages(List<Letter> letterList) {
         List<ViewMessage> viewMessageList = new ArrayList<>();
         for (Letter letterDomain : letterList) {
-            MemberInfo toDto = modelMapper.map(letterDomain.getHeart().getTo(), MemberInfo.class);
-            MemberInfo fromDto = modelMapper.map(letterDomain.getFrom(), MemberInfo.class);
+            MemberInfo toDto = modelMapper.map(
+                    memberRepository.findByMemberId(letterDomain.getLetterTo()).orElseThrow(null),
+                    MemberInfo.class
+            );
+            MemberInfo fromDto = modelMapper.map(
+                    memberRepository.findByMemberId(letterDomain.getLetterFrom()).orElseThrow(null),
+                    MemberInfo.class
+            );
 
             viewMessageList.add(ViewMessage.builder()
                     .letterId(letterDomain.getLetterId())
                     .heartId(letterDomain.getHeart().getHeartId())
                     .title(letterDomain.getTitle())
                     .content(letterDomain.getContent())
-                    .kind(letterDomain.getKind())
+                    .kind(letterDomain.getHeartType())
                     .to(toDto)
                     .from(fromDto)
                     .build());
@@ -101,8 +115,14 @@ public class LetterProcess {
     private List<PrivateViewMessage> createPrivateViewMessages(List<Letter> letterList) {
         List<PrivateViewMessage> viewMessageList = new ArrayList<>();
         for (Letter letterDomain : letterList) {
-            MemberInfo toDto = modelMapper.map(letterDomain.getHeart().getTo(), MemberInfo.class);
-            MemberInfo fromDto = modelMapper.map(letterDomain.getFrom(), MemberInfo.class);
+            MemberInfo toDto = modelMapper.map(
+                    memberRepository.findByMemberId(letterDomain.getLetterTo()).orElseThrow(null),
+                    MemberInfo.class
+            );
+            MemberInfo fromDto = modelMapper.map(
+                    memberRepository.findByMemberId(letterDomain.getLetterFrom()).orElseThrow(null),
+                    MemberInfo.class
+            );
 
             viewMessageList.add(PrivateViewMessage.builder()
                     .letterId(letterDomain.getLetterId())
