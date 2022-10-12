@@ -1,6 +1,7 @@
 package com.swygbro.housemate.analysis.jobs;
 
-import com.swygbro.housemate.analysis.steps.LockTableStep;
+import com.swygbro.housemate.analysis.steps.LockTableProcesses;
+import com.swygbro.housemate.analysis.steps.PerDayDataFatoryStep;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -18,19 +19,24 @@ public class AnalysisJob {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     // steps
-    private final LockTableStep lockTableStep;
+    private final LockTableProcesses lockTableProcesses;
+    private final PerDayDataFatoryStep perDayDataFatoryStep;
 
     @Bean
     public Job analysis() {
         return jobBuilderFactory.get("analysis")
-                .start(lockTableStep.start()) // lockTableStep.check() 실행
-                .on("FAILED")// lockTableStep.check() 결과가 FAILED 일 경우
-                .end()// 종료
-                .from(lockTableStep.start()) // lockTableStep.check() 의 결과로부터
+                .start(lockTableProcesses.start()) // lockTableProcesses Start 실행
+                .on("FAILED") // 결과가 FAILED 일 경우
+                .end() // 종료
+                .from(lockTableProcesses.start()) // Start 의 결과로부터
                 .on("*") // FAILED 를 제외한 모든 경우
-                .to(aaaa()) // aaaa 로 이동 후 실행
-                .next(lockTableStep.end()) // aaaa 의 결과에 상관없이 lockTableStep.end() 실행
-                .on("*") // lockTableStep.end() 의 모든 결과에 상관없이
+                .to(perDayDataFatoryStep.execute()) // perDayDataFatoryStep.execute() 실행
+                .on("FAILED") // 결과가 FAILED 일 경우
+                .end() // 종료
+                .on("*") // FAILED 를 제외한 모든 경우
+                .to(aaaa()) // aaaa 실행
+                .next(lockTableProcesses.end()) // aaaa 의 결과에 상관없이 lockTableProcesses End 실행
+                .on("*") // End 의 모든 결과에 상관없이
                 .end() // FLOW 종료
                 .end() // JOB 종료
                 .build();
@@ -40,7 +46,7 @@ public class AnalysisJob {
     public Step aaaa() {
         return stepBuilderFactory.get("aaaa")
                 .tasklet((contribution, chunkContext) -> {
-                    log.info("======= 비즈니스 로직 시작 =======");
+                    log.info("======= 비즈니스 마지막 로직 시작 =======");
                     return RepeatStatus.FINISHED;
                 })
                 .build();

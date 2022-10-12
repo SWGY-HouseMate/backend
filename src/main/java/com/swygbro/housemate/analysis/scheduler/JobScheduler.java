@@ -24,22 +24,22 @@ public class JobScheduler {
 
     private final AnalysisJob analysisJob;
 
-//    @Scheduled(cron = "0 * * * * *")
-//    public void runJob() {
-//
-//        Map<String, JobParameter> confMap = new HashMap<>();
-//        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-//        JobParameters jobParameters = new JobParameters(confMap);
-//
-//        try {
-//
-//            jobLauncher.run(analysisJob.analysis(), jobParameters);
-//
-//        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
-//                 | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
-//
-//            log.error(e.getMessage());
-//        }
-//    }
+    @Scheduled(cron = "0 * * * * *")
+    public void runJob() {
+
+        Map<String, JobParameter> confMap = new HashMap<>();
+        confMap.put("time", new JobParameter(System.currentTimeMillis()));
+        JobParameters jobParameters = new JobParameters(confMap);
+
+        try {
+
+            jobLauncher.run(analysisJob.analysis(), jobParameters);
+
+        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
+                 | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
+
+            log.error(e.getMessage());
+        }
+    }
 
 }

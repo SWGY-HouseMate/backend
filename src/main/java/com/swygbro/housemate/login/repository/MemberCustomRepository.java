@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface MemberCustomRepository {
 
     Optional<Member> findByEmailJoinFetchGroup(String email);
+
+    Optional<Member> findByIdJoinFetchGroup(String memberId);
 }

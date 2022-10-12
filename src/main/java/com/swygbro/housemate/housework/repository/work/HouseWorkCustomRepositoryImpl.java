@@ -123,5 +123,29 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
         return HouseWorkCountForGroup.of(houseWorkCountInfoList);
     }
 
+    @Override
+    public List<HouseWork> searchHouseWorkByToday(LocalDate now) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .join(houseWork.manager).fetchJoin()
+                .join(houseWork.group).fetchJoin()
+                .join(houseWork.cycle).fetchJoin()
+                .where(houseWork.today.between(start, now))
+                .fetchAll()
+                .fetch();
+    }
+
+    @Override
+    public Long countByMember(LocalDate now, Member member) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .where(
+                        houseWork.today.between(start, now),
+                        houseWork.manager.memberId.eq(member.getMemberId())
+                ).fetchCount();
+    }
+
 
 }

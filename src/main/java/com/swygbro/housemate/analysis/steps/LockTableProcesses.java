@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class LockTableStep {
+public class LockTableProcesses {
     private final StepBuilderFactory stepBuilderFactory;
 
     private final TableLockRepository tableLockRepository;

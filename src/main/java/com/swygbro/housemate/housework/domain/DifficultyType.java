@@ -3,14 +3,14 @@ package com.swygbro.housemate.housework.domain;
 import com.swygbro.housemate.util.model.EnumModel;
 
 public enum DifficultyType implements EnumModel {
-    UPPER("상"),
-    MIDDLE("중"),
-    LOWER("하")
+    UPPER(3),
+    MIDDLE(2),
+    LOWER(1)
     ;
 
-    private String value;
+    private Integer value;
 
-    DifficultyType(String value) {
+    DifficultyType(Integer value) {
         this.value = value;
     }
 
@@ -21,6 +21,10 @@ public enum DifficultyType implements EnumModel {
 
     @Override
     public String getValue() {
+        return this.value.toString();
+    }
+
+    public Integer getScore() {
         return this.value;
     }
 }
