@@ -16,4 +16,5 @@ public interface HouseWorkCustomRepository {
     HouseWorkCountForGroup searchHouseWorkCountByMember(LocalDate startAt, LocalDate endAt, Group group);
     List<HouseWork> searchHouseWorkByToday(LocalDate now);
     Long countByMember(LocalDate now, Member member);
+    List<HouseWork> searchCalculateMostHouseWork(LocalDate now);
 }

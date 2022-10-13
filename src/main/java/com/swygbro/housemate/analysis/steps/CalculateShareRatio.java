@@ -1,9 +1,9 @@
 package com.swygbro.housemate.analysis.steps;
 
-import com.swygbro.housemate.analysis.message.MemberFinalShareRatio;
-import com.swygbro.housemate.analysis.message.MemberPercentInfo;
-import com.swygbro.housemate.analysis.message.ShareRatioInfo;
-import com.swygbro.housemate.analysis.message.ShareRatioType;
+import com.swygbro.housemate.analysis.message.ratio.MemberFinalShareRatio;
+import com.swygbro.housemate.analysis.message.ratio.MemberPercentInfo;
+import com.swygbro.housemate.analysis.message.ratio.ShareRatioInfo;
+import com.swygbro.housemate.analysis.message.ratio.ShareRatioType;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.login.domain.Member;
@@ -23,21 +23,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.swygbro.housemate.analysis.message.ShareRatioType.*;
+import static com.swygbro.housemate.analysis.message.ratio.ShareRatioType.*;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class CalculateShareRatioByGroup {
+public class CalculateShareRatio {
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
     private final MemberRepository memberRepository;
 
     @Bean
-    public Step execute() {
+    public Step executeByGroup() {
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
-                    log.info("======= 필요한 집안일 하루 데이터 가져오기 =======");
+                    log.info("======= 필요한 집안일 가져오기 =======");
                     LocalDate now = LocalDate.now();
                     List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkByToday(now);
 
@@ -66,7 +66,7 @@ public class CalculateShareRatioByGroup {
 
                     log.info("======= 마지막 그룹에 대한 비율 구하기 =======");
 
-                    log.info("DB 업데이트");
+                    log.info("======= DB 업데이트 =======");
 
                     return RepeatStatus.FINISHED;
                 })

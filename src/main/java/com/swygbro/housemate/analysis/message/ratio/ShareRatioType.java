@@ -1,4 +1,4 @@
-package com.swygbro.housemate.analysis.message;
+package com.swygbro.housemate.analysis.message.ratio;
 
 import com.swygbro.housemate.util.model.EnumModel;
 

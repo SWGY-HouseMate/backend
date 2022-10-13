@@ -1,12 +1,15 @@
 package com.swygbro.housemate.analysis.domain;
 
-import com.swygbro.housemate.analysis.message.ShareRatioType;
+import com.swygbro.housemate.analysis.message.ratio.ShareRatioType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 import static javax.persistence.EnumType.STRING;
@@ -31,4 +34,12 @@ public class HouseWorkAnalysis {
     double shareRatioPercent;
 
     LocalDate today;
+
+    // ======================
+
+    String title;
+
+    Integer count;
+
+    // ======================
 }

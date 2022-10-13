@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -126,12 +127,13 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     @Override
     public List<HouseWork> searchHouseWorkByToday(LocalDate now) {
         LocalDate start = now.withDayOfMonth(1);
+        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
 
         return queryFactory.selectFrom(houseWork)
                 .join(houseWork.manager).fetchJoin()
                 .join(houseWork.group).fetchJoin()
                 .join(houseWork.cycle).fetchJoin()
-                .where(houseWork.today.between(start, now))
+                .where(houseWork.today.between(start, end))
                 .fetchAll()
                 .fetch();
     }
@@ -145,6 +147,20 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
                         houseWork.today.between(start, now),
                         houseWork.manager.memberId.eq(member.getMemberId())
                 ).fetchCount();
+    }
+
+    @Override
+    public List<HouseWork> searchCalculateMostHouseWork(LocalDate now) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .join(houseWork.manager).fetchJoin()
+                .join(houseWork.cycle).fetchJoin()
+                .join(houseWork.group).fetchJoin()
+                .where(
+                        houseWork.today.between(start, now)
+                ).fetchAll()
+                .fetch();
     }
 
 
