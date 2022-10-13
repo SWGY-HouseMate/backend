@@ -1,12 +1,14 @@
 package com.swygbro.housemate.analysis.message;
 
-import lombok.Getter;
+import lombok.ToString;
 import lombok.Value;
 
-@Getter
 @Value(staticConstructor = "of")
-public class ShareRatioInfo {
-    String memberId;
-    Integer sum;
+@ToString
+public class MemberPercentInfo {
+
     String groupId;
+    String memberId;
+    double percent;
+
 }
