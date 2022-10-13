@@ -1,5 +1,6 @@
 package com.swygbro.housemate.analysis.jobs;
 
+import com.swygbro.housemate.analysis.steps.CalculateBestAndWorstHouseWork;
 import com.swygbro.housemate.analysis.steps.CalculateMostHouseWork;
 import com.swygbro.housemate.analysis.steps.CalculateShareRatio;
 import com.swygbro.housemate.analysis.steps.LockTableProcesses;
@@ -18,8 +19,8 @@ public class AnalysisJob {
     // steps
     private final LockTableProcesses lockTableProcesses;
     private final CalculateShareRatio calculateShareRatio;
-
     private final CalculateMostHouseWork calculateMostHouseWork;
+    private final CalculateBestAndWorstHouseWork calculateBestAndWorstHouseWork;
 
     @Bean
     public Job analysis() {
@@ -35,6 +36,11 @@ public class AnalysisJob {
                 .from(calculateShareRatio.executeByGroup())
                 .on("*")
                 .to(calculateMostHouseWork.executeByMember())
+                .on("FAILED")
+                .end()
+                .from(calculateMostHouseWork.executeByMember())
+                .on("*")
+                .to(calculateBestAndWorstHouseWork.executeByHouseWork())
                 .next(lockTableProcesses.end()) // execute() 의 결과에 상관없이 lockTableProcesses End 실행
                 .on("*") // End 의 모든 결과에 상관없이
                 .end() // FLOW 종료

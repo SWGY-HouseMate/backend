@@ -24,22 +24,38 @@ public class HouseWorkAnalysis {
     @Id
     String analysisId;
 
+    // ====================== 공통
+
     String memberId;
 
     String groupId;
+
+    LocalDate today;
+
+    // ====================== 분담 비율
 
     @Enumerated(STRING)
     ShareRatioType shareRatioType;
 
     double shareRatioPercent;
 
-    LocalDate today;
+    // ====================== 가장 많이 한 집안일
 
-    // ======================
-
-    String title;
+    String mostTitle;
 
     Integer count;
 
-    // ======================
+    // ====================== 가장 잘한 집안일 / 담당자 변경이 필요한 집안일
+
+    String bestHouseWorkId;
+
+    String bestHouseWorkTitle;
+
+    String bestHouseWorkManager;
+
+    String worstHouseWorkId;
+
+    String worstHouseWorkTitle;
+
+    String worstHouseWorkManager;
 }

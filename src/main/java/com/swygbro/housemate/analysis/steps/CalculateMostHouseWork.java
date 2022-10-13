@@ -29,7 +29,7 @@ public class CalculateMostHouseWork {
     private final HouseWorkRepository houseWorkRepository;
 
     @Bean
-    public Step executeByMember() {
+    public Step executeByMember() { // 집안일 리스트를 가져왔는데 그룹내에 멤버가 1명밖에 없으면 어떻게 할껀가?
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
                     log.info("======= 필요한 집안일 가져오기 =======");
