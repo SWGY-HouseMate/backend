@@ -28,18 +28,22 @@ import static com.swygbro.housemate.analysis.message.ShareRatioType.*;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class PerDayDataFatoryStep {
+public class CalculateShareRatioByGroup {
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
     private final MemberRepository memberRepository;
 
     @Bean
     public Step execute() {
-        return stepBuilderFactory.get("GetPerDayData")
+        return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
                     log.info("======= 필요한 집안일 하루 데이터 가져오기 =======");
                     LocalDate now = LocalDate.now();
                     List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkByToday(now);
+
+                    if (houseWorkList.isEmpty()) {
+                        return RepeatStatus.FINISHED;
+                    }
 
                     log.info("======= 난위도에 맞는 Score 구하기 =======");
                     Map<String, Integer> stringIntegerMap = extracted(houseWorkList);
@@ -61,12 +65,15 @@ public class PerDayDataFatoryStep {
                     }
 
                     log.info("======= 마지막 그룹에 대한 비율 구하기 =======");
+
+                    log.info("DB 업데이트");
+
                     return RepeatStatus.FINISHED;
                 })
                 .build();
     }
 
-    private static List<MemberFinalShareRatio> getMemberFinalShareRatios(List<MemberPercentInfo> memberPercentInfoList) {
+    private List<MemberFinalShareRatio> getMemberFinalShareRatios(List<MemberPercentInfo> memberPercentInfoList) {
         List<MemberFinalShareRatio> memberFinalShareRatios = new ArrayList<>();
         for (MemberPercentInfo memberPercentInfo : memberPercentInfoList) {
             double percent = memberPercentInfo.getPercent();
@@ -83,7 +90,7 @@ public class PerDayDataFatoryStep {
         return memberFinalShareRatios;
     }
 
-    private static List<MemberPercentInfo> getMemberPercentInfos(Map<String, List<ShareRatioInfo>> groupInfoListMap) {
+    private List<MemberPercentInfo> getMemberPercentInfos(Map<String, List<ShareRatioInfo>> groupInfoListMap) {
         List<MemberPercentInfo> memberPercentInfoList = new ArrayList<>();
         for (String groupId : groupInfoListMap.keySet()) {
             List<ShareRatioInfo> shareRatioInfoList = groupInfoListMap.get(groupId);
@@ -131,7 +138,7 @@ public class PerDayDataFatoryStep {
         return stringIntegerMap;
     }
 
-    private static MemberFinalShareRatio getMemberFinalShareRatio(MemberPercentInfo memberPercentInfo, double percent, ShareRatioType shareRatioType) {
+    private MemberFinalShareRatio getMemberFinalShareRatio(MemberPercentInfo memberPercentInfo, double percent, ShareRatioType shareRatioType) {
         return MemberFinalShareRatio.of(memberPercentInfo.getGroupId(),
                 memberPercentInfo.getMemberId(),
                 percent,

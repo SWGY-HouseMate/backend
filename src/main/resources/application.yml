@@ -1,6 +1,9 @@
 spring:
-  application:
-    name: ziphap-backend-batch
+  batch:
+    application:
+      name: ZIPHAP_BACKEND_BATCH
+    bean:
+      name: ZIPHAP_BATCH_BEAN
 
   mvc:
     pathmatch:

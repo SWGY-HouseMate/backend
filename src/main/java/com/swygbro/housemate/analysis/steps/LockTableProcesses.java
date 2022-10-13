@@ -23,7 +23,7 @@ public class LockTableProcesses {
 
     private final TableLockRepository tableLockRepository;
 
-    @Value("${spring.application.name}")
+    @Value("${spring.batch.application.name}")
     private String instanceId;
 
     @Bean
