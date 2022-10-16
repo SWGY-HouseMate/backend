@@ -1,48 +1,60 @@
 package com.swygbro.housemate.analysis.steps;
 
+import com.swygbro.housemate.analysis.domain.HouseWorkAnalysis;
 import com.swygbro.housemate.analysis.message.ratio.MemberFinalShareRatio;
 import com.swygbro.housemate.analysis.message.ratio.MemberPercentInfo;
 import com.swygbro.housemate.analysis.message.ratio.ShareRatioInfo;
 import com.swygbro.housemate.analysis.message.ratio.ShareRatioType;
+import com.swygbro.housemate.analysis.repository.HouseWorkAnalysisRepository;
+import com.swygbro.housemate.analysis.util.AnalysisUtil;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
+import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.analysis.message.ratio.ShareRatioType.*;
+import static org.springframework.batch.core.ExitStatus.FAILED;
+import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class CalculateShareRatio {
+
+    private final AnalysisUtil analysisUtil;
+    private final UUIDUtil uuidUtil;
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
     private final MemberRepository memberRepository;
+    private final HouseWorkAnalysisRepository houseWorkAnalysisRepository;
 
     @Bean
-    public Step executeByGroup() { // 집안일 리스트를 가져왔는데 그룹내에 멤버가 1명밖에 없으면 어떻게 할껀가?
+    @Transactional
+    public Step executeByGroup() {
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
-                    log.info("======= 필요한 집안일 가져오기 =======");
+
                     LocalDate now = LocalDate.now();
-                    List<HouseWork> houseWorkList = houseWorkRepository.searchHouseWorkByToday(now);
+                    List<HouseWork> houseWorkList = analysisUtil.validation(
+                            houseWorkRepository.searchHouseWorkByToday(now)
+                    );
 
                     if (houseWorkList.isEmpty()) {
-                        return RepeatStatus.FINISHED;
+                        return FINISHED;
                     }
 
                     log.info("======= 난위도에 맞는 Score 구하기 =======");
@@ -59,16 +71,28 @@ public class CalculateShareRatio {
                     log.info("======= 비율 구하기 =======");
                     List<MemberFinalShareRatio> memberFinalShareRatios = getMemberFinalShareRatios(memberPercentInfoList);
 
-                    log.info("======= 테스트 =======");
+                    log.info("======= DB =======");
                     for (MemberFinalShareRatio memberFinalShareRatio : memberFinalShareRatios) {
-                        System.out.println("memberId : " + memberFinalShareRatio.getMemberId() + " type : " + memberFinalShareRatio.getShareRatioType() + "(" + memberFinalShareRatio.getPercent() +"%)");
+                        Optional<HouseWorkAnalysis> byToday = houseWorkAnalysisRepository.findByTodayAndMemberIdAndGroupId(now, memberFinalShareRatio.getMemberId(), memberFinalShareRatio.getGroupId());
+
+                        if (byToday.isEmpty()) {
+                            houseWorkAnalysisRepository.save(HouseWorkAnalysis.builder()
+                                    .analysisId(uuidUtil.create())
+                                    .memberId(memberFinalShareRatio.getMemberId())
+                                    .groupId(memberFinalShareRatio.getGroupId())
+                                    .today(now)
+                                    .shareRatioType(memberFinalShareRatio.getShareRatioType())
+                                    .shareRatioPercent(memberFinalShareRatio.getPercent())
+                                    .build());
+
+                            return FINISHED;
+                        }
+
+                        byToday.get().setShareRatioTypeAndShareRatioPercent(memberFinalShareRatio.getShareRatioType(), memberFinalShareRatio.getPercent());
+                        return FINISHED;
                     }
 
-                    log.info("======= 마지막 그룹에 대한 비율 구하기 =======");
-
-                    log.info("======= DB 업데이트 =======");
-
-                    return RepeatStatus.FINISHED;
+                    return FINISHED;
                 })
                 .build();
     }

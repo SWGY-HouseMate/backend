@@ -39,11 +39,21 @@ public class HouseWorkAnalysis {
 
     double shareRatioPercent;
 
+    public void setShareRatioTypeAndShareRatioPercent(ShareRatioType shareRatioType, double shareRatioPercent) {
+        this.shareRatioType = shareRatioType;
+        this.shareRatioPercent = shareRatioPercent;
+    }
+
     // ====================== 가장 많이 한 집안일
 
     String mostTitle;
 
     Integer count;
+
+    public void setMostTitleAndCount(String mostTitle, Integer count) {
+        this.mostTitle = mostTitle;
+        this.count = count;
+    }
 
     // ====================== 가장 잘한 집안일 / 담당자 변경이 필요한 집안일
 

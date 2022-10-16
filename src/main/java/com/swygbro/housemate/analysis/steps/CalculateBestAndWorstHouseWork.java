@@ -1,7 +1,9 @@
 package com.swygbro.housemate.analysis.steps;
 
+import com.swygbro.housemate.analysis.domain.HouseWorkAnalysis;
 import com.swygbro.housemate.analysis.message.best_worst.BestInfo;
 import com.swygbro.housemate.analysis.message.best_worst.WorstInfo;
+import com.swygbro.housemate.analysis.util.AnalysisUtil;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @RequiredArgsConstructor
 public class CalculateBestAndWorstHouseWork {
 
+    private final AnalysisUtil analysisUtil;
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
 
@@ -30,7 +33,9 @@ public class CalculateBestAndWorstHouseWork {
                 .tasklet((contribution, chunkContext) -> {
                     log.info("======= 필요한 집안일 가져오기 =======");
                     LocalDate now = LocalDate.now();
-                    List<HouseWork> houseWorkList = houseWorkRepository.searchCalculateMostHouseWork(now);
+                    List<HouseWork> houseWorkList = analysisUtil.validation(
+                            houseWorkRepository.searchCalculateMostHouseWork(now)
+                    );
 
                     if (houseWorkList.isEmpty()) {
                         return FINISHED;
@@ -49,6 +54,8 @@ public class CalculateBestAndWorstHouseWork {
 
                     // 가장 못한일
                     WorstInfo.of("", "", "");
+
+                    // DB 업데이트
 
                     return FINISHED;
                 }).build();

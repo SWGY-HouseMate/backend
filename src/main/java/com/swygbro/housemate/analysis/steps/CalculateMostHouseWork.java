@@ -1,10 +1,14 @@
 package com.swygbro.housemate.analysis.steps;
 
-import com.swygbro.housemate.analysis.message.mostmany.GroupCountInfo;
+import com.swygbro.housemate.analysis.domain.HouseWorkAnalysis;
+import com.swygbro.housemate.analysis.message.mostmany.MemberCountInfo;
 import com.swygbro.housemate.analysis.message.mostmany.GroupFinalCount;
 import com.swygbro.housemate.analysis.message.mostmany.MostManyInfo;
+import com.swygbro.housemate.analysis.repository.HouseWorkAnalysisRepository;
+import com.swygbro.housemate.analysis.util.AnalysisUtil;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
+import com.swygbro.housemate.util.uuid.UUIDUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
@@ -12,11 +16,9 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
@@ -25,16 +27,22 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Configuration
 @RequiredArgsConstructor
 public class CalculateMostHouseWork {
+    private final AnalysisUtil analysisUtil;
+    private final UUIDUtil uuidUtil;
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
+    private final HouseWorkAnalysisRepository houseWorkAnalysisRepository;
 
     @Bean
-    public Step executeByMember() { // 집안일 리스트를 가져왔는데 그룹내에 멤버가 1명밖에 없으면 어떻게 할껀가?
+    @Transactional
+    public Step executeByMember() {
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
                     log.info("======= 필요한 집안일 가져오기 =======");
                     LocalDate now = LocalDate.now();
-                    List<HouseWork> houseWorkList = houseWorkRepository.searchCalculateMostHouseWork(now);
+                    List<HouseWork> houseWorkList = analysisUtil.validation(
+                            houseWorkRepository.searchCalculateMostHouseWork(now)
+                    );
 
                     if (houseWorkList.isEmpty()) {
                         return FINISHED;
@@ -44,26 +52,28 @@ public class CalculateMostHouseWork {
                     List<MostManyInfo> mostManyInfos = getMostManyInfos(houseWorkList);
 
                     log.info("======= group 을 기준으로 집안일 Count 하기 =======");
-                    List<GroupCountInfo> groupCountInfos = getGroupCountInfos(mostManyInfos);
+                    List<MemberCountInfo> memberCountInfos = getGroupCountInfos(mostManyInfos);
 
                     log.info("======= 제일 집안일이 많은 값 구하기 =======");
-                    GroupFinalCount extracted = extracted(groupCountInfos);
+                    GroupFinalCount extracted = extracted(memberCountInfos);
 
                     log.info("======= 테스트 =======");
                     System.out.println("extracted = " + extracted);
 
                     log.info("======= DB 업데이트 =======");
-
+                    HouseWorkAnalysis houseWorkAnalysis = houseWorkAnalysisRepository.findByTodayAndGroupId(now, extracted.getGroupId())
+                            .orElseThrow(null);
+                    houseWorkAnalysis.setMostTitleAndCount(extracted.getTitle(), extracted.getCount());
                     return FINISHED;
                 }).build();
     }
 
-    private GroupFinalCount extracted(List<GroupCountInfo> groupCountInfos) {
+    private GroupFinalCount extracted(List<MemberCountInfo> memberCountInfos) {
         Map.Entry<String, Integer> maxEntry = null;
         String groupId = null;
-        for (GroupCountInfo groupCountInfo : groupCountInfos) {
-            groupId = groupCountInfo.getGroupId();
-            for (Map.Entry<String, Integer> entry : groupCountInfo.getTitleCount().entrySet()) {
+        for (MemberCountInfo memberCountInfo : memberCountInfos) {
+            groupId = memberCountInfo.getGroupId();
+            for (Map.Entry<String, Integer> entry : memberCountInfo.getTitleCount().entrySet()) {
                 if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
                 {
                     maxEntry = entry;
@@ -73,8 +83,8 @@ public class CalculateMostHouseWork {
         return GroupFinalCount.of(groupId, maxEntry.getKey(), maxEntry.getValue());
     }
 
-    private List<GroupCountInfo> getGroupCountInfos(List<MostManyInfo> mostManyInfos) {
-        List<GroupCountInfo> groupCountInfos = new ArrayList<>();
+    private List<MemberCountInfo> getGroupCountInfos(List<MostManyInfo> mostManyInfos) {
+        List<MemberCountInfo> memberCountInfos = new ArrayList<>();
         Map<String, List<MostManyInfo>> groupingGroupId = mostManyInfos.stream()
                 .collect(Collectors.groupingBy(MostManyInfo::getGroupId));
         for (String groupId : groupingGroupId.keySet()) {
@@ -83,17 +93,19 @@ public class CalculateMostHouseWork {
             int count = 1;
             Map<String, Integer> integerMap = new HashMap<>();
             for (MostManyInfo mostManyInfo : findByGroupId) {
+                String memberId = mostManyInfo.getMemberId();
                 if (integerMap.get(mostManyInfo.getTitle()) == null) {
                     integerMap.put(mostManyInfo.getTitle(), count);
                 } else {
                     count++;
                     integerMap.put(mostManyInfo.getTitle(), count);
                 }
-            }
 
-            groupCountInfos.add(GroupCountInfo.of(groupId, integerMap));
+                memberCountInfos.add(MemberCountInfo.of(groupId, memberId, integerMap));
+            }
         }
-        return groupCountInfos;
+
+        return memberCountInfos;
     }
 
     private List<MostManyInfo> getMostManyInfos(List<HouseWork> houseWorkList) {

@@ -7,9 +7,11 @@ import java.util.Map;
 
 @ToString
 @Value(staticConstructor = "of")
-public class GroupCountInfo {
+public class MemberCountInfo {
 
     String groupId;
+
+    String memberId;
 
     Map<String, Integer> titleCount;
 }
