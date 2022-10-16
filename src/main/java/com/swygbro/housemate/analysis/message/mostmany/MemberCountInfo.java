@@ -8,7 +8,6 @@ import java.util.Map;
 @ToString
 @Value(staticConstructor = "of")
 public class MemberCountInfo {
-
     String groupId;
 
     String memberId;

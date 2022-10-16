@@ -8,8 +8,10 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 @ToString
 public class MostManyInfo {
+
     String groupId;
     String memberId;
     String title;
     Boolean isComplete;
+
 }

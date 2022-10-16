@@ -6,11 +6,11 @@ import lombok.Value;
 @ToString
 @Value(staticConstructor = "of")
 public class GroupFinalCount {
+    String memberId;
 
     String groupId;
 
     String title;
 
     Integer count;
-
 }

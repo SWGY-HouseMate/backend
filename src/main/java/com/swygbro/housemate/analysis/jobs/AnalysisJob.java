@@ -30,7 +30,7 @@ public class AnalysisJob {
                 .end() // 종료
                 .from(lockTableProcesses.start()) // Start 의 결과로부터
                 .on("*") // FAILED 를 제외한 모든 경우
-                .to(calculateShareRatio.executeByGroup()) // calculateShareRatioByGroup.execute() 실행
+                .to(calculateMostHouseWork.executeByMember()) // calculateShareRatioByGroup.execute() 실행
                 .next(lockTableProcesses.end()) // execute() 의 결과에 상관없이 lockTableProcesses End 실행
                 .on("*") // End 의 모든 결과에 상관없이
                 .end() // FLOW 종료
