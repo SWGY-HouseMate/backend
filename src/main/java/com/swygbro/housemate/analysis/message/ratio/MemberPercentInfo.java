@@ -3,12 +3,12 @@ package com.swygbro.housemate.analysis.message.ratio;
 import lombok.ToString;
 import lombok.Value;
 
-@Value(staticConstructor = "of")
 @ToString
+@Value(staticConstructor = "of")
 public class MemberPercentInfo {
-
     String groupId;
-    String memberId;
-    double percent;
 
+    String memberId;
+
+    double percent;
 }

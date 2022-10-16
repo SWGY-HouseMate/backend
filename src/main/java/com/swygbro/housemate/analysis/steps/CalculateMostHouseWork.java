@@ -40,7 +40,7 @@ public class CalculateMostHouseWork {
                 .tasklet((contribution, chunkContext) -> {
                     log.info("======= 필요한 집안일 가져오기 =======");
                     LocalDate now = LocalDate.now();
-                    List<HouseWork> houseWorkList = analysisUtil.validation(
+                    List<HouseWork> houseWorkList = analysisUtil.removeOnlyOneMemberInTheGroup(
                             houseWorkRepository.searchCalculateMostHouseWork(now)
                     );
 
