@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.persistence.EnumType.STRING;
 
@@ -31,6 +32,10 @@ public class HouseWorkAnalysis {
     String groupId;
 
     LocalDate today;
+
+    LocalDateTime startAt;
+
+    LocalDateTime endAt;
 
     // ====================== 분담 비율
 

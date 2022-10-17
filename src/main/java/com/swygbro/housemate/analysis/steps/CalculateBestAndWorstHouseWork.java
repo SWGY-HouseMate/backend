@@ -1,9 +1,9 @@
 package com.swygbro.housemate.analysis.steps;
 
-import com.swygbro.housemate.analysis.domain.HouseWorkAnalysis;
 import com.swygbro.housemate.analysis.message.best_worst.BestInfo;
 import com.swygbro.housemate.analysis.message.best_worst.WorstInfo;
 import com.swygbro.housemate.analysis.util.AnalysisUtil;
+import com.swygbro.housemate.analysis.util.dto.AnalysisDto;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,10 @@ public class CalculateBestAndWorstHouseWork {
     private final HouseWorkRepository houseWorkRepository;
 
     @Bean
-    public Step executeByHouseWork() { // 집안일 리스트를 가져왔는데 그룹내에 멤버가 1명밖에 없으면 어떻게 할껀가?
+    public Step executeByHouseWork() {
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
-                    log.info("======= 필요한 집안일 가져오기 =======");
+
                     LocalDate now = LocalDate.now();
                     List<HouseWork> houseWorkList = analysisUtil.removeOnlyOneMemberInTheGroup(
                             houseWorkRepository.searchCalculateMostHouseWork(now)
@@ -41,21 +41,28 @@ public class CalculateBestAndWorstHouseWork {
                         return FINISHED;
                     }
 
-                    // 성공률 구하기
+                    log.info("======= HouseWork DTO 로 변환 =======");
+                    List<AnalysisDto> analysisDtoList = analysisUtil.converterHouseWorkDto(houseWorkList);
 
-                    // 반복에 따른 점수
+                    log.info("======= 성공률 구하기 =======");
+                    for (AnalysisDto analysisDto : analysisDtoList) {
+                        System.out.println("analysisDto = " + analysisDto);
+                    }
 
-                    // 난위도에 따른 점수 부여
+                    log.info("======= 반복에 따른 점수 구하기 =======");
 
-                    // 합산
+                    log.info("======= 난위도에 따른 점수 구하기 =======");
 
-                    // 가장 잘한일
+                    log.info("======= 합산 =======");
+
+                    log.info("======= 가장 잘한 일 =======");
                     BestInfo.of("", "", "");
 
-                    // 가장 못한일
+                    log.info("======= 담당자 변경이 필요한 일 =======");
                     WorstInfo.of("", "", "");
 
-                    // DB 업데이트
+                    log.info("======= DB 저장 =======");
+                    
 
                     return FINISHED;
                 }).build();
