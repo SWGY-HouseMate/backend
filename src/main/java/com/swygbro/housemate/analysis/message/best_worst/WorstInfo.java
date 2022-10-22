@@ -4,9 +4,5 @@ import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class WorstInfo {
-
-    String groupId;
-
-    String houseWorkId;
-
+    String houseWorkTitle;
 }

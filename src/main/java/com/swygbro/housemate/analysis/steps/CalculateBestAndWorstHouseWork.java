@@ -2,6 +2,7 @@ package com.swygbro.housemate.analysis.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swygbro.housemate.analysis.message.best_worst.*;
+import com.swygbro.housemate.analysis.repository.HouseWorkAnalysisRepository;
 import com.swygbro.housemate.analysis.util.AnalysisUtil;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
@@ -13,7 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
@@ -27,6 +31,7 @@ public class CalculateBestAndWorstHouseWork {
     private final AnalysisUtil analysisUtil;
     private final StepBuilderFactory stepBuilderFactory;
     private final HouseWorkRepository houseWorkRepository;
+    private final HouseWorkAnalysisRepository houseWorkAnalysisRepository;
     private final ObjectMapper objectMapper;
 
     @Bean
@@ -68,20 +73,44 @@ public class CalculateBestAndWorstHouseWork {
                     List<HouseWorkSuccessRate> successRate = getSuccessRate(houseWorkList);
 
                     log.info("======= 합산 =======");
-                    List<SumScore> sumScoreList = new ArrayList<>();
-
-
-                    Map<String, List<SumScore>> groupingGroupId = sumScoreList.stream()
-                            .collect(Collectors.groupingBy(SumScore::getGroupId));
-                    for (String groupId : groupingGroupId.keySet()) {
-                        List<SumScore> findByGroupId = groupingGroupId.get(groupId);
-
-                    }
+                    List<TotalGroupSum> totalGroupSumList = getTotalGroupSum(
+                            difficultyScore,
+                            scoreToRepetitionList,
+                            successRate
+                    );
 
                     log.info("======= DB 저장 =======");
+                    for (TotalGroupSum totalGroupSum : totalGroupSumList) {
+                        houseWorkAnalysisRepository.findByTodayAndGroupId(
+                                now, totalGroupSum.getGroupId()
+                        ).forEach(g -> g.setBestWorst(
+                                null,
+                                totalGroupSum.getBestInfo().getHouseWorkTitle(),
+                                null,
+                                null,
+                                totalGroupSum.getWorstInfo().getHouseWorkTitle(),
+                                null));
+                    }
 
                     return FINISHED;
                 }).build();
+    }
+
+    private List<TotalGroupSum> getTotalGroupSum(
+            List<ScoreToDifficulty> difficultyScore,
+            List<ScoreToRepetition> scoreToRepetitionList,
+            List<HouseWorkSuccessRate> successRate
+    ) { // 구하기
+        List<SumScore> sumScoreList = new ArrayList<>();
+        Map<String, List<SumScore>> groupingGroupId = sumScoreList.stream()
+                .collect(Collectors.groupingBy(SumScore::getGroupId));
+
+        List<TotalGroupSum> totalGroupSumList = new ArrayList<>();
+        for (String groupId : groupingGroupId.keySet()) {
+            List<SumScore> findByGroupId = groupingGroupId.get(groupId);
+
+        }
+        return totalGroupSumList;
     }
 
     private List<ScoreToRepetition> getScoreToRepetitions(List<HouseWork> houseWorkList) {

@@ -10,8 +10,9 @@ import lombok.ToString;
 public class SumScore {
     private String groupId;
 
-    private String houseWorkTitle;
+    private String memberId;
 
+    private String houseWorkTitle;
     private Double sum;
 
     public void divided(double scoreToRepetition) {
