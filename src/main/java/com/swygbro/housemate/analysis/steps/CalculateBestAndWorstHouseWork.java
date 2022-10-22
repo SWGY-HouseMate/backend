@@ -3,11 +3,8 @@ package com.swygbro.housemate.analysis.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swygbro.housemate.analysis.message.best_worst.*;
 import com.swygbro.housemate.analysis.util.AnalysisUtil;
-import com.swygbro.housemate.housework.domain.Cycle;
-import com.swygbro.housemate.housework.domain.CycleType;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
@@ -19,8 +16,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.swygbro.housemate.housework.domain.CycleType.요일_마다;
-import static com.swygbro.housemate.housework.domain.CycleType.일_마다;
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
@@ -66,48 +61,22 @@ public class CalculateBestAndWorstHouseWork {
                     log.info("======= 집안일 난위도에 따른 점수 구하기 =======");
                     List<ScoreToDifficulty> difficultyScore = getDifficultyScore(houseWorkList);
 
-                    log.info("======= 성공률 구하기 =======");
-                    List<HouseWorkSuccessRate> repetitionScore = getRepetitionScore(houseWorkList);
-
                     log.info("======= 반복에 따른 점수 구하기 ======= -> 이게 애매하다");
-                    List<ScoreToRepetition> scoreToRepetitionList = new ArrayList<>();
-                    for (HouseWork houseWork : houseWorkList) {
-                        Cycle cycle = houseWork.getCycle();
-                        CycleType cycleType = cycle.getCycleType();
+                    List<ScoreToRepetition> scoreToRepetitionList = getScoreToRepetitions(houseWorkList);
 
-                        Integer day = null;
-                        List<String> weekList = new ArrayList<>();
-                        Integer mouth = null;
-
-                        Map<String, Object> map = objectMapper.readValue(cycle.getProps(), Map.class);
-                        if (cycleType.equals(일_마다)) {
-                            day = (Integer) map.get("additional");
-                        } else if (cycleType.equals(요일_마다)) {
-                            String weekString = (String) map.get("additional");
-                            weekString.split(",");
-                            weekList.add(weekString.split(",").toString());
-                        } else {
-                            mouth = (Integer) map.get("additional");
-                        }
-
-                        // 점수 구하기
-
-
-
-
-                        Integer score = cycleType.getScore();
-
-                        //
-                    }
+                    log.info("======= 성공률 구하기 =======");
+                    List<HouseWorkSuccessRate> successRate = getSuccessRate(houseWorkList);
 
                     log.info("======= 합산 =======");
+                    List<SumScore> sumScoreList = new ArrayList<>();
 
 
-                    log.info("======= 가장 잘한 일 =======");
-                    BestInfo.of("", "", "");
+                    Map<String, List<SumScore>> groupingGroupId = sumScoreList.stream()
+                            .collect(Collectors.groupingBy(SumScore::getGroupId));
+                    for (String groupId : groupingGroupId.keySet()) {
+                        List<SumScore> findByGroupId = groupingGroupId.get(groupId);
 
-                    log.info("======= 담당자 변경이 필요한 일 =======");
-                    WorstInfo.of("", "", "");
+                    }
 
                     log.info("======= DB 저장 =======");
 
@@ -115,7 +84,29 @@ public class CalculateBestAndWorstHouseWork {
                 }).build();
     }
 
-    private List<HouseWorkSuccessRate> getRepetitionScore(List<HouseWork> houseWorkList) {
+    private List<ScoreToRepetition> getScoreToRepetitions(List<HouseWork> houseWorkList) {
+        List<ScoreToRepetition> scoreToRepetitionList = new ArrayList<>();
+        for (HouseWork houseWork : houseWorkList) {
+            Optional<ScoreToRepetition> optionalScoreToRepetition = scoreToRepetitionList.stream()
+                    .filter(scoreToRepetition -> scoreToRepetition.getHouseWorkTitle().equals(houseWork.getTitle()))
+                    .findFirst();
+
+            if (optionalScoreToRepetition.isEmpty()) {
+                // 세부 내용에 따라서 점수가 달라지는 것은 다음에 구현
+                Integer score = houseWork.getCycle().getCycleType().getScore();
+
+                scoreToRepetitionList.add(ScoreToRepetition.builder()
+                        .groupId(houseWork.getGroup().getZipHapGroupId())
+                        .memberId(houseWork.getManager().getMemberId())
+                        .houseWorkTitle(houseWork.getTitle())
+                        .score(score)
+                        .build());
+            }
+        }
+        return scoreToRepetitionList;
+    }
+
+    private List<HouseWorkSuccessRate> getSuccessRate(List<HouseWork> houseWorkList) {
         List<HouseWorkSuccessRate> houseWorkSuccessRateList = new ArrayList<>();
         for (HouseWork houseWork : houseWorkList) {
             Optional<HouseWorkSuccessRate> optionalHouseWorkSuccessRate = houseWorkSuccessRateList.stream()

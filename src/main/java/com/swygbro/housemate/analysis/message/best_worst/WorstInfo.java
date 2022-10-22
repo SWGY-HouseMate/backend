@@ -7,8 +7,6 @@ public class WorstInfo {
 
     String groupId;
 
-    String memberId;
-
     String houseWorkId;
 
 }
