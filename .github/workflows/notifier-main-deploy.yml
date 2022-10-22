@@ -37,19 +37,17 @@ jobs:
 
       - name: Generate Api package
         run: |
-          mkdir -p deploy-notifier
-          cp api/build/libs/api.jar deploy-notifier/notifier-production-ebextensions-1.jar
-          cp Procfile deploy-notifier/Procfile
-          cp -r .ebextensions deploy-notifier/.ebextensions
-          cd deploy-notifier && zip -r notifier-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip .
+          mkdir -p deploy-backend
+          cp api/build/libs/api.jar deploy-backend/backend-production-ebextensions-1.jar
+          cp Procfile deploy-backend/Procfile
+          cp -r .ebextensions deploy-backend/.ebextensions
+          cd deploy-backend && zip -r notifier-backend-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip .
 
       - name: Deploy Api to ElasticBeansTalk
         uses: einaregilsson/beanstalk-deploy@v14
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: notifier
-          environment_name: notifier-prod
-          version_label: notifier-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
+          application_name: backend
+          environment_name: backend-prod
+          version_label: backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
-          deployment_package: deploy-notifier/notifier-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
+          deployment_package: deploy-backend/backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
