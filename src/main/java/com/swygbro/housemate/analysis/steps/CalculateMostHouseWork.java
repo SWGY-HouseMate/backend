@@ -39,7 +39,7 @@ public class CalculateMostHouseWork {
     @Bean
     @Transactional
     public Step executeByMember() {
-        return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
+        return stepBuilderFactory.get("CalculateMostHouseWorkStep")
                 .tasklet((contribution, chunkContext) -> {
 
                     LocalDate now = LocalDate.now();
