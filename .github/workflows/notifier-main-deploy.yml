@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/analysis
   workflow_dispatch:
 
 jobs:
@@ -35,7 +36,7 @@ jobs:
           format: YYYYMMDDTHHmm
           utcOffset: "+09:00"
 
-      - name: Generate Api package
+      - name: Generate Root package
         run: |
           mkdir -p deploy-backend
           cp api/build/libs/api.jar deploy-backend/backend-production-ebextensions-1.jar
@@ -43,11 +44,11 @@ jobs:
           cp -r .ebextensions deploy-backend/.ebextensions
           cd deploy-backend && zip -r notifier-backend-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip .
 
-      - name: Deploy Api to ElasticBeansTalk
-        uses: einaregilsson/beanstalk-deploy@v14
-        with:
-          application_name: backend
-          environment_name: backend-prod
-          version_label: backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
-          region: ap-northeast-2
-          deployment_package: deploy-backend/backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
+#      - name: Deploy Api to ElasticBeansTalk
+#        uses: einaregilsson/beanstalk-deploy@v14
+#        with:
+#          application_name: backend
+#          environment_name: backend-prod
+#          version_label: backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
+#          region: ap-northeast-2
+#          deployment_package: deploy-backend/backend-production-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
