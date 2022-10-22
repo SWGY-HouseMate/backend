@@ -3,14 +3,14 @@ package com.swygbro.housemate.housework.domain;
 import com.swygbro.housemate.util.model.EnumModel;
 
 public enum CycleType implements EnumModel {
-    일_마다("몇 일마다"),
-    요일_마다("몇 요일 마다"),
-    매달("매달")
+    일_마다(10),
+    요일_마다(6),
+    매달(3)
     ;
 
-    private final String value;
+    private final Integer value;
 
-    CycleType(String value) {
+    CycleType(Integer value) {
         this.value = value;
     }
 
@@ -21,6 +21,10 @@ public enum CycleType implements EnumModel {
 
     @Override
     public String getValue() {
+        return this.value.toString();
+    }
+
+    public Integer getScore() {
         return this.value;
     }
 }

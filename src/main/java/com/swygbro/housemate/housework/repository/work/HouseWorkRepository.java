@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HouseWorkRepository extends JpaRepository<HouseWork, String>, HouseWorkCustomRepository {
     void deleteAllByCycle(Cycle cycle);
-    HouseWork findByManager(Member member);
 }

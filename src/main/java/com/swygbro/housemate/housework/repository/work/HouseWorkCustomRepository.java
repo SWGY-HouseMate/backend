@@ -17,4 +17,6 @@ public interface HouseWorkCustomRepository {
     List<HouseWork> searchHouseWorkByToday(LocalDate now);
     Long countByMember(LocalDate now, Member member);
     List<HouseWork> searchCalculateMostHouseWork(LocalDate now);
+
+    Long countByHouseWorkTitle(LocalDate now, String title);
 }

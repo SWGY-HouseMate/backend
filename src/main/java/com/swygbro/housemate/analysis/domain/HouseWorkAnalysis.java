@@ -73,4 +73,20 @@ public class HouseWorkAnalysis {
     String worstHouseWorkTitle;
 
     String worstHouseWorkManager;
+
+    public void setBestWorst(
+            String bestHouseWorkId,
+            String bestHouseWorkTitle,
+            String bestHouseWorkManager,
+            String worstHouseWorkId,
+            String worstHouseWorkTitle,
+            String worstHouseWorkManager) {
+        this.bestHouseWorkId = bestHouseWorkId;
+        this.bestHouseWorkTitle = bestHouseWorkTitle;
+        this.bestHouseWorkManager = bestHouseWorkManager;
+
+        this.worstHouseWorkId = worstHouseWorkId;
+        this.worstHouseWorkTitle = worstHouseWorkTitle;
+        this.worstHouseWorkManager = worstHouseWorkManager;
+    }
 }

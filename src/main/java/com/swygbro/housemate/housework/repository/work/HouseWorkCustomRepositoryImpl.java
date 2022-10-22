@@ -162,5 +162,14 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
                 .fetch();
     }
 
+    @Override
+    public Long countByHouseWorkTitle(LocalDate now, String title) {
+        LocalDate start = now.withDayOfMonth(1);
 
+        return queryFactory.selectFrom(houseWork)
+                .where(
+                        houseWork.today.between(start, now),
+                        houseWork.title.eq(title)
+                ).fetchCount();
+    }
 }
