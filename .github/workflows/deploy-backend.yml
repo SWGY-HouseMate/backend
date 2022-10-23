@@ -13,7 +13,7 @@ env:
   DOCKER_HUB_USERNAME: ksh030506
 
 jobs:
-  backend-build:
+  backend-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
