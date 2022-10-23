@@ -26,7 +26,7 @@ import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class CalculateBestAndWorstHouseWork {
+public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 위해 DTO 에 HouseWorkInfo 를 넣자
 
     private final AnalysisUtil analysisUtil;
     private final StepBuilderFactory stepBuilderFactory;
