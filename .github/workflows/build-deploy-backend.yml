@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/analysis
+#      - feature/analysis
   workflow_dispatch:
 
 env:
@@ -13,8 +13,10 @@ env:
   MYSQL_CHARACTER: utf8
   MYSQL_DATABASE: ziphap
   MYSQL_USER: root
-  MYSQL_PASSWORD: ksh03050621
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
   DOCKER_HUB_USERNAME: ksh030506
+  DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  DOCKER_IMAGE_NAME: ziphap-backend
 
 jobs:
   backend-build-deploy:
@@ -47,17 +49,13 @@ jobs:
         uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
         with:
           username: ${{ env.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-      - name: Build Number
-        id: build-number
-        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+          password: ${{ env.DOCKER_HUB_PASSWORD }}
 
       - name: Docker build And Push
         run: |
-          docker build -t ziphap-backend .
-          docker tag ziphap-backend ksh030506/ziphap-backend:latest
-          docker push ksh030506/ziphap-backend:latest
+          docker build -t $DOCKER_IMAGE_NAME .
+          docker tag $DOCKER_IMAGE_NAME $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest
+          docker push $DOCKER_HUB_USERNAME/$DOCKER_IMAGE_NAME:latest
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
@@ -72,6 +70,13 @@ jobs:
           replace-with: '-'
           flags: 'g'
 
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          cp -r .ebextensions deploy/.ebextensions
+          cp Dockerrun.aws.json deploy/Dockerrun.aws.json
+          cd deploy && zip -r deploy.zip .
+
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v20
         with:
@@ -81,4 +86,5 @@ jobs:
           environment_name: Ziphap-env
           version_label: "github-action--${{ steps.format-time.outputs.replaced }}"
           region: ap-northeast-2
-          deployment_package: Dockerrun.aws.json
+          deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 200
