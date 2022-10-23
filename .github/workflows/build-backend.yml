@@ -1,4 +1,4 @@
-name: house-work-backend-main-ci
+name: house-work-backend-main-build
 
 on:
   push:
