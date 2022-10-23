@@ -53,5 +53,12 @@ jobs:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Push to Dockerhub
-        run: ./gradlew jib
+      - name: build and release to DockerHub
+        env:
+          NAME: ksh030506
+          GITHUB_REPO: backend
+          REPO: ziphap
+        run: |
+          docker build -t $REPO .
+          docker tag $REPO:latest $NAME/$REPO:latest
+          docker push $NAME/$REPO:latest
