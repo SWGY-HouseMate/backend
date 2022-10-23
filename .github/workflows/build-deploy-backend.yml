@@ -1,4 +1,4 @@
-name: house-work-backend-main-deploy
+name: house-work-backend-main-build
 
 on:
   push:
@@ -10,10 +10,14 @@ on:
 env:
   JAVA_VERSION: 11
   DISTRIBUTION: temurin
+  MYSQL_CHARACTER: utf8
+  MYSQL_DATABASE: ziphap
+  MYSQL_USER: root
+  MYSQL_PASSWORD: ksh03050621
   DOCKER_HUB_USERNAME: ksh030506
 
 jobs:
-  backend-deploy:
+  backend-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +27,21 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.DISTRIBUTION }}
+
+      - name: Setup MySQL
+        uses: samin/mysql-action@v1
+        with:
+          character set server: ${{ env.MYSQL_CHARACTER }}
+          mysql database: ${{ env.MYSQL_DATABASE }}
+          mysql user: ${{ env.MYSQL_USER }}
+          mysql password: ${{ env.MYSQL_PASSWORD }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+        shell: bash
 
       - name: Build Number
         id: build-number
