@@ -7,6 +7,14 @@ on:
       - feature/analysis
   workflow_dispatch:
 
+env:
+  JAVA_VERSION: 11
+  DISTRIBUTION: temurin
+  MYSQL_CHARACTER: utf8
+  MYSQL_DATABASE: ziphap
+  MYSQL_USER: root
+  MYSQL_PASSWORD: ksh03050621
+
 jobs:
   backend-build:
     runs-on: ubuntu-latest
@@ -16,16 +24,16 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.DISTRIBUTION }}
 
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
-          character set server: 'utf8'
-          mysql database: 'ziphap'
-          mysql user: 'root'
-          mysql password: 'ksh03050621'
+          character set server: ${{ env.MYSQL_CHARACTER }}
+          mysql database: ${{ env.MYSQL_DATABASE }}
+          mysql user: ${{ env.MYSQL_USER }}
+          mysql password: ${{ env.MYSQL_PASSWORD }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
