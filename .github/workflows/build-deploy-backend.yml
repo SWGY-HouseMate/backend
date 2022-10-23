@@ -43,22 +43,18 @@ jobs:
         run: ./gradlew clean build -x test
         shell: bash
 
-      - name: Build Number
-        id: build-number
-        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
-
       - name: Docker Login
         uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
         with:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: build and release to DockerHub
-        env:
-          NAME: ksh030506
-          GITHUB_REPO: backend
-          REPO: ziphap
+      - name: Build Number
+        id: build-number
+        run: echo "::set-output name=BUILD_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+
+      - name: Docker build
         run: |
-          docker build -t $REPO .
-          docker tag $REPO:latest $NAME/$REPO:latest
-          docker push $NAME/$REPO:latest
+          docker build -t ziphap-backend .
+          docker tag ziphap-backend ksh030506/ziphap-backend:latest
+          docker push ksh030506/ziphap-backend:latest

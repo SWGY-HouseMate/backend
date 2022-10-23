@@ -8,7 +8,7 @@ RUN gradle build -x test --parallel --continue > /dev/null 2>&1 || true
 # 이미지에서 애플리케이션 빌드
 COPY . /build
 CMD ls
-RUN gradle build
+RUN gradle clean build -x test
 
 # APP
 FROM openjdk:17.0-slim
