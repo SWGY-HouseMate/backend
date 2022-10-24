@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
+@CrossOrigin(originPatterns = "http://222.112.83.120:3000")
 @Api("HouseWork 관련 API 입니다.")
 @RequestMapping("/house-work")
 @RequiredArgsConstructor

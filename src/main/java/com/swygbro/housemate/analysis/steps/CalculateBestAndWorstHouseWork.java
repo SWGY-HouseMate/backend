@@ -109,6 +109,7 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
         for (String groupId : groupingGroupId.keySet()) {
             List<SumScore> findByGroupId = groupingGroupId.get(groupId);
 
+
         }
         return totalGroupSumList;
     }

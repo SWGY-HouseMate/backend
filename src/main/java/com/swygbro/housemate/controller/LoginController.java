@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(originPatterns = "http://222.112.83.120:3000")
 @Api("Member 관련 API 입니다.")
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
