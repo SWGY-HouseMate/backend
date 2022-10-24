@@ -1,18 +1,3 @@
-alter table house_work drop foreign key FKbjoc5vrx6bavg9c2dk1iexnl
-alter table house_work drop foreign key FK9w5gyueejx4gjxr6folh04qvk
-alter table house_work drop foreign key FK8dhlw89swuy8mpjw5rvn72eha
-alter table member_role drop foreign key FKjkor8coasvpxd945p9qssuny4
-alter table ziphap_group drop foreign key FK9tkqtci4kcbssvksao5j8kman
-alter table ziphap_letter drop foreign key FK6aiw45f5qjnlld3ewy3u1du6e
-alter table ziphap_letter drop foreign key FKhh4v3krxeohkpjae9yk2e8lcc
-alter table ziphap_member drop foreign key FKt0cfjtahb47rrb384yui9oqns
-drop table if exists cycle
-drop table if exists house_work
-drop table if exists member_role
-drop table if exists ziphap_group
-drop table if exists ziphap_heart
-drop table if exists ziphap_letter
-drop table if exists ziphap_member
 create table cycle (cycle_id varchar(255) not null, created_at datetime not null, updated_at datetime, cycle_type varchar(255), end_at date, props varchar(255), start_at date, primary key (cycle_id)) engine=InnoDB
 create table house_work (house_work_id varchar(255) not null, created_at datetime not null, updated_at datetime, difficulty varchar(255), house_work_status_type varchar(255), is_cycle bit, title varchar(255), today date, cycle_id varchar(255), zip_hap_group_id varchar(255), member_id varchar(255), primary key (house_work_id)) engine=InnoDB
 create table member_role (id varchar(255) not null, member_role varchar(255)) engine=InnoDB

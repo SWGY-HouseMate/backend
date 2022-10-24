@@ -11,7 +11,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ziphap?serverTimezone=UTC&characterEncoding=UTF-8
+    url: ziphap-server-db.ap-northeast-2.rds.amazonaws.com
     username: root
     password: ksh03050621
 
