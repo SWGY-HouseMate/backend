@@ -11,12 +11,14 @@ env:
   JAVA_VERSION: 11
   DISTRIBUTION: temurin
   MYSQL_CHARACTER: utf8
-  MYSQL_DATABASE: ziphap
+  MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
   MYSQL_USER: root
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
   DOCKER_HUB_USERNAME: ksh030506
   DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
   DOCKER_IMAGE_NAME: ziphap-backend
+  EB_APPLICATION_NAME: ziphap-server
+  EB_ENVIRONMENT_NAME: Ziphapserver-env
 
 jobs:
   backend-build-deploy:
@@ -82,8 +84,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ziphap-server
-          environment_name: Ziphapserver-env
+          application_name: ${{ secrets.EB_APPLICATION_NAME }}
+          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           version_label: "github-action--${{ steps.format-time.outputs.replaced }}"
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
