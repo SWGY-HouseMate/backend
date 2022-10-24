@@ -1,4 +1,6 @@
 spring:
+  base_url: http://housework-backend.ap-northeast-2.elasticbeanstalk.com
+
   batch:
     application:
       name: ZIPHAP_BACKEND_BATCH
@@ -29,7 +31,7 @@ spring:
       url: https://accounts.google.com/o/oauth2/v2/auth
       client-id: 767085427001-c220ums6k5ntb78vv7rma8ne46den43g.apps.googleusercontent.com
       client-secret: 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
-      callback-url: http://localhost:8080/accounts/auth/google/callback
+      callback-url: http://housework-backend.ap-northeast-2.elasticbeanstalk.com/accounts/auth/google/callback
       scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
       token: https://oauth2.googleapis.com/token
       user-info: https://www.googleapis.com/oauth2/v1/userinfo
@@ -37,7 +39,7 @@ spring:
       client-id: 44a3c35e7086a6cea10ebddd03df7aa7
       token: https://kauth.kakao.com/oauth/token
       user-info: https://kapi.kakao.com/v2/user/me
-      redirect-uri: http://localhost:8080/accounts/auth/kakao/callback
+      redirect-uri: http://housework-backend.ap-northeast-2.elasticbeanstalk.com/accounts/auth/kakao/callback
       page-uri: https://kauth.kakao.com/oauth/authorize
       logout-uri: https://kapi.kakao.com/v1/user/logout
 

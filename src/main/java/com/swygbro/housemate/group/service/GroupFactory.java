@@ -13,6 +13,7 @@ import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,6 +32,9 @@ public class GroupFactory {
     private final UUIDUtil uuidUtil;
     private final ModelMapper modelMapper;
     private final CurrentMemberUtil currentMemberUtil;
+
+    @Value("spring.base_url")
+    private String BASE_URL;
 
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
@@ -58,7 +62,7 @@ public class GroupFactory {
         group.applyMember(currentMemberObject);
 
         currentMemberObject.updateName(group.getGroupName());
-        return GroupResponse.of(linkId, group.createAt(), "http://localhost:8080/group/join/" + linkId);
+        return GroupResponse.of(linkId, group.createAt(), BASE_URL +"/group/join/" + linkId);
     }
 
     @Transactional
@@ -68,7 +72,7 @@ public class GroupFactory {
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
         group.applyMember(addMember);
-        return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());
+        return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());
     }
 
     public GroupInfo info(String likeId) {
