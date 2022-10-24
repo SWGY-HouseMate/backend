@@ -11,7 +11,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ziphap-server-db.c7daveqqjbex.ap-northeast-2.rds.amazonaws.com
+    url: jdbc:mysql://ziphap-server-db.c7daveqqjbex.ap-northeast-2.rds.amazonaws.com:3306/ziphap
     username: root
     password: ksh03050621
 
