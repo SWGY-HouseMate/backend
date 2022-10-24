@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(originPatterns = "http://222.112.83.120:3000")
+@CrossOrigin(originPatterns = "*")
 @Api("Analysis 관련 API 입니다.")
 @RequestMapping("/analysis")
 @RequiredArgsConstructor
