@@ -21,4 +21,12 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(member.memberEmail.eq(email))
                 .fetchOne());
     }
+
+    @Override
+    public Optional<Member> findByIdJoinFetchGroup(String memberId) {
+        return Optional.ofNullable(queryFactory.selectFrom(member)
+                .join(member.zipHapGroup).fetchJoin()
+                .where(member.memberId.eq(memberId))
+                .fetchOne());
+    }
 }

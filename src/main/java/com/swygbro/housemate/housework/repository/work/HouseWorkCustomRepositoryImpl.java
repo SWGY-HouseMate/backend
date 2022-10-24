@@ -123,5 +123,53 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
         return HouseWorkCountForGroup.of(houseWorkCountInfoList);
     }
 
+    @Override
+    public List<HouseWork> searchHouseWorkByToday(LocalDate now) {
+        LocalDate start = now.withDayOfMonth(1);
+        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
 
+        return queryFactory.selectFrom(houseWork)
+                .join(houseWork.manager).fetchJoin()
+                .join(houseWork.group).fetchJoin()
+                .join(houseWork.cycle).fetchJoin()
+                .where(houseWork.today.between(start, end))
+                .fetchAll()
+                .fetch();
+    }
+
+    @Override
+    public Long countByMember(LocalDate now, Member member) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .where(
+                        houseWork.today.between(start, now),
+                        houseWork.manager.memberId.eq(member.getMemberId())
+                ).fetchCount();
+    }
+
+    @Override
+    public List<HouseWork> searchCalculateMostHouseWork(LocalDate now) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .join(houseWork.manager).fetchJoin()
+                .join(houseWork.cycle).fetchJoin()
+                .join(houseWork.group).fetchJoin()
+                .where(
+                        houseWork.today.between(start, now)
+                ).fetchAll()
+                .fetch();
+    }
+
+    @Override
+    public Long countByHouseWorkTitle(LocalDate now, String title) {
+        LocalDate start = now.withDayOfMonth(1);
+
+        return queryFactory.selectFrom(houseWork)
+                .where(
+                        houseWork.today.between(start, now),
+                        houseWork.title.eq(title)
+                ).fetchCount();
+    }
 }

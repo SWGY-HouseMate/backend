@@ -1,6 +1,7 @@
 package com.swygbro.housemate.security;
 
 
+import com.swygbro.housemate.config.CorsConfigurationSourceConfig;
 import com.swygbro.housemate.security.jwt.JwtTokenFilterConfigurer;
 import com.swygbro.housemate.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CorsConfigurationSourceConfig corsConfigurationSourceConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -24,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // CORS
-        http.cors();
+        http.cors().configurationSource(corsConfigurationSourceConfig.corsConfigurationSource());
 
         //http Basic
         http.httpBasic().disable();

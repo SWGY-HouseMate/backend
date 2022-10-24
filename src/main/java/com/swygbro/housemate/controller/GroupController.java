@@ -25,7 +25,7 @@ public class GroupController {
             @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @ResponseBody
-    @ApiOperation("그룹을 생성합니다.")
+    @ApiOperation("그룹을 생성합니다")
     @PostMapping("/create")
     public SingleResult<GroupResponse> createGroup(@RequestBody GroupCreator groupCreator) {
         return responseService.getSingleResult(groupFactory.create(groupCreator));
@@ -37,8 +37,8 @@ public class GroupController {
     @ResponseBody
     @ApiOperation("그룹에 참가합니다.")
     @PostMapping("/join/{linkId}")
-    public SingleResult<GroupResponse> joinGroup(@PathVariable String linkId) {
-        return responseService.getSingleResult(groupFactory.join(linkId));
+    public SingleResult<GroupResponse> joinGroup(@PathVariable String linkId, @RequestParam String memberName) {
+        return responseService.getSingleResult(groupFactory.join(linkId, memberName));
     }
 
     @ApiImplicitParams({

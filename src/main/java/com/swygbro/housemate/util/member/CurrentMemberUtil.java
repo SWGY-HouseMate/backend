@@ -26,6 +26,20 @@ public class CurrentMemberUtil {
     private final GroupRepository groupRepository;
     private final ModelMapper modelMapper;
 
+    public MemberDto getCurrentMemberDtoObject() {
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        Member member = memberRepository.findByMemberEmail(username)
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
+        return MemberDto.of(member.getMemberId(), member.getMemberEmail(), member.getMemberName(), member.getMemberProfilePicture(), member.getMemberLoginRole(), member.getMemberRole());
+    }
+
     public Member getCurrentMemberObject() {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,9 +54,9 @@ public class CurrentMemberUtil {
     public Member getCurrentMemberANDGroupObject() {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof UserDetails) {
+        if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        } else{
+        } else {
             username = principal.toString();
         }
         return memberRepository.findByEmailJoinFetchGroup(username).orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
@@ -51,9 +65,9 @@ public class CurrentMemberUtil {
     public CurrentMemberInfo getCurrentMemberInfoAndGroupInfoObject() {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof UserDetails) {
+        if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        } else{
+        } else {
             username = principal.toString();
         }
         Member member = memberRepository.findByEmailJoinFetchGroup(username).orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
@@ -69,9 +83,9 @@ public class CurrentMemberUtil {
     public GroupPersonInfo getMembersOfTheGroup() {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof UserDetails) {
+        if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        } else{
+        } else {
             username = principal.toString();
         }
         Member member_me = memberRepository.findByEmailJoinFetchGroup(username).orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));

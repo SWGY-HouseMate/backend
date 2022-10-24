@@ -13,6 +13,7 @@ import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,6 +25,7 @@ import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
 public class GroupFactory {
+    private final String BASE_URL = "http://housework-backend.ap-northeast-2.elasticbeanstalk.com";
     private final List<ValidatorURI> validators = new ArrayList<>();
     private final LinkCreator linkCreator;
     private final GroupRepository groupRepository;
@@ -58,17 +60,19 @@ public class GroupFactory {
         group.applyMember(currentMemberObject);
 
         currentMemberObject.updateName(group.getGroupName());
-        return GroupResponse.of(linkId, group.createAt(), "http://localhost:8080/group/join/" + linkId);
+        return GroupResponse.of(linkId, group.createAt(), BASE_URL +"/group/join/" + linkId);
     }
 
     @Transactional
-    public GroupResponse join(String likeId) {
+    public GroupResponse join(String likeId, String memberName) {
         Member addMember = currentMemberUtil.getCurrentMemberObject();
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
         group.applyMember(addMember);
-        return GroupResponse.of(group.getLinkId(), group.createAt(), "http://localhost:8080/group/join/" + group.getLinkId());
+        addMember.updateName(memberName);
+
+        return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());
     }
 
     public GroupInfo info(String likeId) {
