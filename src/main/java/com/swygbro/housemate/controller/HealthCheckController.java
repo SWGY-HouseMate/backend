@@ -13,7 +13,7 @@ public class HealthCheckController {
 
     @GetMapping("/")
     public String hello() {
-        return "Hello ZipHap Server";
+        return "Hello ZipHap Server!!!";
     }
 
     @GetMapping("/health")
