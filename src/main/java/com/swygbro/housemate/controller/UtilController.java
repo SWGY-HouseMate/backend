@@ -3,6 +3,7 @@ package com.swygbro.housemate.controller;
 import com.swygbro.housemate.util.member.CurrentMemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.member.GroupPersonInfo;
+import com.swygbro.housemate.util.member.MemberDto;
 import com.swygbro.housemate.util.response.domain.SingleResult;
 import com.swygbro.housemate.util.response.service.ResponseService;
 import io.swagger.annotations.Api;
@@ -28,9 +29,19 @@ public class UtilController {
             @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
     @ResponseBody
-    @ApiOperation("현재 로그인된 사용자와 그룹에 대한 정보를 가져옵니다.")
+    @ApiOperation("현재 로그인된 사용자의 정보를 가져옵니다.")
     @GetMapping("/login-member")
-    public SingleResult<CurrentMemberInfo> currentMember() {
+    public SingleResult<MemberDto> currentMember() {
+        return responseService.getSingleResult(currentMemberUtil.getCurrentMemberDtoObject());
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @ResponseBody
+    @ApiOperation("현재 로그인된 사용자와 그룹에 대한 정보를 가져옵니다.")
+    @GetMapping("/login-member-group")
+    public SingleResult<CurrentMemberInfo> currentMemberAndGroup() {
         return responseService.getSingleResult(currentMemberUtil.getCurrentMemberInfoAndGroupInfoObject());
     }
 

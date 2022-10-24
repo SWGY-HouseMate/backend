@@ -26,6 +26,20 @@ public class CurrentMemberUtil {
     private final GroupRepository groupRepository;
     private final ModelMapper modelMapper;
 
+    public MemberDto getCurrentMemberDtoObject() {
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return memberRepository.findByMemberEmail(username)
+                .map(m -> modelMapper.map(m, MemberDto.class))
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
+    }
+
     public Member getCurrentMemberObject() {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
