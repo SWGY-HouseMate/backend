@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-#      - feature/analysis
+      - feature/analysis
   workflow_dispatch:
 
 env:
@@ -18,7 +18,7 @@ env:
   DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
   DOCKER_IMAGE_NAME: ziphap-backend
   EB_APPLICATION_NAME: ziphap-server
-  EB_ENVIRONMENT_NAME: Ziphapserver-env
+  EB_ENVIRONMENT_NAME: housework-backend-monolithic
 
 jobs:
   backend-build-deploy:
