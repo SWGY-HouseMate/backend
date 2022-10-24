@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:latest",
+    "Name": "${{ DOCKER_HUB_USERNAME }}/${{ DOCKER_IMAGE_NAME }}:latest",
     "Update": "true"
   },
   "Ports": [
