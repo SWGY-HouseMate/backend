@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/analysis
   workflow_dispatch:
 
 env:
@@ -26,6 +27,22 @@ jobs:
   backend-build-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: starting-alert-release-to-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: "custom"
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `✨ ZipHap Deploy Start ${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+
       - uses: actions/checkout@v3
 
       - name: Set up JDK 11
@@ -92,3 +109,19 @@ jobs:
           region: ${{ env.REGION }}
           deployment_package: deploy/deploy.zip
           wait_for_environment_recovery: 200
+
+      - name: ending-alert-release-to-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: "custom"
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `✅ ZipHap Deploy complete ${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} \nstatus: ${{ job.status }} \n release time elapsed: ${process.env.AS_TOOK}`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
