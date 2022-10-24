@@ -6,17 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Value;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Value(staticConstructor = "of")
 public class MemberDto {
 
-    private String memberId;
+    String memberId;
 
-    private String memberEmail;
+    String memberEmail;
 
-    private String memberName;
+    String memberName;
 
-    private String memberProfilePicture;
+    String memberProfilePicture;
 
-    private String memberLoginRole;
+    String memberLoginRole;
+
+    String memberRole;
 }
