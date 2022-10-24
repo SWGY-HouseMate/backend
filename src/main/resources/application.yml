@@ -1,6 +1,4 @@
 spring:
-  base_url: http://housework-backend.ap-northeast-2.elasticbeanstalk.com
-
   batch:
     application:
       name: ZIPHAP_BACKEND_BATCH
@@ -13,9 +11,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://awseb-e-vr37tmss9q-stack-awsebrdsdatabase-fjp4nwnxaq7s.c7daveqqjbex.ap-northeast-2.rds.amazonaws.com:3306/ziphap
-    username: root
-    password: ksh03050621
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_DATABASE_PORT}/${RDS_DATABASE_NAME}
+    username: ${RDS_USER_NAME}
+    password: ${RDS_USER_PASSWORD}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -25,7 +23,8 @@ spring:
       ddl-auto: none
 
   jwt:
-    secret: JDKdldsjkdndsljJKDJLsdafldlJOkjd-jldkjadfsaOJUJNsdlsdjdsknslefipsjkewkw
+    secret: ${JWT_SECRET}
+
   OAuth2:
     google:
       url: https://accounts.google.com/o/oauth2/v2/auth

@@ -25,6 +25,7 @@ import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
 public class GroupFactory {
+    private final String BASE_URL = "http://housework-backend.ap-northeast-2.elasticbeanstalk.com";
     private final List<ValidatorURI> validators = new ArrayList<>();
     private final LinkCreator linkCreator;
     private final GroupRepository groupRepository;
@@ -32,9 +33,6 @@ public class GroupFactory {
     private final UUIDUtil uuidUtil;
     private final ModelMapper modelMapper;
     private final CurrentMemberUtil currentMemberUtil;
-
-    @Value("spring.base_url")
-    private String BASE_URL;
 
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
@@ -66,12 +64,14 @@ public class GroupFactory {
     }
 
     @Transactional
-    public GroupResponse join(String likeId) {
+    public GroupResponse join(String likeId, String memberName) {
         Member addMember = currentMemberUtil.getCurrentMemberObject();
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
         group.applyMember(addMember);
+        addMember.updateName(memberName);
+
         return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());
     }
 
