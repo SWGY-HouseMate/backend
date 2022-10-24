@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(originPatterns = "*")
 @Api("Letter 관련 API 입니다.")
 @RequestMapping("/letter")
 @RequiredArgsConstructor

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(originPatterns = "*")
 @Api("Member 관련 API 입니다.")
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
