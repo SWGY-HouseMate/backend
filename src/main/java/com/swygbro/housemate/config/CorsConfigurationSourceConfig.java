@@ -13,7 +13,7 @@ public class CorsConfigurationSourceConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("222.112.83.120:3000");
         configuration.setAllowedMethods(List.of("GET","POST", "OPTIONS", "PUT","DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
