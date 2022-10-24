@@ -30,7 +30,7 @@ public class GoogleLogin implements Login {
 
     @Override
     public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
-        GoogleOAuthToken oAuthToken = googleOauthService.getGoogleAccessToken(additionInfo.get("code"));
+        GoogleOAuthToken oAuthToken = googleOauthService.getGoogleAccessToken(additionInfo.get("token"));
 
         GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);
 

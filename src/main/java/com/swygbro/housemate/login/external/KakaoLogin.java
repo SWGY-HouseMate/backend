@@ -30,10 +30,7 @@ public class KakaoLogin implements Login {
 
     @Override
     public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
-        KakaoOAuthToken oAuthToken = kakaoService.getKakaoAccessToken(additionInfo.get("code"));
-
-        KakaoUser kakaoUser = kakaoService.getKakaoUserInfo(oAuthToken.getAccess_token());
-
+        KakaoUser kakaoUser = kakaoService.getKakaoUserInfo(additionInfo.get("token"));
         Optional<Member> emailExists = memberRepository.findByMemberEmail(kakaoUser.getEmail());
 
         Member createMember = Member.builder()
@@ -51,7 +48,7 @@ public class KakaoLogin implements Login {
 
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
-        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), KAKAO.getKey(), createMember.getMemberId());
+        return GetSocialOAuthRes.of(jwtToken, "Bearer", additionInfo.get("token"), "Bearer", KAKAO.getKey(), createMember.getMemberId());
     }
 
     @Override
