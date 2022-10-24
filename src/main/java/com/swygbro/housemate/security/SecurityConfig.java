@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 //        http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
+
         // Apply JWT
         http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
     }
