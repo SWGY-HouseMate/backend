@@ -56,9 +56,9 @@ public class GoogleOauthService {
         throw new BadRequestException(GOOGLE_LOGIN_COMMUNICATION_FAIL);
     }
 
-    public GoogleUser getUserInfo(GoogleOAuthToken oAuthToken) throws JsonProcessingException {
+    public GoogleUser getUserInfo(String accessToken) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization","Bearer "+oAuthToken.getAccess_token());
+        headers.add("Authorization","Bearer "+ accessToken);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);

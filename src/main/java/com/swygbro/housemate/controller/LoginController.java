@@ -43,12 +43,12 @@ public class LoginController {
     /**
      * Social Login API Server 요청에 의한 callback 을 처리
      * @param socialLoginType (GOOGLE, FACEBOOK, NAVER, KAKAO)
-     * @param code API Server 로부터 넘어오는 code
+     * @param token API Server 로부터 넘어오는 token
      * @return SNS Login 요청 결과로 받은 Json 형태의 java 객체 (access_token, jwt_token, user_num 등)
      */
     @ResponseBody
     @ApiOperation("로그인 API CallBack을 담당합니다. (구글, 카카오)")
-    @GetMapping(value = "/auth/{socialLoginType}/callback")
+    @PostMapping(value = "/auth/{socialLoginType}/callback")
     public SingleResult<GetSocialOAuthRes> callbackLogin (@PathVariable String socialLoginType, @RequestParam String token) throws IOException {
         Login by = oAutLoginFinder.findBy(LoginType.valueOf(socialLoginType.toUpperCase()));
         Map<String, String> info = new HashMap<>();

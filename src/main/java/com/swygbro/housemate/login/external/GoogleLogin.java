@@ -30,10 +30,7 @@ public class GoogleLogin implements Login {
 
     @Override
     public GetSocialOAuthRes execute(Map<String, String> additionInfo) throws JsonProcessingException {
-        GoogleOAuthToken oAuthToken = googleOauthService.getGoogleAccessToken(additionInfo.get("token"));
-
-        GoogleUser googleUser = googleOauthService.getUserInfo(oAuthToken);
-
+        GoogleUser googleUser = googleOauthService.getUserInfo(additionInfo.get("token"));
         Optional<Member> emailExists = memberRepository.findByMemberEmail(googleUser.getEmail());
 
         Member createMember = Member.builder()
@@ -51,7 +48,7 @@ public class GoogleLogin implements Login {
 
         String jwtToken = jwtTokenProvider.createToken(createMember);
 
-        return GetSocialOAuthRes.of(jwtToken, "Bearer", oAuthToken.getAccess_token(), oAuthToken.getToken_type(), GOOGLE.getKey(), createMember.getMemberId());
+        return GetSocialOAuthRes.of(jwtToken, "Bearer", additionInfo.get("token"), "Bearer", GOOGLE.getKey(), createMember.getMemberId());
     }
 
     @Override
