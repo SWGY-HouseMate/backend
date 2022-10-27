@@ -65,10 +65,8 @@ public class GroupFactory {
     }
 
     @Transactional
-    public GroupResponse join(String likeId, String memberName, String memberEmail) {
-        Member addMember = memberRepository.findByMemberEmail(memberEmail)
-                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-
+    public GroupResponse join(String likeId, String memberName) {
+        Member addMember = currentMemberUtil.getCurrentMemberObject();
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
