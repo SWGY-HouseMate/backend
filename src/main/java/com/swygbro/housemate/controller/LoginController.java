@@ -48,7 +48,7 @@ public class LoginController {
      */
     @ResponseBody
     @ApiOperation("로그인 API CallBack을 담당합니다. (구글, 카카오)")
-    @GetMapping(value = "/auth/{socialLoginType}/callback")
+    @PostMapping(value = "/auth/{socialLoginType}/callback")
     public SingleResult<GetSocialOAuthRes> callbackLogin (@PathVariable String socialLoginType, @RequestParam String token) throws IOException {
         Login by = oAutLoginFinder.findBy(LoginType.valueOf(socialLoginType.toUpperCase()));
         Map<String, String> info = new HashMap<>();
