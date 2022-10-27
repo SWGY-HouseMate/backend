@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
@@ -64,8 +65,10 @@ public class GroupFactory {
     }
 
     @Transactional
-    public GroupResponse join(String likeId, String memberName) {
-        Member addMember = currentMemberUtil.getCurrentMemberObject();
+    public GroupResponse join(String likeId, String memberName, String memberEmail) {
+        Member addMember = memberRepository.findByMemberEmail(memberEmail)
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
+
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
