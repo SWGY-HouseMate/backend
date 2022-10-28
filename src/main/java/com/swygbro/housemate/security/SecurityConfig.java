@@ -25,16 +25,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Disable CSRF (cross site request forgery)
-        http.csrf().disable();
+        http.csrf()
+                .disable();
 
         // CORS
-        http.cors().configurationSource(corsConfigurationSource());
+        http.cors()
+                .configurationSource(corsConfigurationSource());
+
+        // XXS 공격 방어 설정
+        http.headers()
+                .xssProtection()
+                .and()
+                .contentSecurityPolicy("script-src 'self'");
 
         //http Basic
-        http.httpBasic().disable();
+        http.httpBasic()
+                .disable();
 
         // No session will be created or used by spring security
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
                 .antMatchers("/accounts/auth/**").permitAll() // 소셜 로그인 URL
