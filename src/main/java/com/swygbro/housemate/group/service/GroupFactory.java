@@ -71,6 +71,7 @@ public class GroupFactory {
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
         group.applyMember(addMember);
+        group.updateParticipatingMembers();
         addMember.updateName(memberName);
 
         return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());

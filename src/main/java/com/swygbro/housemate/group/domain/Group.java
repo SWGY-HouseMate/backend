@@ -26,6 +26,8 @@ public class Group extends AbstractEntity {
 
     private String groupName;
 
+    private Integer participatingMembers;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "memberId")
     private Member owner;
@@ -33,5 +35,9 @@ public class Group extends AbstractEntity {
     public void applyMember(final Member member) {
         this.owner = member;
         member.setZipHapGroup(this);
+    }
+
+    public void updateParticipatingMembers() {
+        this.participatingMembers = this.participatingMembers + 1;
     }
 }

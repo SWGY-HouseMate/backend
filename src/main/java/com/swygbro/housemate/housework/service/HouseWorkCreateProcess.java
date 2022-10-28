@@ -9,8 +9,9 @@ import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
 import com.swygbro.housemate.login.ManagedFactory;
+import com.swygbro.housemate.login.domain.Member;
+import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,13 +30,17 @@ public class HouseWorkCreateProcess {
     private final HouseWorkRepository houseWorkRepository;
     private final CycleRepository cycleRepository;
     private final HouseWorkUtil houseWorkUtil;
-    private final ModelMapper mapper;
+    private final CurrentMemberUtil currentMemberUtil;
 
     @Transactional
     public HoseWorkCreate execute(CreateHouseWork createHouseWork) throws ParseException {
-        Boolean condition = houseWorkUtil.getCondition(createHouseWork);
+        // 그룹에 2명이 있는지 확인
+        Member currentMemberANDGroupObject = currentMemberUtil.getCurrentMemberANDGroupObject();
+        if (!currentMemberANDGroupObject.getZipHapGroup().getParticipatingMembers().equals(2)) {
+            throw new IllegalStateException("그룹에 한명 밖에 없습니다.");
+        }
 
-        List<HouseWorkByMember> houseWorkByMembers = new ArrayList<>();
+        Boolean condition = houseWorkUtil.getCondition(createHouseWork);
         if (!condition) {
             HouseWork houseWork = houseWorkUtil.createHouseWork(createHouseWork);
 

@@ -18,6 +18,7 @@ public class GroupCreator {
                 .zipHapGroupId(id)
                 .linkId(linkId)
                 .owner(owner)
+                .participatingMembers(1)
                 .groupName(groupName)
                 .build();
     }

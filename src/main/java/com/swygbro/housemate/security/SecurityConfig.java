@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors()
                 .configurationSource(corsConfigurationSource());
 
-        // XXS 공격 방어 설정
+        // XSS 공격 방어 설정
         http.headers()
                 .xssProtection()
                 .and()
