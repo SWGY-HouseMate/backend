@@ -1,6 +1,8 @@
 package com.swygbro.housemate.security;
 
 
+import com.swygbro.housemate.exception.handler.CustomAccessDeniedHandler;
+import com.swygbro.housemate.exception.handler.CustomAuthenticationEntryPointHandler;
 import com.swygbro.housemate.security.jwt.JwtTokenFilterConfigurer;
 import com.swygbro.housemate.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts/auth/**").permitAll() // 소셜 로그인 URL
         ;
 
-//        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-//        http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
+        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPointHandler());
+        http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
 
         // Apply JWT
@@ -72,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         // Allow swagger to be accessed without authentication
         web.ignoring().antMatchers("/v2/api-docs")//
                 .antMatchers("/swagger-resources/**")//

@@ -1,5 +1,6 @@
 package com.swygbro.housemate.housework.service;
 
+import com.swygbro.housemate.exception.badrequest.BadRequestException;
 import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.swygbro.housemate.exception.badrequest.BadRequestType.그룹에_한_명_밖에_없습니다;
+
 @Service
 @RequiredArgsConstructor
 public class HouseWorkCreateProcess {
@@ -37,7 +40,7 @@ public class HouseWorkCreateProcess {
         // 그룹에 2명이 있는지 확인
         Member currentMemberANDGroupObject = currentMemberUtil.getCurrentMemberANDGroupObject();
         if (!currentMemberANDGroupObject.getZipHapGroup().getParticipatingMembers().equals(2)) {
-            throw new IllegalStateException("그룹에 한명 밖에 없습니다.");
+            throw new BadRequestException(그룹에_한_명_밖에_없습니다);
         }
 
         Boolean condition = houseWorkUtil.getCondition(createHouseWork);

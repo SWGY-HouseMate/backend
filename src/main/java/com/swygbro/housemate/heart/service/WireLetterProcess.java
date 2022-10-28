@@ -19,7 +19,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +59,9 @@ public class WireLetterProcess {
     @Transactional
     public CreateHeartLetter writeSecond(String heartId, InputSecondHeartLetter inputSecondHeartLetter) { // B가 편지를 쓴다.
         Heart findBy = heartRepository.findByHeartId(heartId)
-                .orElseThrow(null);
+                .orElseThrow(() -> new DataNotFoundException(편지를_찾을_수_없습니다));
         Letter letter = letterRepository.findByHeart(findBy)
-                .orElseThrow(null);
+                .orElseThrow(() -> new DataNotFoundException(편지의_내용을_찾을_수_없습니다));
         // 편지쓰기
         Heart heart = letter.getHeart();
         Letter writeLetter = inputSecondHeartLetter.createLetterEntity(

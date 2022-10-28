@@ -1,5 +1,6 @@
 package com.swygbro.housemate.security.jwt;
 
+
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.security.authectication.MyUserDetails;
 import io.jsonwebtoken.Claims;
@@ -63,7 +64,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String resolveToken(HttpServletRequest req){
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if(bearerToken != null && bearerToken.startsWith("Bearer ")){
             return  bearerToken.substring(7);
