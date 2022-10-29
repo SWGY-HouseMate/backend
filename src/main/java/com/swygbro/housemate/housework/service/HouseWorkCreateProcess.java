@@ -13,6 +13,7 @@ import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;

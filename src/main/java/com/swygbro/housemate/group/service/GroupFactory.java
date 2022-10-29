@@ -3,7 +3,7 @@ package com.swygbro.housemate.group.service;
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupCreator;
-import com.swygbro.housemate.group.message.GroupInfo;
+import com.swygbro.housemate.group.message.GroupInfoByAll;
 import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.group.validator.URIDuplicateValidator;
@@ -11,9 +11,9 @@ import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
+import com.swygbro.housemate.util.member.GroupPersonInfo;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
-import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
@@ -77,9 +76,11 @@ public class GroupFactory {
         return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());
     }
 
-    public GroupInfo info(String likeId) {
-        return groupRepository.findByLinkIdJoinFetchOwner(likeId)
-                .map(m -> modelMapper.map(m, GroupInfo.class))
+    public GroupInfoByAll info(String likeId) {
+        GroupPersonInfo membersOfTheGroup = currentMemberUtil.getMembersOfTheGroup();
+        Group group = groupRepository.findByLinkIdJoinFetchOwner(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
+
+        return GroupInfoByAll.of(group.getZipHapGroupId(), group.getGroupName(), group.getLinkId(), membersOfTheGroup);
     }
 }

@@ -1,7 +1,7 @@
 package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.group.message.GroupCreator;
-import com.swygbro.housemate.group.message.GroupInfo;
+import com.swygbro.housemate.group.message.GroupInfoByAll;
 import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.service.GroupFactory;
 import com.swygbro.housemate.util.response.domain.SingleResult;
@@ -47,7 +47,7 @@ public class GroupController {
     @ResponseBody
     @ApiOperation("그룹의 정보를 가져옵니다.")
     @GetMapping("/info/{linkId}")
-    public SingleResult<GroupInfo> groupInfo(@PathVariable String linkId) {
+    public SingleResult<GroupInfoByAll> groupInfo(@PathVariable String linkId) {
         return responseService.getSingleResult(groupFactory.info(linkId));
     }
 }
