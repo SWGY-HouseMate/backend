@@ -42,13 +42,13 @@ public class UtilController {
         return responseService.getSingleResult(currentMemberUtil.getCurrentMemberInfoAndGroupInfoObject());
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
-    })
-    @ResponseBody
-    @ApiOperation("그룹에 속해 있는 MemberId 구하는 API 추가")
-    @GetMapping("/group-member")
-    public SingleResult<GroupPersonInfo> currentGroupMemberInfo() {
-        return responseService.getSingleResult(currentMemberUtil.getMembersOfTheGroup());
-    }
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+//    })
+//    @ResponseBody
+//    @ApiOperation("그룹에 속해 있는 MemberId 구하는 API 추가")
+//    @GetMapping("/group-member")
+//    public SingleResult<GroupPersonInfo> currentGroupMemberInfo() {
+//        return responseService.getSingleResult(currentMemberUtil.getMembersOfTheGroup());
+//    }
 }

@@ -77,9 +77,10 @@ public class GroupFactory {
     }
 
     public GroupInfoByAll info(String likeId) {
-        GroupPersonInfo membersOfTheGroup = currentMemberUtil.getMembersOfTheGroup();
         Group group = groupRepository.findByLinkIdJoinFetchOwner(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
+        GroupPersonInfo membersOfTheGroup = currentMemberUtil.getMembersOfTheGroup(group);
+
 
         return GroupInfoByAll.of(group.getZipHapGroupId(), group.getGroupName(), group.getLinkId(), membersOfTheGroup);
     }

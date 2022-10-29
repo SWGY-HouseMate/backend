@@ -80,7 +80,7 @@ public class CurrentMemberUtil {
         return CurrentMemberInfo.of(groupInfo, memberInfo);
     }
 
-    public GroupPersonInfo getMembersOfTheGroup() {
+    public GroupPersonInfo getMembersOfTheGroup(Group group) {
         String username = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
@@ -88,14 +88,16 @@ public class CurrentMemberUtil {
         } else {
             username = principal.toString();
         }
-        Member member_me = memberRepository.findByEmailJoinFetchGroup(username).orElse(null);
+
+        Member member_me = memberRepository.findByMemberEmail(username)
+                .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
         if (member_me == null) {
             return GroupPersonInfo.of(null, null);
         }
 
         MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
-        Member member_author = memberRepository.findByZipHapGroup(member_me.getZipHapGroup())
+        Member member_author = memberRepository.findByZipHapGroup(group)
                 .stream()
                 .filter(Predicate.not(m -> m.getMemberEmail() == memberInfo_me.getMemberEmail()))
                 .collect(Collectors.toList())
