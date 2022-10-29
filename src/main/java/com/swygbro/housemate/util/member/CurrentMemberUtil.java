@@ -91,14 +91,13 @@ public class CurrentMemberUtil {
 
         Member member_me = memberRepository.findByMemberEmail(username)
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-
-        MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
         Member member_author = memberRepository.findByZipHapGroup(group)
                 .stream()
-                .filter(Predicate.not(m -> m.getMemberEmail() == memberInfo_me.getMemberEmail()))
+                .filter(m -> !m.getMemberEmail().equals(member_me.getMemberEmail()))
                 .collect(Collectors.toList())
                 .get(0);
 
+        MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
         if (member_author == null) {
             return GroupPersonInfo.of(memberInfo_me, null);
         }
