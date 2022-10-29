@@ -59,7 +59,7 @@ public class GroupFactory {
         currentMemberObject.updateRole(OWNER);
         group.applyMember(currentMemberObject);
 
-        currentMemberObject.updateName(group.getGroupName());
+        currentMemberObject.updateName(groupCreator.getMemberName());
         return GroupResponse.of(linkId, group.createAt(), BASE_URL +"/group/join/" + linkId);
     }
 
