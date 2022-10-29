@@ -5,7 +5,6 @@ import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.message.HoseWorkCreate;
-import com.swygbro.housemate.housework.message.HouseWorkByMember;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

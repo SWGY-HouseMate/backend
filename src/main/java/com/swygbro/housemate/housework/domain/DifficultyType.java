@@ -5,7 +5,7 @@ import com.swygbro.housemate.util.model.EnumModel;
 public enum DifficultyType implements EnumModel {
     UPPER(3),
     MIDDLE(2),
-    LOWER(1)
+    LOWERLOWER(1)
     ;
 
     private Integer value;

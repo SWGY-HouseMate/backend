@@ -15,6 +15,6 @@ import java.util.List;
 public class HouseWorkByMember {
 
     List<HouseWorkMemberInfo> houseWorkInfos;
-    GroupInfo groupInfo;
+    GroupInfo groupInfo; // TODO :: Delete
 
 }

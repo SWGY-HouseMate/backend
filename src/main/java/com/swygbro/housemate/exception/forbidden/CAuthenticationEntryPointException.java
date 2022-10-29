@@ -1,16 +1,12 @@
 package com.swygbro.housemate.exception.forbidden;
 
 public class CAuthenticationEntryPointException extends RuntimeException {
-    public CAuthenticationEntryPointException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
-    public CAuthenticationEntryPointException(String msg) {
-        super(msg);
-    }
-
     public CAuthenticationEntryPointException() {
-        super();
+        super(ForbiddenType.DEFAULT.getMessage());
+    }
+
+    public CAuthenticationEntryPointException(String message) {
+        super(message);
     }
 
     public CAuthenticationEntryPointException(ForbiddenType dataType) {
