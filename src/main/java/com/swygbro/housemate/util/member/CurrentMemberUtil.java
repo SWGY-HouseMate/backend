@@ -96,7 +96,13 @@ public class CurrentMemberUtil {
                 .filter(Predicate.not(m -> m.getMemberEmail() == memberInfo_me.getMemberEmail()))
                 .collect(Collectors.toList())
                 .get(0);
-        MemberInfo memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
-        return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
+
+        MemberInfo memberInfo_author;
+        if (member_author != null) {
+            memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
+            return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
+        }
+
+        return GroupPersonInfo.of(memberInfo_me, null);
     }
 }
