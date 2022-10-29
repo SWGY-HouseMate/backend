@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 public class InputFirstHeartLetter {
 
     private HeartType heartType;
-
-    private String title;
-
     private String content;
 
     private String from;
@@ -29,7 +26,7 @@ public class InputFirstHeartLetter {
     public Letter createLetterEntity(String letterId, String from, String to, Heart heart, Group group) {
         return Letter.builder()
                 .letterId(letterId)
-                .title(this.title)
+                .title(null)
                 .content(this.content)
                 .heartType(this.heartType)
                 .letterFrom(from)
