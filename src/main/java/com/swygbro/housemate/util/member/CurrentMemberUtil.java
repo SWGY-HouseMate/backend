@@ -92,10 +92,6 @@ public class CurrentMemberUtil {
         Member member_me = memberRepository.findByMemberEmail(username)
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
 
-        if (member_me == null) {
-            return GroupPersonInfo.of(null, null);
-        }
-
         MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
         Member member_author = memberRepository.findByZipHapGroup(group)
                 .stream()
