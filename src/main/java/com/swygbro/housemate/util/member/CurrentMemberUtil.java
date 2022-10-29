@@ -97,12 +97,11 @@ public class CurrentMemberUtil {
                 .collect(Collectors.toList())
                 .get(0);
 
-        MemberInfo memberInfo_author;
-        if (member_author != null) {
-            memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
-            return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
+        if (member_author == null) {
+            return GroupPersonInfo.of(memberInfo_me, null);
         }
 
-        return GroupPersonInfo.of(memberInfo_me, null);
+        MemberInfo memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
+        return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
     }
 }
