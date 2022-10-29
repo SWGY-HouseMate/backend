@@ -127,6 +127,7 @@ public class WireLetterProcess {
             viewMessageList.add(PrivateViewMessage.builder()
                     .letterId(letterDomain.getLetterId())
                     .heartId(letterDomain.getHeart().getHeartId())
+                    .heartType(letterDomain.getHeartType())
                     .to(toDto)
                     .from(fromDto)
                     .build());
