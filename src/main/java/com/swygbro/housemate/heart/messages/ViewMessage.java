@@ -20,5 +20,5 @@ public class ViewMessage {
     private MemberInfo from;
     private MemberInfo to;
 
-    private LocalDateTime createAt;
+    private String createAt;
 }

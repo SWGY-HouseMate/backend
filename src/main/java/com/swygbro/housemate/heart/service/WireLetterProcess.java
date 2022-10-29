@@ -31,7 +31,7 @@ public class WireLetterProcess {
     private final CurrentMemberUtil currentMemberUtil;
     private final ModelMapper modelMapper;
 
-    // TODO :: 일단은 무한으로 작성 -> 바꾸기
+    // TODO :: 일단은 무한으로 작성 -> 바꾸기 (생성 시점을 Client 에게 받기)
     public CreateHeartLetter writeFirst(InputFirstHeartLetter inputFirstHeartLetter) { // A가 편지를 쓴다.
         Member from = currentMemberUtil.getCurrentMemberANDGroupObject();
         Member to = memberRepository.findByMemberId(inputFirstHeartLetter.getFrom())
@@ -106,7 +106,7 @@ public class WireLetterProcess {
                     .title(letterDomain.getTitle())
                     .content(letterDomain.getContent())
                     .kind(letterDomain.getHeartType())
-                    .createAt(letterDomain.getCreatedAt())
+                    .createAt(letterDomain.createAt())
                     .to(toDto)
                     .from(fromDto)
                     .build());
@@ -130,7 +130,7 @@ public class WireLetterProcess {
                     .letterId(letterDomain.getLetterId())
                     .heartId(letterDomain.getHeart().getHeartId())
                     .heartType(letterDomain.getHeartType())
-                    .createAt(letterDomain.getCreatedAt())
+                    .createAt(letterDomain.createAt())
                     .to(toDto)
                     .from(fromDto)
                     .build());
