@@ -1,6 +1,8 @@
 package com.swygbro.housemate.analysis.message.ratio;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.Value;
 
 @Getter
 @ToString

@@ -2,9 +2,7 @@ package com.swygbro.housemate.analysis.util;
 
 import com.swygbro.housemate.analysis.util.dto.AnalysisDto;
 import com.swygbro.housemate.group.domain.Group;
-import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
-import com.swygbro.housemate.housework.message.CycleInfo;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

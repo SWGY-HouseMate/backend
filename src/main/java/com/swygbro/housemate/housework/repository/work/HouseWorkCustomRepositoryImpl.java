@@ -1,12 +1,7 @@
 package com.swygbro.housemate.housework.repository.work;
 
-import com.querydsl.core.types.ConstantImpl;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
-import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
@@ -18,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
-import java.beans.Expression;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

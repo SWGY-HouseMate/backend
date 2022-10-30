@@ -1,5 +1,6 @@
 package com.swygbro.housemate.group.service;
 
+import com.swygbro.housemate.exception.badrequest.BadRequestException;
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.group.message.GroupCreator;
@@ -9,17 +10,17 @@ import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.group.validator.URIDuplicateValidator;
 import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
-import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.member.GroupPersonInfo;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.swygbro.housemate.exception.badrequest.BadRequestType.그룹에_이미_참여하였습니다;
+import static com.swygbro.housemate.exception.badrequest.BadRequestType.그룹이_1개_이상_생성_되었습니다;
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
@@ -29,23 +30,17 @@ public class GroupFactory {
     private final List<ValidatorURI> validators = new ArrayList<>();
     private final LinkCreator linkCreator;
     private final GroupRepository groupRepository;
-    private final MemberRepository memberRepository;
     private final UUIDUtil uuidUtil;
-    private final ModelMapper modelMapper;
     private final CurrentMemberUtil currentMemberUtil;
 
     public GroupFactory(LinkCreator linkCreator,
                         GroupRepository groupRepository,
-                        MemberRepository memberRepository,
                         UUIDUtil uuidUtil,
-                        ModelMapper modelMapper,
                         CurrentMemberUtil currentMemberUtil,
                         URIDuplicateValidator uriDuplicateValidator) {
         this.linkCreator = linkCreator;
-        this.memberRepository = memberRepository;
         this.groupRepository = groupRepository;
         this.uuidUtil = uuidUtil;
-        this.modelMapper = modelMapper;
         this.currentMemberUtil = currentMemberUtil;
         validators.add(uriDuplicateValidator);
     }
@@ -53,6 +48,11 @@ public class GroupFactory {
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
+
+        if (currentMemberObject.getZipHapGroup() != null) {
+            throw new BadRequestException(그룹이_1개_이상_생성_되었습니다);
+        }
+
         String linkId = linkCreator.executor(currentMemberObject.getMemberId(), validators);
         Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, currentMemberObject));
 
@@ -66,6 +66,11 @@ public class GroupFactory {
     @Transactional
     public GroupResponse join(String likeId, String memberName) {
         Member addMember = currentMemberUtil.getCurrentMemberObject();
+
+        if (addMember.getZipHapGroup() != null) {
+            throw new BadRequestException(그룹에_이미_참여하였습니다);
+        }
+
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 

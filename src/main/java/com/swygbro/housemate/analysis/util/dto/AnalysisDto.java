@@ -2,7 +2,6 @@ package com.swygbro.housemate.analysis.util.dto;
 
 import com.swygbro.housemate.housework.domain.DifficultyType;
 import com.swygbro.housemate.housework.domain.HouseWorkStatusType;
-import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;

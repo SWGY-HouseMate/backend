@@ -3,7 +3,6 @@ package com.swygbro.housemate.login.external;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.GetSocialOAuthRes;
-import com.swygbro.housemate.login.message.GoogleOAuthToken;
 import com.swygbro.housemate.login.message.GoogleUser;
 import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.login.service.Login;

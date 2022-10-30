@@ -1,8 +1,6 @@
 package com.swygbro.housemate.util.member;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Value;
 
 @Getter
