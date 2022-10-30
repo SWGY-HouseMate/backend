@@ -23,8 +23,6 @@ public class Letter extends AbstractEntity {
     @Id
     private String letterId;
 
-    private String title; // TODO : 지우기
-
     private String content;
 
     @Enumerated(STRING)

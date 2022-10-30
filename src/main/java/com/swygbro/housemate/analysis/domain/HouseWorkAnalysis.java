@@ -62,30 +62,19 @@ public class HouseWorkAnalysis {
 
     // ====================== 가장 잘한 집안일 / 담당자 변경이 필요한 집안일
 
-    String bestHouseWorkId;
-
     String bestHouseWorkTitle;
-
     String bestHouseWorkManager;
-
-    String worstHouseWorkId;
-
     String worstHouseWorkTitle;
-
     String worstHouseWorkManager;
 
     public void setBestWorst(
-            String bestHouseWorkId,
             String bestHouseWorkTitle,
             String bestHouseWorkManager,
-            String worstHouseWorkId,
             String worstHouseWorkTitle,
             String worstHouseWorkManager) {
-        this.bestHouseWorkId = bestHouseWorkId;
         this.bestHouseWorkTitle = bestHouseWorkTitle;
         this.bestHouseWorkManager = bestHouseWorkManager;
 
-        this.worstHouseWorkId = worstHouseWorkId;
         this.worstHouseWorkTitle = worstHouseWorkTitle;
         this.worstHouseWorkManager = worstHouseWorkManager;
     }

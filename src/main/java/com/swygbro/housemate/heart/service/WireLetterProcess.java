@@ -103,7 +103,6 @@ public class WireLetterProcess {
             viewMessageList.add(ViewMessage.builder()
                     .letterId(letterDomain.getLetterId())
                     .heartId(letterDomain.getHeart().getHeartId())
-                    .title(letterDomain.getTitle())
                     .content(letterDomain.getContent())
                     .kind(letterDomain.getHeartType())
                     .createAt(letterDomain.createAt())

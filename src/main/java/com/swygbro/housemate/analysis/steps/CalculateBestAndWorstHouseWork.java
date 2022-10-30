@@ -84,9 +84,7 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
                         houseWorkAnalysisRepository.findByTodayAndGroupId(
                                 now, totalGroupSum.getGroupId()
                         ).forEach(g -> g.setBestWorst(
-                                null,
                                 totalGroupSum.getBestInfo().getHouseWorkTitle(),
-                                null,
                                 null,
                                 totalGroupSum.getWorstInfo().getHouseWorkTitle(),
                                 null));

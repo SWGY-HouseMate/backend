@@ -26,7 +26,6 @@ public class InputFirstHeartLetter {
     public Letter createLetterEntity(String letterId, String from, String to, Heart heart, Group group) {
         return Letter.builder()
                 .letterId(letterId)
-                .title(null)
                 .content(this.content)
                 .heartType(this.heartType)
                 .letterFrom(from)
