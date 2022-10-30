@@ -85,6 +85,7 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
                         .houseWorkStatusType(work.getHouseWorkStatusType())
                         .isCycle(work.getIsCycle())
                         .cycleInfo(cycleInfo)
+                        .createAt(work.createAt())
                         .build());
             }
 

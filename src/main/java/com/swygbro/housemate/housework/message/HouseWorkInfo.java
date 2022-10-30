@@ -22,5 +22,6 @@ public class HouseWorkInfo {
     HouseWorkStatusType houseWorkStatusType;
     Boolean isCycle;
     CycleInfo cycleInfo;
+    String createAt;
 
 }

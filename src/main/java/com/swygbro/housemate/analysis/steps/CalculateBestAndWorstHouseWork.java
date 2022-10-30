@@ -14,10 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
@@ -120,49 +117,46 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
             sumScoreList.add(
                     SumScore.builder()
                             .groupId(scoreToDifficulty.getGroupId())
+                            .memberId(scoreToDifficulty.getMemberId())
                             .sum(sum)
                             .houseWorkTitle(scoreToDifficulty.getHouseWorkTitle())
                             .build()
             );
         }
 
-        for (SumScore sumScore : sumScoreList) {
-            System.out.println("sumScore = " + sumScore);
-        }
-
         // 그룹 별로 가장 적은 값이랑 가장 큰 값을 고름
         List<TotalGroupSum> totalGroupSumList = new ArrayList<>();
-//        Map<String, List<SumScore>> groupByGroup = sumScoreList.stream()
-//                .collect(Collectors.groupingBy(SumScore::getGroupId));
-//        for (String groupId : groupByGroup.keySet()) {
-//            List<SumScore> sumScores = groupByGroup.get(groupId);
-//
-//            double max = sumScores.stream().mapToDouble(SumScore::getSum)
-//                    .max()
-//                    .orElseThrow(NoSuchElementException::new);
-//
-//            double min = sumScores.stream().mapToDouble(SumScore::getSum)
-//                    .min()
-//                    .orElseThrow(NoSuchElementException::new);
-//
-//            SumScore maxSumScore = sumScores.stream()
-//                    .filter(s -> s.getSum().equals(max))
-//                    .collect(Collectors.toList())
-//                    .get(0);
-//
-//            SumScore minSumScore = sumScores.stream()
-//                    .filter(s -> s.getSum().equals(min))
-//                    .collect(Collectors.toList())
-//                    .get(0);
-//
-//            totalGroupSumList.add(
-//              TotalGroupSum.builder()
-//                      .groupId(groupId)
-//                      .bestInfo(BestInfo.of(maxSumScore.getHouseWorkTitle(), maxSumScore.getMemberId()))
-//                      .worstInfo(WorstInfo.of(minSumScore.getHouseWorkTitle(), minSumScore.getMemberId()))
-//                      .build()
-//            );
-//        }
+        Map<String, List<SumScore>> groupByGroup = sumScoreList.stream()
+                .collect(Collectors.groupingBy(SumScore::getGroupId));
+        for (String groupId : groupByGroup.keySet()) {
+            List<SumScore> sumScores = groupByGroup.get(groupId);
+
+            double max = sumScores.stream().mapToDouble(SumScore::getSum)
+                    .max()
+                    .orElseThrow(NoSuchElementException::new);
+
+            double min = sumScores.stream().mapToDouble(SumScore::getSum)
+                    .min()
+                    .orElseThrow(NoSuchElementException::new);
+
+            SumScore maxSumScore = sumScores.stream()
+                    .filter(s -> s.getSum().equals(max))
+                    .collect(Collectors.toList())
+                    .get(0);
+
+            SumScore minSumScore = sumScores.stream()
+                    .filter(s -> s.getSum().equals(min))
+                    .collect(Collectors.toList())
+                    .get(0);
+
+            totalGroupSumList.add(
+              TotalGroupSum.builder()
+                      .groupId(groupId)
+                      .bestInfo(BestInfo.of(maxSumScore.getHouseWorkTitle(), maxSumScore.getMemberId()))
+                      .worstInfo(WorstInfo.of(minSumScore.getHouseWorkTitle(), minSumScore.getMemberId()))
+                      .build()
+            );
+        }
 
         return totalGroupSumList;
     }
