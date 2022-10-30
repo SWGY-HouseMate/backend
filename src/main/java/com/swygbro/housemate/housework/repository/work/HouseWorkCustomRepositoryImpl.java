@@ -1,20 +1,30 @@
 package com.swygbro.housemate.housework.repository.work;
 
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPQLQueryFactory;
+import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
+import com.swygbro.housemate.exception.datanotfound.DataNotFoundType;
 import com.swygbro.housemate.group.domain.Group;
+import com.swygbro.housemate.housework.domain.Cycle;
 import com.swygbro.housemate.housework.domain.HouseWork;
 import com.swygbro.housemate.housework.message.*;
+import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
+import java.beans.Expression;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.반복_주기를_찾을_수_없습니다;
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
 import static com.swygbro.housemate.housework.domain.QHouseWork.houseWork;
 import static com.swygbro.housemate.login.domain.QMember.member;
@@ -24,6 +34,7 @@ import static com.swygbro.housemate.login.domain.QMember.member;
 public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository {
 
     private final JPQLQueryFactory queryFactory;
+    private final CycleRepository cycleRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -48,21 +59,29 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
         for (Member m : memberList) {
             List<HouseWork> houseWorkList = queryFactory.selectFrom(houseWork)
                     .join(houseWork.manager).fetchJoin()
-                    .join(houseWork.cycle).fetchJoin()
-                    .where(houseWork.today.between(startAt, endAt)
-                            .and(houseWork.manager.eq(m)))
+                    .where(
+                            houseWork.today.between(startAt, endAt),
+                            houseWork.manager.eq(m)
+                    )
                     .fetchAll()
                     .fetch();
 
             List<HouseWorkInfo> houseWorkInfoList = new ArrayList<>();
             for (HouseWork work : houseWorkList) {
-                CycleInfo cycleInfo = CycleInfo.builder()
-                        .cycleId(work.getCycle().getCycleId())
-                        .cycleType(work.getCycle().getCycleType())
-                        .props(work.getCycle().getProps())
-                        .startAt(work.getCycle().getStartAt())
-                        .endAt(work.getCycle().getEndAt())
-                        .build();
+
+                CycleInfo cycleInfo = null;
+                if (work.getIsCycle()) {
+                    Cycle cycle = cycleRepository.findByCycleId(work.getCycle().getCycleId())
+                            .orElseThrow(() -> new DataNotFoundException(반복_주기를_찾을_수_없습니다));
+
+                    cycleInfo = CycleInfo.builder()
+                            .cycleId(cycle.getCycleId())
+                            .cycleType(cycle.getCycleType())
+                            .props(cycle.getProps())
+                            .startAt(cycle.getStartAt())
+                            .endAt(cycle.getEndAt())
+                            .build();
+                }
 
                 houseWorkInfoList.add(HouseWorkInfo.builder()
                         .houseWorkId(work.getHouseWorkId())
