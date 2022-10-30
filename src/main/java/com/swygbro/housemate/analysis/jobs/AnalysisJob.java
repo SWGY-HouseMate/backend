@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Slf4j
@@ -22,7 +21,6 @@ public class AnalysisJob {
     private final CalculateMostHouseWork calculateMostHouseWork;
     private final CalculateBestAndWorstHouseWork calculateBestAndWorstHouseWork;
 
-    @Bean
     public Job analysis() {
         return jobBuilderFactory.get("analysis")
                 .start(lockTableProcesses.start()) // lockTableProcesses Start 실행

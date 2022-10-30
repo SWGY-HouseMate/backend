@@ -22,10 +22,12 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.analysis.message.ratio.ShareRatioType.*;
+import static java.time.LocalDateTime.now;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
 @Slf4j
@@ -71,6 +73,11 @@ public class CalculateShareRatio {
 
                     log.info("======= DB 저장 =======");
                     for (MemberFinalShareRatio memberFinalShareRatio : memberFinalShareRatios) {
+                        System.out.println("memberFinalShareRatio = " + memberFinalShareRatio);
+                    }
+
+
+                    for (MemberFinalShareRatio memberFinalShareRatio : memberFinalShareRatios) {
                         Optional<HouseWorkAnalysis> findByMemberIdAndToday = houseWorkAnalysisRepository.findByTodayAndMemberId(
                                 now,
                                 memberFinalShareRatio.getMemberId()
@@ -84,6 +91,7 @@ public class CalculateShareRatio {
                                     .today(now)
                                     .shareRatioType(memberFinalShareRatio.getShareRatioType())
                                     .shareRatioPercent(memberFinalShareRatio.getPercent())
+                                    .startAt(now())
                                     .build());
                         } else {
                             findByMemberIdAndToday.get().setShareRatioTypeAndShareRatioPercent(

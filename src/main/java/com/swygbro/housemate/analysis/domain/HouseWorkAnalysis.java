@@ -71,11 +71,14 @@ public class HouseWorkAnalysis {
             String bestHouseWorkTitle,
             String bestHouseWorkManager,
             String worstHouseWorkTitle,
-            String worstHouseWorkManager) {
+            String worstHouseWorkManager,
+            LocalDateTime endAt) {
         this.bestHouseWorkTitle = bestHouseWorkTitle;
         this.bestHouseWorkManager = bestHouseWorkManager;
 
         this.worstHouseWorkTitle = worstHouseWorkTitle;
         this.worstHouseWorkManager = worstHouseWorkManager;
+
+        this.endAt = endAt;
     }
 }

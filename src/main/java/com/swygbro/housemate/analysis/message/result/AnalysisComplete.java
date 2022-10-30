@@ -32,11 +32,12 @@ public class AnalysisComplete {
 
     Integer count;
 
-    String bestHouseWorkId;
+    String bestHouseWorkTitle;
+    String bestHouseWorkManager;
+    String worstHouseWorkTitle;
+    String worstHouseWorkManager;
 
-    String worstHouseWorkId;
+    String startAt;
 
-    LocalDateTime startAt;
-
-    LocalDateTime endAt;
+    String endAt;
 }

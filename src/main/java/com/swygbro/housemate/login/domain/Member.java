@@ -3,10 +3,7 @@ package com.swygbro.housemate.login.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.swygbro.housemate.group.domain.Group;
 import com.swygbro.housemate.util.model.AbstractEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +24,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ziphap_member")
+@ToString
 public class Member extends AbstractEntity implements UserDetails {
 
     @Id

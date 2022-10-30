@@ -13,11 +13,14 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.COMPLETED;
+import static java.time.LocalDateTime.now;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 
 @Slf4j
@@ -32,6 +35,7 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
     private final ObjectMapper objectMapper;
 
     @Bean
+    @Transactional
     public Step executeByHouseWork() {
         return stepBuilderFactory.get("CalculateBestAndWorstHouseWorkStep")
                 .tasklet((contribution, chunkContext) -> {
@@ -84,7 +88,8 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
                                 totalGroupSum.getBestInfo().getHouseWorkTitle(),
                                 totalGroupSum.getBestInfo().getHouseWorkManager(),
                                 totalGroupSum.getWorstInfo().getHouseWorkTitle(),
-                                totalGroupSum.getWorstInfo().getHouseWorkManager()));
+                                totalGroupSum.getWorstInfo().getHouseWorkManager(),
+                                now()));
                     }
 
                     return FINISHED;
