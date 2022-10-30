@@ -85,9 +85,9 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
                                 now, totalGroupSum.getGroupId()
                         ).forEach(g -> g.setBestWorst(
                                 totalGroupSum.getBestInfo().getHouseWorkTitle(),
-                                null,
+                                totalGroupSum.getBestInfo().getHouseWorkManager(),
                                 totalGroupSum.getWorstInfo().getHouseWorkTitle(),
-                                null));
+                                totalGroupSum.getWorstInfo().getHouseWorkManager()));
                     }
 
                     return FINISHED;
@@ -98,17 +98,72 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
             List<ScoreToDifficulty> difficultyScore,
             List<ScoreToRepetition> scoreToRepetitionList,
             List<HouseWorkSuccessRate> successRate
-    ) { // 구하기
-        List<SumScore> sumScoreList = new ArrayList<>();
-        Map<String, List<SumScore>> groupingGroupId = sumScoreList.stream()
-                .collect(Collectors.groupingBy(SumScore::getGroupId));
-
-        List<TotalGroupSum> totalGroupSumList = new ArrayList<>();
-        for (String groupId : groupingGroupId.keySet()) {
-            List<SumScore> findByGroupId = groupingGroupId.get(groupId);
-
-
+    ) {
+        if (difficultyScore.size() == 0) {
+            throw new IllegalStateException("계산된 데이터가 없습니다.");
         }
+
+        List<SumScore> sumScoreList = new ArrayList<>();
+        for (ScoreToDifficulty scoreToDifficulty : difficultyScore) {
+            ScoreToRepetition scoreToRepetition = scoreToRepetitionList.stream()
+                    .filter(s -> s.getGroupId().equals(scoreToDifficulty.getGroupId()))
+                    .collect(Collectors.toList())
+                    .get(0);
+
+            HouseWorkSuccessRate houseWorkSuccessRate = successRate.stream()
+                    .filter(s -> s.getGroupId().equals(scoreToDifficulty.getGroupId()))
+                    .collect(Collectors.toList())
+                    .get(0);
+
+            // 성공율 / 주기(일수) * 난이도 배점
+            double sum = houseWorkSuccessRate.getRate() / (double) scoreToRepetition.getScore() * (double) scoreToDifficulty.getScore();
+            sumScoreList.add(
+                    SumScore.builder()
+                            .groupId(scoreToDifficulty.getGroupId())
+                            .sum(sum)
+                            .houseWorkTitle(scoreToDifficulty.getHouseWorkTitle())
+                            .build()
+            );
+        }
+
+        for (SumScore sumScore : sumScoreList) {
+            System.out.println("sumScore = " + sumScore);
+        }
+
+        // 그룹 별로 가장 적은 값이랑 가장 큰 값을 고름
+        List<TotalGroupSum> totalGroupSumList = new ArrayList<>();
+//        Map<String, List<SumScore>> groupByGroup = sumScoreList.stream()
+//                .collect(Collectors.groupingBy(SumScore::getGroupId));
+//        for (String groupId : groupByGroup.keySet()) {
+//            List<SumScore> sumScores = groupByGroup.get(groupId);
+//
+//            double max = sumScores.stream().mapToDouble(SumScore::getSum)
+//                    .max()
+//                    .orElseThrow(NoSuchElementException::new);
+//
+//            double min = sumScores.stream().mapToDouble(SumScore::getSum)
+//                    .min()
+//                    .orElseThrow(NoSuchElementException::new);
+//
+//            SumScore maxSumScore = sumScores.stream()
+//                    .filter(s -> s.getSum().equals(max))
+//                    .collect(Collectors.toList())
+//                    .get(0);
+//
+//            SumScore minSumScore = sumScores.stream()
+//                    .filter(s -> s.getSum().equals(min))
+//                    .collect(Collectors.toList())
+//                    .get(0);
+//
+//            totalGroupSumList.add(
+//              TotalGroupSum.builder()
+//                      .groupId(groupId)
+//                      .bestInfo(BestInfo.of(maxSumScore.getHouseWorkTitle(), maxSumScore.getMemberId()))
+//                      .worstInfo(WorstInfo.of(minSumScore.getHouseWorkTitle(), minSumScore.getMemberId()))
+//                      .build()
+//            );
+//        }
+
         return totalGroupSumList;
     }
 

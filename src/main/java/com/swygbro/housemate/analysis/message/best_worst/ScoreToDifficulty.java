@@ -15,4 +15,8 @@ public class ScoreToDifficulty {
     private String houseWorkTitle;
 
     private Integer score;
+
+    public ScoreToDifficulty empty() {
+        return ScoreToDifficulty.builder().build();
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
@@ -90,18 +91,17 @@ public class CurrentMemberUtil {
 
         Member member_me = memberRepository.findByMemberEmail(username)
                 .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
-        Member member_author = memberRepository.findByZipHapGroup(group)
+        MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
+
+        List<Member> member_authorList = memberRepository.findByZipHapGroup(group)
                 .stream()
                 .filter(m -> !m.getMemberEmail().equals(member_me.getMemberEmail()))
-                .collect(Collectors.toList())
-                .get(0);
-
-        MemberInfo memberInfo_me = modelMapper.map(member_me, MemberInfo.class);
-        if (member_author == null) {
+                .collect(Collectors.toList());
+        if (member_authorList.size() == 0) {
             return GroupPersonInfo.of(memberInfo_me, null);
         }
 
-        MemberInfo memberInfo_author = modelMapper.map(member_author, MemberInfo.class);
+        MemberInfo memberInfo_author = modelMapper.map(member_authorList.get(0), MemberInfo.class);
         return GroupPersonInfo.of(memberInfo_me, memberInfo_author);
     }
 }

@@ -13,9 +13,6 @@ public class SumScore {
     private String memberId;
 
     private String houseWorkTitle;
-    private Double sum;
 
-    public void divided(double scoreToRepetition) {
-        this.sum  = this.sum / scoreToRepetition;
-    }
+    private Double sum;
 }
