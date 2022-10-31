@@ -23,7 +23,7 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final AnalysisJob analysisJob;
 
-//    @Scheduled(cron = "0 * * * * *") // 50 23 * * * -> 프론트에게 안내 사항으로 모달 띄워 주기 아니면 전날 데이터를 가져와서 처리
+//    @Scheduled(cron = "0 * * * * *") // 15 0 * * *
 //    public void analysisScheduler() {
 //
 //        Map<String, JobParameter> confMap = new HashMap<>();

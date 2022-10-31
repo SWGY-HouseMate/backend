@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,9 +39,9 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
         return stepBuilderFactory.get("CalculateBestAndWorstHouseWorkStep")
                 .tasklet((contribution, chunkContext) -> {
 
-                    LocalDate now = LocalDate.now();
+                    LocalDate yesterday = LocalDate.now().minusDays(1);
                     List<HouseWork> houseWorkList = analysisUtil.removeOnlyOneMemberInTheGroup(
-                            houseWorkRepository.searchCalculateMostHouseWork(now)
+                            houseWorkRepository.searchCalculateMostHouseWork(yesterday)
                     );
 
                     // 주기가 없는 것은 거르기
@@ -83,7 +82,7 @@ public class CalculateBestAndWorstHouseWork { // TODO: HouseWorkId 를 넣기 �
                     log.info("======= DB 저장 =======");
                     for (TotalGroupSum totalGroupSum : totalGroupSumList) {
                         houseWorkAnalysisRepository.findByTodayAndGroupId(
-                                now, totalGroupSum.getGroupId()
+                                yesterday, totalGroupSum.getGroupId()
                         ).forEach(g -> g.setBestWorst(
                                 totalGroupSum.getBestInfo().getHouseWorkTitle(),
                                 totalGroupSum.getBestInfo().getHouseWorkManager(),

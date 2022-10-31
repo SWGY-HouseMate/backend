@@ -14,9 +14,9 @@ public interface HouseWorkCustomRepository {
     Optional<HouseWork> searchHouseWorkIdJoinManger(String houseWorkId);
     HouseWorkByMember searchHouseWorkAtDateByGroup(LocalDate startAt, LocalDate endAt, Group group);
     HouseWorkCountForGroup searchHouseWorkCountByMember(LocalDate startAt, LocalDate endAt, Group group);
-    List<HouseWork> searchHouseWorkByToday(LocalDate now);
+    List<HouseWork> searchHouseWorkByYesterday(LocalDate yesterday);
     Long countByMember(LocalDate now, Member member);
-    List<HouseWork> searchCalculateMostHouseWork(LocalDate now);
+    List<HouseWork> searchCalculateMostHouseWork(LocalDate yesterday);
 
     Long countByHouseWorkTitle(LocalDate now, String title);
 }

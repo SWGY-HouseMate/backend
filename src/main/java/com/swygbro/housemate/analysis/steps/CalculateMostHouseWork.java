@@ -42,9 +42,9 @@ public class CalculateMostHouseWork {
         return stepBuilderFactory.get("CalculateMostHouseWorkStep")
                 .tasklet((contribution, chunkContext) -> {
 
-                    LocalDate now = LocalDate.now();
+                    LocalDate yesterday = LocalDate.now().minusDays(1);
                     List<HouseWork> houseWorkList = analysisUtil.removeOnlyOneMemberInTheGroup(
-                            houseWorkRepository.searchCalculateMostHouseWork(now)
+                            houseWorkRepository.searchCalculateMostHouseWork(yesterday)
                     );
 
                     if (houseWorkList.isEmpty()) {
@@ -67,7 +67,7 @@ public class CalculateMostHouseWork {
                     log.info("======= DB 저장 =======");
                     for (GroupFinalCount groupFinalCount : extracted) {
                         houseWorkAnalysisRepository.findByTodayAndGroupId(
-                                now, groupFinalCount.getGroupId()
+                                yesterday, groupFinalCount.getGroupId()
                         ).forEach(g -> g.setMostTitleAndCount(groupFinalCount.getTitle(), groupFinalCount.getCount()));
                     }
                     return FINISHED;

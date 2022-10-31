@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,9 +47,9 @@ public class CalculateShareRatio {
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
 
-                    LocalDate now = LocalDate.now();
+                    LocalDate yesterday = LocalDate.now().minusDays(1);
                     List<HouseWork> houseWorkList = analysisUtil.removeOnlyOneMemberInTheGroup(
-                            houseWorkRepository.searchHouseWorkByToday(now)
+                            houseWorkRepository.searchHouseWorkByYesterday(yesterday)
                     );
 
                     if (houseWorkList.isEmpty()) {
@@ -61,7 +60,7 @@ public class CalculateShareRatio {
                     List<AnalysisDto> analysisDtoList = analysisUtil.converterHouseWorkDto(houseWorkList);
 
                     log.info("======= MemberId 별 난위도 Score 구하기 =======");
-                    List<ShareRatioInfo> shareRatioInfos = memberIdByScore(now, analysisDtoList);
+                    List<ShareRatioInfo> shareRatioInfos = memberIdByScore(yesterday, analysisDtoList);
 
                     log.info("======= Group Member 별 백분율 구하기 =======");
                     Map<String, List<ShareRatioInfo>> groupInfoListMap = shareRatioInfos.stream()
@@ -79,7 +78,7 @@ public class CalculateShareRatio {
 
                     for (MemberFinalShareRatio memberFinalShareRatio : memberFinalShareRatios) {
                         Optional<HouseWorkAnalysis> findByMemberIdAndToday = houseWorkAnalysisRepository.findByTodayAndMemberId(
-                                now,
+                                yesterday,
                                 memberFinalShareRatio.getMemberId()
                         );
 
@@ -88,7 +87,7 @@ public class CalculateShareRatio {
                                     .analysisId(uuidUtil.create())
                                     .memberId(memberFinalShareRatio.getMemberId())
                                     .groupId(memberFinalShareRatio.getGroupId())
-                                    .today(now)
+                                    .today(yesterday)
                                     .shareRatioType(memberFinalShareRatio.getShareRatioType())
                                     .shareRatioPercent(memberFinalShareRatio.getPercent())
                                     .startAt(now())
@@ -140,7 +139,7 @@ public class CalculateShareRatio {
         return memberPercentInfoList;
     }
 
-    private List<ShareRatioInfo> memberIdByScore(LocalDate now, List<AnalysisDto> analysisDtoList) {
+    private List<ShareRatioInfo> memberIdByScore(LocalDate yesterday, List<AnalysisDto> analysisDtoList) {
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         for (AnalysisDto analysisDto: analysisDtoList) {
             String memberId = analysisDto.getMemberId();
@@ -158,7 +157,7 @@ public class CalculateShareRatio {
         List<ShareRatioInfo> shareRatioInfos = new ArrayList<>();
         for (String memberId : stringIntegerMap.keySet()) {
             Member member = memberRepository.findByIdJoinFetchGroup(memberId).orElseThrow(null);
-            Integer houseWorkCount = houseWorkRepository.countByMember(now, member).intValue();
+            Integer houseWorkCount = houseWorkRepository.countByMember(yesterday, member).intValue();
             Integer score = stringIntegerMap.get(memberId);
 
             shareRatioInfos.add(ShareRatioInfo.of(member.getZipHapGroup().getZipHapGroupId(), memberId, (houseWorkCount + score)));

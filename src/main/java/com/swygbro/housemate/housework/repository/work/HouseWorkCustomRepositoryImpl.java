@@ -138,9 +138,9 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     }
 
     @Override
-    public List<HouseWork> searchHouseWorkByToday(LocalDate now) {
-        LocalDate start = now.withDayOfMonth(1);
-        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+    public List<HouseWork> searchHouseWorkByYesterday(LocalDate yesterday) {
+        LocalDate start = yesterday.withDayOfMonth(1);
+        LocalDate end = yesterday.withDayOfMonth(yesterday.lengthOfMonth());
 
         return queryFactory.selectFrom(houseWork)
                 .join(houseWork.manager).fetchJoin()
@@ -163,15 +163,15 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     }
 
     @Override
-    public List<HouseWork> searchCalculateMostHouseWork(LocalDate now) {
-        LocalDate start = now.withDayOfMonth(1);
+    public List<HouseWork> searchCalculateMostHouseWork(LocalDate yesterday) {
+        LocalDate start = yesterday.withDayOfMonth(1);
 
         return queryFactory.selectFrom(houseWork)
                 .join(houseWork.manager).fetchJoin()
                 .join(houseWork.cycle).fetchJoin()
                 .join(houseWork.group).fetchJoin()
                 .where(
-                        houseWork.today.between(start, now)
+                        houseWork.today.between(start, yesterday)
                 ).fetchAll()
                 .fetch();
     }
