@@ -2,6 +2,7 @@ package com.swygbro.housemate.controller;
 
 import com.swygbro.housemate.housework.message.*;
 import com.swygbro.housemate.housework.service.*;
+import com.swygbro.housemate.util.response.domain.ListResult;
 import com.swygbro.housemate.util.response.domain.SingleResult;
 import com.swygbro.housemate.util.response.service.ResponseService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @Api("HouseWork 관련 API 입니다.")
@@ -31,8 +33,8 @@ public class HouseWorkController {
     @ResponseBody
     @ApiOperation("집안일을 생성합니다.")
     @PostMapping("/create")
-    public SingleResult<HoseWorkCreate> create(@RequestBody CreateHouseWork createHouseWork) throws ParseException {
-        return responseService.getSingleResult(houseWorkCreateProcess.execute(createHouseWork));
+    public ListResult<HouseWorkCreate> create(@RequestBody CreateHouseWork createHouseWork) throws ParseException {
+        return responseService.getListResult(houseWorkCreateProcess.execute(createHouseWork));
     }
 
     @ApiImplicitParams({
@@ -63,6 +65,16 @@ public class HouseWorkController {
     @PostMapping("/complete")
     public SingleResult<String> updateCompleted(@RequestBody HouseWorkCompleted houseWorkCompleted) {
         return responseService.getSingleResult(houseWorkUtil.completion(houseWorkCompleted.getHouse_work_id(), houseWorkCompleted.getHouseWorkStatusType()));
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+    })
+    @ResponseBody
+    @ApiOperation("집안일을 ID를 기준으로 가져옵니다.")
+    @GetMapping("/{houseWork_id}")
+    public SingleResult<WorkById> findById(@PathVariable String houseWork_id) {
+        return responseService.getSingleResult(searchDateProcess.searchById(houseWork_id));
     }
 
     @ApiImplicitParams({

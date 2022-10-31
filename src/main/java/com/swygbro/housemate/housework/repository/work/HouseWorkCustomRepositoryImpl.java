@@ -35,8 +35,8 @@ public class HouseWorkCustomRepositoryImpl implements HouseWorkCustomRepository 
     public Optional<HouseWork> searchHouseWorkIdJoinManger(String houseWorkId) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(houseWork)
-                        .join(houseWork.manager)
-                        .fetchJoin()
+                        .join(houseWork.manager).fetchJoin()
+                        .join(houseWork.group).fetchJoin()
                         .where(houseWork.houseWorkId.eq(houseWorkId))
                         .fetchOne());
     }

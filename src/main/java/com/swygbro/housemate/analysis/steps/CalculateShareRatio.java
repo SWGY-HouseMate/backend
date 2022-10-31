@@ -44,7 +44,7 @@ public class CalculateShareRatio {
 
     @Bean
     @Transactional
-    public Step executeByGroup() {
+    public Step executeByGroup() { // 집안일이 둘중에 한명만 있어도 처리해야한다.
         return stepBuilderFactory.get("CalculateShareRatioByGroupStep")
                 .tasklet((contribution, chunkContext) -> {
 
