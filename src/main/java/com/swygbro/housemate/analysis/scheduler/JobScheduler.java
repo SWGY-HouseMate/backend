@@ -23,7 +23,7 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final AnalysisJob analysisJob;
 
-//    @Scheduled(cron = "0 * * * * *") // 15 0 * * *
+//    @Scheduled(cron = "15 0 * * * *") // 15 0 * * * *
 //    public void analysisScheduler() {
 //
 //        Map<String, JobParameter> confMap = new HashMap<>();
