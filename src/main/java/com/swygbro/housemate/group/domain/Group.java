@@ -30,9 +30,12 @@ public class Group extends AbstractEntity {
     @JoinColumn(name = "memberId")
     private Member owner;
 
-    public void applyMember(final Member member) {
-        this.owner = member;
+    public void applyMember(Member member) {
         member.setZipHapGroup(this);
+    }
+
+    public void setOwner(Member owner) {
+        this.owner = owner;
     }
 
     public void updateParticipatingMembers() {

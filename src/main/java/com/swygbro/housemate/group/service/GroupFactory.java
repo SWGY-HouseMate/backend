@@ -57,6 +57,7 @@ public class GroupFactory {
         Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, currentMemberObject));
 
         currentMemberObject.updateRole(OWNER);
+        group.setOwner(currentMemberObject);
         group.applyMember(currentMemberObject);
 
         currentMemberObject.updateName(groupCreator.getMemberName());

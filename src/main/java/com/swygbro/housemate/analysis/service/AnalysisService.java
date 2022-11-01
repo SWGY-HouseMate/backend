@@ -10,6 +10,7 @@ import com.swygbro.housemate.group.message.GroupInfo;
 import com.swygbro.housemate.group.repository.GroupRepository;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
+import com.swygbro.housemate.login.repository.MemberRepository;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
+import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.멤버를_찾을_수_없습니다;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class AnalysisService {
     private final HouseWorkAnalysisRepository houseWorkAnalysisRepository;
     private final ModelMapper modelMapper;
     private final GroupRepository groupRepository;
+    private final MemberRepository memberRepository;
 
     public List<AnalysisComplete> execute() {
         Member currentMemberANDGroupObject = currentMemberUtil.getCurrentMemberANDGroupObject();
