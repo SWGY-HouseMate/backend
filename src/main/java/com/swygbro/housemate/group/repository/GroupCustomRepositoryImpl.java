@@ -22,4 +22,6 @@ public class GroupCustomRepositoryImpl implements GroupCustomRepository {
                         .where(group.linkId.eq(linkId))
                         .fetchOne());
     }
+
+
 }

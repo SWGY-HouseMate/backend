@@ -22,6 +22,7 @@ import java.util.Date;
 
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.집안일을_찾을_수_없습니다;
 import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DEFAULT;
+import static com.swygbro.housemate.housework.domain.HouseWorkStatusType.DELAY;
 
 @Component
 @RequiredArgsConstructor
@@ -77,6 +78,18 @@ public class HouseWorkUtil {
         }
 
         findByHouseWorkId.setCompleted(houseWorkStatusType);
+
+//        if (houseWorkStatusType.equals(DELAY)) {
+//            houseWorkRepository.save(HouseWork.builder()
+//                    .houseWorkId(uuidUtil.create())
+//                    .title(findByHouseWorkId.getTitle())
+//                    .difficulty(findByHouseWorkId.getDifficulty())
+//                    .isCycle(findByHouseWorkId.getIsCycle())
+//                    .today(findByHouseWorkId.getToday().plusDays(1))
+//                    .houseWorkStatusType(DEFAULT)
+//                    .build());
+//        }
+
         return findByHouseWorkId.getHouseWorkId();
     }
 }
