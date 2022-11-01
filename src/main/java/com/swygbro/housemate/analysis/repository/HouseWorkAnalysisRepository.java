@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface HouseWorkAnalysisRepository extends JpaRepository<HouseWorkAnalysis, String> {
     Optional<HouseWorkAnalysis> findByTodayAndMemberId(LocalDate now, String memberId);
     List<HouseWorkAnalysis> findByTodayAndGroupId(LocalDate now, String groupId);
-    List<HouseWorkAnalysis> findByGroupId(String groupId);
+    List<HouseWorkAnalysis> findByGroupIdAndToday(String groupId, LocalDate today);
 }

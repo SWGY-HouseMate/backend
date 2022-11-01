@@ -28,7 +28,7 @@ public class JobScheduler {
 //
 //        Map<String, JobParameter> confMap = new HashMap<>();
 //        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-//        JobParameters jobParameters = new JobParameters(confMap);
+//        JobParameters jobParameters = new  JobParameters(confMap);
 //
 //        try {
 //            jobLauncher.run(analysisJob.analysis(), jobParameters);

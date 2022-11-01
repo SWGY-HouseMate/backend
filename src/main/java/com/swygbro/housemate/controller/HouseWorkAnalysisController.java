@@ -9,10 +9,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @Api("Analysis 관련 API 입니다.")
@@ -28,7 +28,8 @@ public class HouseWorkAnalysisController {
     @ResponseBody
     @ApiOperation("그룹 분석 결과를 가져옵니다.")
     @PostMapping("/create")
-    public ListResult<AnalysisComplete> createGroup() {
-        return responseService.getListResult(analysisService.execute());
+    public ListResult<AnalysisComplete> createGroup(@RequestParam String today) {
+        LocalDate date = LocalDate.parse(today, DateTimeFormatter.ISO_DATE);
+        return responseService.getListResult(analysisService.execute(date));
     }
 }

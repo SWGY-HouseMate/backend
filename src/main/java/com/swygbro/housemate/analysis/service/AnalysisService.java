@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,28 +32,33 @@ public class AnalysisService {
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
 
-    public List<AnalysisComplete> execute() {
+    public List<AnalysisComplete> execute(LocalDate today) {
         Member currentMemberANDGroupObject = currentMemberUtil.getCurrentMemberANDGroupObject();
-        List<HouseWorkAnalysis> findByGroupId = houseWorkAnalysisRepository
-                .findByGroupId(currentMemberANDGroupObject.getZipHapGroup().getZipHapGroupId());
-        List<AnalysisComplete> analysisCompletes = new ArrayList<>();
 
+        List<HouseWorkAnalysis> findByGroupId = houseWorkAnalysisRepository.findByGroupIdAndToday(
+                currentMemberANDGroupObject.getZipHapGroup().getZipHapGroupId(),
+                today.minusDays(1)
+        );
+
+        List<AnalysisComplete> analysisCompletes = new ArrayList<>();
         if (findByGroupId.isEmpty()) {
             return analysisCompletes;
         }
 
         for (HouseWorkAnalysis houseWorkAnalysis : findByGroupId) {
-            MemberInfo memberInfo = modelMapper.map(currentMemberANDGroupObject, MemberInfo.class);
+            Member member = memberRepository.findByIdJoinFetchGroup(houseWorkAnalysis.getMemberId())
+                    .orElseThrow(() -> new DataNotFoundException(멤버를_찾을_수_없습니다));
+            MemberInfo memberInfo = modelMapper.map(member, MemberInfo.class);
 
-            Group group = groupRepository.findByLinkIdJoinFetchOwner(currentMemberANDGroupObject.getZipHapGroup().getLinkId())
+            Group group = groupRepository.findByLinkIdJoinFetchOwner(member.getZipHapGroup().getLinkId())
                     .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
             MemberInfo owner = modelMapper.map(group.getOwner(), MemberInfo.class);
 
             GroupInfo groupInfo = GroupInfo.builder()
-                    .zipHapGroupId(currentMemberANDGroupObject.getZipHapGroup().getZipHapGroupId())
-                    .groupName(currentMemberANDGroupObject.getZipHapGroup().getGroupName())
-                    .linkId(currentMemberANDGroupObject.getZipHapGroup().getLinkId())
+                    .zipHapGroupId(group.getZipHapGroupId())
+                    .groupName(group.getGroupName())
+                    .linkId(group.getLinkId())
                     .owner(owner)
                     .build();
 
