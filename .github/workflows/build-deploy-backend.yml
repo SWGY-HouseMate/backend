@@ -20,7 +20,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   REGION: ap-northeast-2
   EB_APPLICATION_NAME: ${{ secrets.EB_APPLICATION_NAME }}
-  EB_ENVIRONMENT_NAME: housework-backend-monolithic
+  EB_ENVIRONMENT_NAME: ziphap-api
 
 jobs:
   backend-build-deploy:
