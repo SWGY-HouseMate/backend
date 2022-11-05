@@ -1,4 +1,4 @@
-package com.swygbro.housemate.login;
+package com.swygbro.housemate.login.service;
 
 import com.swygbro.housemate.exception.datanotfound.DataNotFoundException;
 import com.swygbro.housemate.housework.domain.HouseWork;

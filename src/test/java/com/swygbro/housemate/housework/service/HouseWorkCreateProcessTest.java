@@ -4,7 +4,7 @@ import com.swygbro.housemate.housework.message.CreateHouseWork;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
-import com.swygbro.housemate.login.ManagedFactory;
+import com.swygbro.housemate.login.service.ManagedFactory;
 import com.swygbro.housemate.util.condition.CycleCondition;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
 import org.junit.jupiter.api.extension.ExtendWith;

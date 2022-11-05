@@ -10,7 +10,7 @@ import com.swygbro.housemate.housework.message.HouseWorkCreate;
 import com.swygbro.housemate.housework.repository.cycle.CycleRepository;
 import com.swygbro.housemate.housework.repository.work.HouseWorkRepository;
 import com.swygbro.housemate.housework.service.cycle.CycleFactory;
-import com.swygbro.housemate.login.ManagedFactory;
+import com.swygbro.housemate.login.service.ManagedFactory;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.login.message.MemberInfo;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
