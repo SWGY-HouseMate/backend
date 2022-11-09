@@ -1,4 +1,7 @@
 spring:
+  backend:
+    base-url: ${BACKEND_BASE_URL}
+
   batch:
     application:
       name: ${ZIPHAP_BATCH_APPLICATION_NAME}

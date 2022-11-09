@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
@@ -95,15 +96,16 @@ public class Member extends AbstractEntity implements UserDetails {
         return true;
     }
 
-    public void updateRole(MemberType memberType) {
-        this.memberAuthorityRoles = Collections.singletonList(memberType);
-    }
-
     public void setZipHapGroup(final Group group) {
         this.zipHapGroup = group;
     }
 
-    public void updateName(String name) {
+    public void ownerGroupCreateFlow(String name) {
+        this.memberAuthorityRoles = Collections.singletonList(OWNER);
+        this.memberName = name;
+    }
+
+    public void memberGroupJoinFlow(String name) {
         this.memberName = name;
     }
 }

@@ -13,8 +13,11 @@ import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.member.GroupPersonInfo;
 import com.swygbro.housemate.util.uuid.UUIDUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,42 +28,30 @@ import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그�
 import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
+@RequiredArgsConstructor
 public class GroupFactory {
-    private final String BASE_URL = "http://housework-backend.ap-northeast-2.elasticbeanstalk.com";
-    private final List<ValidatorURI> validators = new ArrayList<>();
-    private final LinkCreator linkCreator;
+    @Value("${spring.backend.base-url}")
+    private final String BASE_URL;
     private final GroupRepository groupRepository;
+    private final LinkCreator linkCreator;
     private final UUIDUtil uuidUtil;
     private final CurrentMemberUtil currentMemberUtil;
-
-    public GroupFactory(LinkCreator linkCreator,
-                        GroupRepository groupRepository,
-                        UUIDUtil uuidUtil,
-                        CurrentMemberUtil currentMemberUtil,
-                        URIDuplicateValidator uriDuplicateValidator) {
-        this.linkCreator = linkCreator;
-        this.groupRepository = groupRepository;
-        this.uuidUtil = uuidUtil;
-        this.currentMemberUtil = currentMemberUtil;
-        validators.add(uriDuplicateValidator);
-    }
 
     @Transactional
     public GroupResponse create(GroupCreator groupCreator) {
         Member currentMemberObject = currentMemberUtil.getCurrentMemberObject();
-
         if (currentMemberObject.getZipHapGroup() != null) {
             throw new BadRequestException(그룹이_1개_이상_생성_되었습니다);
         }
 
-        String linkId = linkCreator.executor(currentMemberObject.getMemberId(), validators);
-        Group group = groupRepository.save(groupCreator.create(uuidUtil.create(), linkId, currentMemberObject));
+        String linkId = linkCreator.executor(currentMemberObject.getMemberId());
+        Group group = groupRepository.save(
+                groupCreator.create(uuidUtil.create(), linkId, currentMemberObject)
+        );
 
-        currentMemberObject.updateRole(OWNER);
-        group.setOwner(currentMemberObject);
-        group.applyMember(currentMemberObject);
+        group.ownerGroupCreateFlow(currentMemberObject);
+        currentMemberObject.ownerGroupCreateFlow(groupCreator.getMemberName());
 
-        currentMemberObject.updateName(groupCreator.getMemberName());
         return GroupResponse.of(linkId, group.createAt(), BASE_URL +"/group/join/" + linkId);
     }
 
@@ -75,9 +66,8 @@ public class GroupFactory {
         Group group = groupRepository.findByLinkId(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
 
-        group.applyMember(addMember);
-        group.updateParticipatingMembers();
-        addMember.updateName(memberName);
+        group.memberGroupJoinFlow(addMember);
+        addMember.memberGroupJoinFlow(memberName);
 
         return GroupResponse.of(group.getLinkId(), group.createAt(), BASE_URL + "/group/join/" + group.getLinkId());
     }
@@ -85,8 +75,8 @@ public class GroupFactory {
     public GroupInfoByAll info(String likeId) {
         Group group = groupRepository.findByLinkIdJoinFetchOwner(likeId)
                 .orElseThrow(() -> new DataNotFoundException(그룹을_찾을_수_없습니다));
-        GroupPersonInfo membersOfTheGroup = currentMemberUtil.getMembersOfTheGroup(group);
 
+        GroupPersonInfo membersOfTheGroup = currentMemberUtil.getMembersOfTheGroup(group);
 
         return GroupInfoByAll.of(group.getZipHapGroupId(), group.getGroupName(), group.getLinkId(), membersOfTheGroup);
     }

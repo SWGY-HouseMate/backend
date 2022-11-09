@@ -30,15 +30,13 @@ public class Group extends AbstractEntity {
     @JoinColumn(name = "memberId")
     private Member owner;
 
-    public void applyMember(Member member) {
+    public void memberGroupJoinFlow(Member member) {
         member.setZipHapGroup(this);
-    }
-
-    public void setOwner(Member owner) {
-        this.owner = owner;
-    }
-
-    public void updateParticipatingMembers() {
         this.participatingMembers = this.participatingMembers + 1;
+    }
+
+    public void ownerGroupCreateFlow(Member owner) {
+        this.owner = owner;
+        owner.setZipHapGroup(this);
     }
 }

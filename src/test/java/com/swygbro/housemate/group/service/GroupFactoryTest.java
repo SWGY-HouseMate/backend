@@ -32,7 +32,7 @@ class GroupFactoryTest {
 
     @BeforeEach
     void setUp() {
-        sut = new GroupFactory(linkCreator, groupRepository, uuidUtil, currentMemberUtil, uriDuplicateValidator);
+        sut = new GroupFactory(groupRepository, linkCreator, uuidUtil, currentMemberUtil);
     }
 
     @Test
