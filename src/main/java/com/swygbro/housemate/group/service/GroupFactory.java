@@ -7,8 +7,6 @@ import com.swygbro.housemate.group.message.GroupCreator;
 import com.swygbro.housemate.group.message.GroupInfoByAll;
 import com.swygbro.housemate.group.message.GroupResponse;
 import com.swygbro.housemate.group.repository.GroupRepository;
-import com.swygbro.housemate.group.validator.URIDuplicateValidator;
-import com.swygbro.housemate.group.validator.ValidatorURI;
 import com.swygbro.housemate.login.domain.Member;
 import com.swygbro.housemate.util.member.CurrentMemberUtil;
 import com.swygbro.housemate.util.member.GroupPersonInfo;
@@ -17,21 +15,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.swygbro.housemate.exception.badrequest.BadRequestType.그룹에_이미_참여하였습니다;
 import static com.swygbro.housemate.exception.badrequest.BadRequestType.그룹이_1개_이상_생성_되었습니다;
 import static com.swygbro.housemate.exception.datanotfound.DataNotFoundType.그룹을_찾을_수_없습니다;
-import static com.swygbro.housemate.login.domain.MemberType.OWNER;
 
 @Service
 @RequiredArgsConstructor
 public class GroupFactory {
     @Value("${spring.backend.base-url}")
-    private final String BASE_URL;
+    private String BASE_URL;
     private final GroupRepository groupRepository;
     private final LinkCreator linkCreator;
     private final UUIDUtil uuidUtil;
